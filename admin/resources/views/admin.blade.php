@@ -166,11 +166,7 @@
                         itemCount++;
 
                     });
-                    alert(JSON.stringify(arr_quantity))
-
-
-
-                    const files = Array.from(document.getElementById("file-upload-product").files);
+                 const files = Array.from(document.getElementById("file-upload-product").files);
                     const uploadPromises = [];
                     const ref = firebase.storage().ref();
 
