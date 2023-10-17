@@ -1,0 +1,56 @@
+*{
+    font-family: "Nunito", sans-serif;
+}
+.auth-form-light{
+    border-radius: 20px;
+    box-shadow: 10px 10px 10px #ccc;
+}
+.auth-form-light h4{
+    text-align: center;
+    text-transform: uppercase;
+    color: #6610f2;
+    font-weight: 550;
+}
+.login-input-form{
+    position: relative;
+}
+.login-input-form label{
+    position: absolute;
+    top: 50%;
+    left: 35px;
+    transform: translateY(-50%);
+    font-family: "Nunito", sans-serif;
+}
+.login-input-form input{
+    padding-left: 35px;
+}
+.login-input-form input:focus+label,.login-input-form input:valid+label{
+    top: 0;
+    background-color: white;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 300;
+    transition: 0.5s ease-in-out;
+    left: 30px;
+}
+.login-input-form .icon-form{
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+   
+}
+.eye{
+    position: absolute;
+    top: 50%;
+    right: 13px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.eye.eye-open{
+    display: none;
+}
+.mess-form{
+    width: 100%;
+    height: 50px;
+}
