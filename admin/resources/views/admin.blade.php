@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css"
         integrity="sha512-W/zrbCncQnky/EzL+/AYwTtosvrM+YG/V6piQLSe2HuKS6cmbw89kjYkp3tWFn1dkWV7L1ruvJyKbLz73Vlgfg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('BE/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/css/vendor.bundle.base.css') }}">
@@ -41,6 +42,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -101,8 +104,52 @@
         firebase.initializeApp(firebaseConfig);
     </script>
     <script>
+           flatpickr(".flatpickr", {
+            altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
         $(document).ready(function() {
+            $('#is-limit-voucher').on('change', function() {
+                const selectChane='#is-limit-voucher';
+                const input='#voucher-quantity'
+                checkInputVoucher(selectChane,input)
+            });
+            $('#unit-voucher').on('change', function() {
+                const selectChane='#unit-voucher';
+                const input='#voucher_number_condition'
+                checkInputVoucher(selectChane,input)
+            });
+            function checkInputVoucher(selectChane,input){
+                var selectedValue = $(selectChane).val();
+                var voucherQuantity = $(input);
 
+                if (selectedValue === '0' ||selectedValue === 'Free' ) {
+                    // Nếu giá trị là '0' (Không), ngăn người dùng nhập giá trị vào input
+                    voucherQuantity.on('keydown', function(e) {
+                        e.preventDefault();
+                    });
+
+                    // Đặt giá trị mặc định là '0'
+                    voucherQuantity.val('0');
+                } else {
+                    // Nếu giá trị là '1' (Có), bỏ bỏ ngăn người dùng nhập giá trị
+                    voucherQuantity.off('keydown');
+                    // Xóa giá trị hiện có
+                    voucherQuantity.val('');
+                }
+            }
+            $('.voucher-unit').on('change', function() {
+                var selectedValue = $(this).val();
+                var $voucherCategory = $('#voucher_category');
+                if (selectedValue === "Free") {
+                    $voucherCategory.val("0");
+                } else if (selectedValue === "%") {
+                    $voucherCategory.val("1");
+                } else if (selectedValue === "VNĐ") {
+                    $voucherCategory.val("2");
+                }
+            });
             $(".tab-pane p").click(function() {
                 // Loại bỏ lớp "active" từ tất cả các phần tử <p> trong .tab-pane
                 $(".tab-pane p").removeClass("active");

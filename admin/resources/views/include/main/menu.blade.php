@@ -199,14 +199,13 @@
       <a class="nav-link" href="{{route('user_list')}}">
         <i class="mdi mdi-account-settings menu-icon"></i>
         <span class="menu-title">Người dùng</span>
-        <i class="menu-arrow"></i>
       </a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{{route('banner_list')}}">
         <i class="mdi mdi-image menu-icon"></i>
         <span class="menu-title">Bannner</span>
-        <i class="menu-arrow"></i>
       </a>
     </li>
     <li class="nav-item">
@@ -239,23 +238,11 @@
         </ul>
    
     </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-        <i class="icon-ban menu-icon"></i>
-        <span class="menu-title">Error pages</span>
+   <li class="nav-item">
+      <a class="nav-link" href="{{route('voucher_list')}}">
+        <i class="mdi mdi-account-settings menu-icon"></i>
+        <span class="menu-title">Voucher</span>
         <i class="menu-arrow"></i>
-      </a>
-      <div class="collapse" id="error">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-          <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="pages/documentation/documentation.html">
-        <i class="icon-paper menu-icon"></i>
-        <span class="menu-title">Documentation</span>
       </a>
     </li>
   </ul>

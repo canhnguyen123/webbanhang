@@ -17,6 +17,8 @@ use App\Http\Controllers\methodPaymentController;
 use App\Http\Controllers\statusPaymentController;
 use App\Http\Controllers\accountController;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\voucherController;
+
 Route::get('/login', [Controller::class, 'login'])->name('login');
 Route::post('/login-post', [accountController::class, 'postLogin'])->name('login_post');
 Route::middleware(['auth'])->group(function () {
@@ -100,6 +102,17 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/show-home', [productController::class, 'showHo me'])->name('product_showHome');
                 Route::post('/post-show-home', [productController::class, 'postShowHome'])->name('product_post_showHome');
             });
+        });
+        Route::prefix('/voucher')->group(function(){
+          
+                Route::get('/list', [voucherController::class, 'list'])->name('voucher_list');
+                Route::get('/add', [voucherController::class, 'add'])->name('voucher_add');
+                Route::post('/post-add', [voucherController::class, 'post_add'])->name('voucher_post_add');
+                Route::get('/update/{voucher_id}', [voucherController::class, 'update'])->name('voucher_update');
+                Route::put('/post-update/{voucher_id}', [voucherController::class, 'post_update'])->name('voucher_post_update');
+                Route::get('/toggle-status/{voucher_id}/{voucher_status}', [voucherController::class, 'toogle_status'])->name('voucher_toogle_status');
+                Route::get('/deatil/{voucher_id}', [voucherController::class, 'deatil'])->name('voucher_deatil');
+
         });
         Route::prefix('/banner')->group(function(){
             Route::get('/list', [bannerController::class, 'list'])->name('banner_list');

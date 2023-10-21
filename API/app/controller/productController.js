@@ -48,14 +48,13 @@ exports.getListHome = (req, res) => {
         });
     });
 }
-
 exports.getDeatil = (req, res) => {
     const arr = [];
     const product_id = req.params.product_id;
 
     productModel.deatil((error, results) => {
         if (error) {
-            return res.status(500).json({ error: 'Database query error' });
+            return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
         }
 
         const promises = results.map(item => {
@@ -72,21 +71,44 @@ exports.getDeatil = (req, res) => {
                     mota: item.product_mota,
                     dacdiem: item.product_dacdiem,
                     baoquan: item.product_baoquan,
-                    images: []
+                    images: [],
+                    quantity: [],
+                    colorList:[],
+                    sizeList:[],
                 };
 
                 // Gọi hàm getDeatilImg để lấy danh sách hình ảnh
                 productModel.getDeatilImg((error, resultsImg) => {
                     if (error) {
                         reject(error);
+                    } else {
+                        const arrImg = resultsImg.map(img => ({
+                            link: img.productImg_name
+                        }));
+                        productItem.images = arrImg;
+
+                        // Gọi hàm getDeatilQuantity bên trong callback của getDeatilImg
+                        productModel.getDeatilQuantity((error, resultsQuantity) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                const arrQuantity = resultsQuantity.map(quantity => ({
+                                    size: quantity.productQuantity_size,
+                                    color: quantity.productQuantity_color,
+                                    quantity_: quantity.productQuantity,
+                                    price: quantity.productQuantity_priceOut
+                                }));
+                                const uniqueColors = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_color)));
+                                const uniqueSizes = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_size)));
+                                const arrColor = uniqueColors.map(color => ({ color }));
+                                const arrSize = uniqueSizes.map(size => ({ size }));
+                                productItem.quantity = arrQuantity;
+                                productItem.colorList = arrColor;
+                                productItem.sizeList = arrSize;
+                                resolve(productItem);
+                            }
+                        }, item.product_id);
                     }
-
-                    const arrImg = resultsImg.map(img => ({
-                        link: img.productImg_name
-                    }));
-
-                    productItem.images = arrImg;
-                    resolve(productItem);
                 }, item.product_id);
             });
         });
@@ -96,8 +118,8 @@ exports.getDeatil = (req, res) => {
                 res.json({ status: 'success', results: arrItem });
             })
             .catch(err => {
-                console.error('Error: ', err);
-                res.status(500).json({ error: 'Database query error' });
+                console.error('Lỗi: ', err);
+                res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
             });
     }, product_id);
 };
