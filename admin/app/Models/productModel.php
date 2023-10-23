@@ -18,54 +18,54 @@ class productModel extends Model
 
     // Định nghĩa các trường cho bảng và các quan hệ nếu cần
 
-    public function addproduct($theloai_id, $product_name, $product_code, $brand_product, $baoquan_product, $mota_product, $dacdiem_product, $listImg, $listQuantity)
-    {
+    public function addtourDeatil($location, $tour_id, $price, $name, $code, $startTime, $endTime, $startTimeTour, $transport, $infro, $listImg)
+{
+    $data = [
+        'tour_category_id' => $tour_id,
+        'category_tour_deatil_price' => $price,
+        'tour_deatil_code' => $code,
+        'tour_deatil_name' => $name,
+        'tour_deatil_localtion' => $location,
+        'tour_deatil_start' => $startTimeTour,
+        'tour_deatil_startTime' => $startTime,
+        'tour_deatil_endTime' => $endTime,
+        'tour_deatil_transport' => $transport,
+        'tour_deatil_infro' => $infro,
+        'category_tour_status' => 1,
+    ];
+
+    try {
+        $result = DB::table($this->table)->insertGetId($data);
+        if ($result) {
+            $this->addImg($listImg, $result);
+        }
+        return $result; // Trả về true nếu thành công, false nếu thất bại
+    } catch (\Exception $e) {
+        return false;
+    }
+}
+
+public function addImg($listImg, $id)
+{
+    $success = true; // Sử dụng biến này để theo dõi kết quả
+    foreach ($listImg as $item) {
         $data = [
-            'product_name' => $product_name,
-            'product_code' => $product_code,
-            'theloai_id' => $theloai_id,
-            'brand_id' => $brand_product,
-            'product_baoquan' => $baoquan_product,
-            'product_dacdiem' => $dacdiem_product, // Đặt giá trị cho cột này
-            'product_mota' => $mota_product,
-            'product_status' => 1, // Đặt giá trị cho cột này
+            'tour_deatil_id' => $id,
+            'tour_deatil_img_link' => $item,
+            'tour_deatil_img_status' => 1,
         ];
         try {
-            //  $result = DB::table($this->table)->insertGetId($data);
-            $result = DB::table($this->table)->insertGetId($data);
-            $addImg = $this->addProductImg($listImg, $result);
-            $addQuantity = $this->addProductQuantity($listQuantity, $result);
-            if ($addQuantity&& $addImg) {
-                return $result;
+            $result = DB::table('tbl_tour_deatil__img')->insert($data);
+            if (!$result) {
+                $success = false;
             }
-            return false;
-            // Trả về true nếu thành công, false nếu thất bại
         } catch (\Exception $e) {
-            return false;
+            $success = false;
         }
     }
-    function addProductImg($listImg, $product_id)
-    {
-        try {
-            DB::beginTransaction();
+    return $success; // Trả về true nếu tất cả ảnh được chèn thành công, false nếu có lỗi
+}
 
-            foreach ($listImg as $item) {
-                $data = [
-                    'product_id' => $product_id,
-                    'productImg_name' => $item,
-                    'productImg_status' => 1,
-                ];
-
-                DB::table($this->tableImg)->insert($data);
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return false;
-        }
-    }
     function getDeatil($product_id){
         $result=DB::table('tbl_product')
         ->join('tbl_brand',"tbl_product.brand_id","=","tbl_brand.brand_id")
