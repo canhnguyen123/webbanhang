@@ -396,6 +396,22 @@
                 returnAjax(link, list, btnLoad)
             })
 
+            $('#voucher-search-btn').click(function(event) {
+                event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
+                const content = $('#voucher-search').val();
+                const link = '{{ route('voucher_seach_Ajax') }}';
+                const list = '#list-voucher';
+                $('.tfoot-table').hide()
+                searchAjax(content, link, list);
+            });
+
+            $('#return-voucher').click(function() {
+                const link = '{{ route('voucher_return_Ajax') }}';
+                const list = '#list-voucher';
+                const btnLoad = '.tfoot-table';
+                returnAjax(link, list, btnLoad)
+            })
+
             $('#color-search-btn').click(function(event) {
                 event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
                 const content = $('#color-search').val();

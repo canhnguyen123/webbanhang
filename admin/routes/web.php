@@ -181,6 +181,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/methodPayment', [AjaxController::class, 'methodPayment_seach'])->name('methodPayment_seach_Ajax');
             Route::get('/statusPayment', [AjaxController::class, 'statusPayment_seach'])->name('statusPayment_seach_Ajax');
             Route::get('/user', [AjaxController::class, 'user_seach'])->name('user_seach_Ajax');
+            Route::get('/voucher', [AjaxController::class, 'voucher_seach'])->name('voucher_seach_Ajax');
 
         });
        
@@ -208,6 +209,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/methodPayment', [AjaxController::class, 'methodPayment_return'])->name('methodPayment_return_Ajax');
             Route::get('/statusPayment', [AjaxController::class, 'statusPayment_return'])->name('statusPayment_return_Ajax');
             Route::get('/user', [AjaxController::class, 'user_return'])->name('user_return_Ajax');
+            Route::get('/voucher', [AjaxController::class, 'voucher_return'])->name('voucher_return_Ajax');
 
         });
         Route::prefix('/select')->group(function(){ 

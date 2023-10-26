@@ -10,6 +10,8 @@ const { response } = require('express');
 
 const secretKey = 'yourSecretKey';
 const bcrypt = require('bcrypt');
+const tokenExpiration = '1h';
+
 exports.createUser = (req, res) => {
     const userName = req.body.username;
     const fullName = req.body.fullName;
@@ -69,6 +71,7 @@ exports.login = (req, res) => {
         }
         const user_id = results[0].user_id;  // Sử dụng results[0].user_id
         const storedHashedPassword = results[0].user_pasword;
+        const token = jwt.sign({ user_id }, secretKey, { expiresIn: tokenExpiration });
 
         // Compare hashed password
         bcrypt.compare(password, storedHashedPassword, (err, result) => {
@@ -77,7 +80,7 @@ exports.login = (req, res) => {
             }
           
             if (result) {
-                return res.json({ status: 'success', mess: 'Đăng nhập thành công',user_id:user_id });
+                return res.json({ status: 'success', mess: 'Đăng nhập thành công',user_id:user_id,token:token });
             } else {
                 return res.json({ status: 'fail', mess: 'Sai mật khẩu' });
             }
@@ -91,6 +94,7 @@ exports.deatil=(req,res)=>{
             return res.status(500).json({ error: 'Database query error' });
         }
         const arr={
+            user_id:user_id,
             user_linkImg:results[0].user_linkImg,
             user_fullname:results[0].user_fullname
         }

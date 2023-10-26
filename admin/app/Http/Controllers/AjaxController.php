@@ -32,6 +32,15 @@ class AjaxController extends Controller
             'primary_id' => 'brand_id',
         ];
     }
+    private function voucherParams()
+    {
+        return [
+            'table_name' => 'tbl_voucher',
+            'colum_name1' => 'voucher_name',
+            'colum_name2' => 'voucher_code',
+            'primary_id' => 'voucher_id',
+        ];
+    }
     private function userParams()
     {
         return [
@@ -356,7 +365,29 @@ class AjaxController extends Controller
             ->with('i', $i);
     }
 
- 
+    public function voucher_seach(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->voucherParams();
+        $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        $i = 1;
+        $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.voucher_list')->with('list_voucher', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function voucher_return()
+    {
+        $params = $this->voucherParams();
+        $results = $this->ajaxModel->returnTable_ajax($params['table_name'], $params['primary_id']);
+        $i = 1;
+
+        return view('ohther.ajax.admin.voucher_list')
+            ->with('list_voucher', $results)
+            ->with('i', $i);
+    }
 
     public function methodPayment_seach(Request $request)
     {

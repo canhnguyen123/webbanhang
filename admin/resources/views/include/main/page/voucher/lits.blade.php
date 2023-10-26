@@ -103,14 +103,14 @@
                       </table>
                     </div>
                   </div>
-                  @if ($check===1)
+                  {{-- @if ($check===1)
                   <div class="col-12 flex_center pd-30">
                     <button type="button" class=" btn-pimar-key btn-icon-text" id="btn-loadmore-voucher" data-id="{{ $list_voucher->last()->voucher_id-1 }}" data-stt="{{$i-1}}">
                       <i class="mdi mdi-arrow-down"></i>
                       Xem  thêm
                     </button>
                   </div>
-                  @endif
+                  @endif --}}
                 </div>
                 </div>
               </div>

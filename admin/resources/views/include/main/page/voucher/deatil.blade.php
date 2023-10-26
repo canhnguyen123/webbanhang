@@ -4,112 +4,135 @@
         <div class="flex_center">
             <div class=" with-form-100w grid-margin stretch-card">
                 <div class="card">
+                    
                     <div class="card-body">
                         <h4 class="card-title" style="text-align: center">Chi tiết voucher</h4>
+
                         @foreach ($item_voucher as $item)
-                        <div class="col-12 row">
+                            <div class="col-12 row">
 
-                          <div class="col-6 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group  col-12 ">
-                                <p>  <label> Tên voucher</label> :{{$item->voucher_name}}</p>
-                              </div>
-                          </div>
-                          <div class="col-6 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group col-12">
-                                  <p><label> Mã voucher</label>: {{$item->voucher_code}}</p>
-                              </div>
-                          </div>
+                                <div class="col-6 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group  col-12 ">
+                                        <p> <label> Tên voucher</label> :{{ $item->voucher_name }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Mã voucher</label>: {{ $item->voucher_code }}</p>
+                                    </div>
+                                </div>
 
 
-                          <div class="col-4 pd-0-mg-0-b-0">
-                              <div class="form-group col-12">
-                                  <label for="">Giới hạn</label>
-                                  <select class="form-control form-control-lg check-selects" name="voucher_isLimit"
-                                      id="is-limit-voucher">
-                                      <option value="1">Có</option>
-                                      <option value="0">Không</option>
-                                  </select>
-                              </div>
-                          </div>
-                          <div class="col-4 pd-0-mg-0-b-0">
-                              <div class="form-group col-12">
-                                  <label for="">Đơn vị</label>
-                                  <select class="form-control form-control-lg voucher-unit check-selects"
-                                      id="unit-voucher" name="voucher_unit">
-                                      <option value="Free">Free ship</option>
-                                      <option value="%">%</option>
-                                      <option value="VNĐ">VNĐ</option>
-                                  </select>
-                                  <input type="hidden" value="0" name="voucher_category" id="voucher_category">
-                              </div>
-                          </div>
-                          <div class="col-4 pd-0-mg-0-b-0">
-                              <div class="form-group col-12">
-                                  <label for="">Điều kiện</label>
-                                  <select class="form-control form-control-lg" name="voucher_condition">
-                                      <option value=">">Lớn hơn</option>
-                                      <option value=">=">Lớn hơn hoặc bằng</option>
-                                      <option value=">=">Bằng</option>
-                                      <option value="<=">Nhỏ hơn hoặc bằng</option>
-                                      <option value=">=">Nhỏ hơn </option>
-                                  </select>
-                              </div>
-                          </div>
-                          <div class="col-4 pd-0-mg-0-b-0 validate-form row">
-                              <div class="form-group form-input col-12">
-                                  <i class="mdi mdi-codepen"></i>
-                                  <input type="text" name="voucher_quantity" id="voucher-quantity"
-                                      class="form-control product_code number-input get-number" required>
-                                  <label> Số lượng</label>
-                              </div>
-                              <div class="col-12 err"><span class="err-text"></span></div>
-                          </div>
-                          <div class="col-4 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group form-input col-12">
-                                  <i class="mdi mdi-codepen"></i>
-                                  <input type="text" id="voucher_number_condition" name="voucher_number"
-                                      class="form-control product_code  number-input  get-number" value="0" required>
-                                  <label> Nhập số giảm</label>
-                              </div>
-                              <div class="col-12 err"><span class="err-text"></span></div>
-                          </div>
-                          <div class="col-4 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group form-input col-12">
-                                  <i class="mdi mdi-codepen"></i>
-                                  <input type="text" name="voucher_number_condition"
-                                      class="form-control product_code  number-input  " required>
-                                  <label> Nhập số của điều kiện</label>
-                              </div>
-                              <div class="col-12 err"><span class="err-text"></span></div>
-                          </div>
-                          <div class="col-6 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group form-input col-12 ">
-                                  <i class="mdi mdi-calendar-text"></i>
-                                  <input type="text" name="voucher_startTime"
-                                      class="form-control flatpickr nameProduct " required>
-                                  <label> Ngày bắt đầu</label>
-                              </div>
-                              <div class="col-12 err"><span class="err-text"></span></div>
-                          </div>
-                          <div class="col-6 pd-0-mg-0-b-0 validate-form">
-                              <div class="form-group form-input col-12">
-                                  <i class="mdi mdi-calendar-text"></i>
-                                  <input type="text" name="voucher_endTime"
-                                      class="form-control product_code uppercaseInput flatpickr  " required>
-                                  <label>Ngày kết thúc</label>
-                              </div>
-                              <div class="col-12 err"><span class="err-text"></span></div>
-                          </div>
-                          <div class="col-12">
-                              <label for="">Mô tả</label>
-                              <textarea name="voucher_note" id="dacdiem_product" class="editor dacdiem_product" cols="30" rows="10"> </textarea>
-                          </div>
-                          <div class="col-12">
-                              <button type="submit" class="btn-pimar-key mr-2">Thêm voucher</button>
-                          </div>
-                      </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Giới hạn </label>:
+                                            @if ($item->voucher_isLimit === 1)
+                                                Có
+                                            @else
+                                                không
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Đơn vị </label>:
+                                            @if ($item->voucher_unit === 0)
+                                                Free ship
+                                            @elseif($item->voucher_unit === 1)
+                                                %
+                                            @else
+                                                VNĐ
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Điều kiện </label>:
+                                            @if ($item->voucher_condition === '>')
+                                                Lớn hơn {{ number_format($item->voucher_number_condition, 0, '.', ',') }}
+                                                VNĐ
+                                            @elseif ($item->voucher_condition === '>=')
+                                                Lớn hơn hoặc bằng
+                                                {{ number_format($item->voucher_number_condition, 0, '.', ',') }} VNĐ
+                                            @elseif ($item->voucher_condition === '=')
+                                                Bằng {{ number_format($item->voucher_number_condition, 0, '.', ',') }} VNĐ
+                                            @elseif ($item->voucher_condition === '<=')
+                                                Nhỏ hơn hoặc bằng
+                                                {{ number_format($item->voucher_number_condition, 0, '.', ',') }} VNĐ
+                                            @elseif ($item->voucher_condition === '<')
+                                                Nhỏ hơn {{ number_format($item->voucher_number_condition, 0, '.', ',') }}
+                                                VNĐ
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Số lượng giới hạn</label>:
+                                            @if ($item->voucher_isLimit === 1)
+                                                {{ $item->voucher_quantity }}
+                                            @else
+                                                không giới hạn
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label> Số tiền giảm </label>:
+                                            {{ number_format($item->voucher_number, 0, '.', ',') }} VNĐ</p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label>Thể loại voucher</label>: 
+                                            @if ($item->voucher_category === 0)
+                                               Free ship
+                                            @elseif ($item->voucher_category === 1)
+                                                Giảm theo %
+                                            @else
+                                                Giảm giá  theo VNĐ
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label>Ngày bắt đầu</label>: 
+                                            {{ $item->voucher_startDate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label>Ngày kết thúc</label>: 
+                                            {{ $item->voucher_endDate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 pd-0-mg-0-b-0 validate-form">
+                                    <div class="form-group col-12">
+                                        <p><label>Trạng thái</label>: 
+                                            
+                                            @if ($item->voucher_status === 1)
+                                                Đang hoạt động
+                                            @else
+                                                Đã tắt
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="">Mô tả</label><br>
+                                    {!! htmlspecialchars_decode($item->voucher_note) !!}
+                                </div>
+                              
+                            </div>
                         @endforeach
-                      
+
 
                     </div>
                 </div>

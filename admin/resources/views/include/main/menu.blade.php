@@ -242,7 +242,6 @@
       <a class="nav-link" href="{{route('voucher_list')}}">
         <i class="mdi mdi-account-settings menu-icon"></i>
         <span class="menu-title">Voucher</span>
-        <i class="menu-arrow"></i>
       </a>
     </li>
   </ul>

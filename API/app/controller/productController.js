@@ -100,8 +100,8 @@ exports.getDeatil = (req, res) => {
                                 }));
                                 const uniqueColors = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_color)));
                                 const uniqueSizes = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_size)));
-                                const arrColor = uniqueColors.map(color => ({ color }));
-                                const arrSize = uniqueSizes.map(size => ({ size }));
+                                const arrColor = uniqueColors.map(color => (color));
+                                const arrSize = uniqueSizes.map(size => (size ));
                                 productItem.quantity = arrQuantity;
                                 productItem.colorList = arrColor;
                                 productItem.sizeList = arrSize;

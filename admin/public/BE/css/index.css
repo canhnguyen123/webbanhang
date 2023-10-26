@@ -655,3 +655,7 @@ margin-bottom: 35px;
     object-position: center;
     object-fit: cover;
 }
+.form-control[readonly] {
+    background :transparent !important; 
+    opacity: 1;
+}

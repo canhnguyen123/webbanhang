@@ -62,21 +62,31 @@ public function deatil($voucher_id){
 }
 
 public function post_update(voucherRequest $request,$voucher_id){
-    $name=$request->namevoucher;
-    $code=$request->codevoucher;
+    $name=$request->voucher_name;
+    $code=$request->voucher_code;
+    $isLimit=$request->voucher_isLimit;
+    $unit=$request->voucher_unit;
+    $condition=$request->voucher_condition;
+    $quantity=$request->voucher_quantity;
+    $number=$request->voucher_number;
+    $voucher_category=$request->voucher_category;
+    $number_condition=$request->voucher_number_condition;
+    $startTime=$request->voucher_startTime;
+    $endTime=$request->voucher_endTime;
+    $note=$request->voucher_note;
     $voucher= new voucherModel();
-    $check_is= $voucher->checkDatabaseIs($code,$voucher_id);
-    if($check_is){
+    $check=$voucher->checkDatabaseIs($code,$voucher_id);
+    if($check){
         $errorMessage = "Mã danh mục đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $voucher->updatevoucher($name,$code,$voucher_id);
-       // if($update){
+        $add= $voucher->updatevoucher($name, $code, $isLimit, $unit, $voucher_category, $condition, $quantity, $number, $number_condition, $startTime, $endTime, $note,$voucher_id) ;
+        if($add){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('voucher_list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('voucher_list')."';</script>";
-        // }
+        }else{
+            return " <script> alert('Cập nhật thất bại'); window.location = '".route('voucher_post_update',['voucher_id'=>$voucher_id])."';</script>";
+        }
     }
   
 }
