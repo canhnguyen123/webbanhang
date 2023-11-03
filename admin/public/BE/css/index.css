@@ -14,15 +14,23 @@
 .div-search{
     width: 100%;
 }
+.flex_start{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
 .item-icon {
     height: 40px;
     border-radius: 50%;
     width: 40px;
     text-decoration: none;
     cursor: pointer;
-    position: relative; /* Add this for positioning */
+    position: relative;
+    transition: .5s ease-in-out;
 }
-
+.tran-0-5{
+    transition: .5s ease-in-out;
+}
 .item-icon i {
     color: white;
 }
@@ -168,7 +176,9 @@ background-color: white;
     border: 0 !important;
     padding: 0 !important;
 }
-
+.pg-50-0{
+    padding: 50px 0;
+}
 .with-form-800{
     width: 800px;
 }
@@ -216,11 +226,23 @@ p.card-title{
     text-transform: uppercase !important;
     padding: 20px 0;
 }
+.he-46{
+    height: 46px;
+}
 .pg-10{
     padding: 10px;
 }
 .pd-30{
     padding: 30px;
+}
+.pd-100-0{
+    padding: 100px 0;
+}
+.pg-15-0{
+    padding: 15px 0;
+}
+.mg-right-5{
+    margin-right: 5px;
 }
 .img-div img{
     width: 100%;
@@ -658,4 +680,21 @@ margin-bottom: 35px;
 .form-control[readonly] {
     background :transparent !important; 
     opacity: 1;
+}
+.status-payment-list{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px 0;
+}
+.status-payment-item{
+    min-width: 100px;
+    height: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.status-payment-item.active{
+    background-color: #5E50F9;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #ccc;
 }

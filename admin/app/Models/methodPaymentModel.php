@@ -13,11 +13,12 @@ class methodPaymentModel extends Model
 
     // Định nghĩa các trường cho bảng và các quan hệ nếu cần
 
-    public function addmethodPayment($name,$code,$note)
+    public function addmethodPayment($name,$code,$category,$note)
 {
     $data = [
         'methodPayment_name' => $name,
         'methodPayment_code' => $code,
+        'methodPayment_category' => $category,
         'methodPayment_note' => $note,
         'methodPayment_status' => 1,
     ];
@@ -29,12 +30,13 @@ class methodPaymentModel extends Model
         return false;
     }
 }
-    public function updatemethodPayment($name,$code,$methodPayment_id,$note)
+    public function updatemethodPayment($name,$code,$methodPayment_id,$note,$category)
     {
         $data = [
             'methodPayment_name' => $name,
             'methodPayment_code' => $code,
             'methodPayment_note' => $note,
+            'methodPayment_category' => $category,
         ];
         try {
             $result = DB::table($this->table)->where('methodPayment_id',$methodPayment_id)->update($data);

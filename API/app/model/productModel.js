@@ -136,3 +136,4 @@ exports.getDeatilQuantity= (callback, product_id) => {
     );
 };
 
+

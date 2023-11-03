@@ -217,13 +217,11 @@
       <div class="collapse" id="icons">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{route('position_list')}}">Vị trí</a></li>
-        </ul>
-      </div> <div class="collapse" id="icons">
-        <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{route('staff_list')}}">Nhân viên</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('permission.Group.list')}}">Nhóm quyền</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('permission.list')}}">Phân quyền chi tiết</a></li>
         </ul>
-      </div>
-    </li>
+      </li>
     <li class="nav-item">
       <a class="nav-link" data-toggle="collapse" href="#payment" aria-expanded="false" aria-controls="payment">
         <i class="mdi mdi-cart-outline menu-icon"></i>
@@ -234,7 +232,8 @@
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{route('methodPayment_list')}}">Phương thức TT</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('statusPayment_list')}}">Trạng thái đơn hàng</a></li>
-          <li class="nav-item"> <a class="nav-link" href="{{route('position_list')}}">Đơn hàng</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('ship.list')}}">Vận chuyển</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('payment_list')}}">Đơn hàng</a></li>
         </ul>
    
     </li>

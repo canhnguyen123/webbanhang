@@ -173,7 +173,7 @@
                                 <label for="" class="p-static">Chức vụ</label>
                                <select name="position_id"  height="40px" class="form-control  form-control-lg">
                                 @foreach ($listPosition as $item)
-                                  <option value="{{$item->position_id}}">{{$item->position_code}}</option>
+                                  <option value="{{$item->position_id}}">{{$item->position_name}}</option>
                                 @endforeach
                                </select>
                               </div>
@@ -186,10 +186,11 @@
                                 <textarea name="note" class="editor" cols="30" rows="10"> </textarea>
                             </div>
                             </div>
+                          
+                        
                             <div class="col-12">
 
                                 <button type="submit" id="btn-upload-staff" class="btn-pimar-key mr-2">Thêm</button>
-                                <button type="reset" class="btn btn-light">Reset form</button>
                             </div>
                         </form>
                     </div>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css"
         integrity="sha512-W/zrbCncQnky/EzL+/AYwTtosvrM+YG/V6piQLSe2HuKS6cmbw89kjYkp3tWFn1dkWV7L1ruvJyKbLz73Vlgfg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('BE/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/css/vendor.bundle.base.css') }}">
@@ -104,27 +104,28 @@
         firebase.initializeApp(firebaseConfig);
     </script>
     <script>
-           flatpickr(".flatpickr", {
+        flatpickr(".flatpickr", {
             altInput: true,
-                altFormat: "F j, Y",
-                dateFormat: "Y-m-d",
-            });
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
         $(document).ready(function() {
             $('#is-limit-voucher').on('change', function() {
-                const selectChane='#is-limit-voucher';
-                const input='#voucher-quantity'
-                checkInputVoucher(selectChane,input)
+                const selectChane = '#is-limit-voucher';
+                const input = '#voucher-quantity'
+                checkInputVoucher(selectChane, input)
             });
             $('#unit-voucher').on('change', function() {
-                const selectChane='#unit-voucher';
-                const input='#voucher_number_condition'
-                checkInputVoucher(selectChane,input)
+                const selectChane = '#unit-voucher';
+                const input = '#voucher_number_condition'
+                checkInputVoucher(selectChane, input)
             });
-            function checkInputVoucher(selectChane,input){
+
+            function checkInputVoucher(selectChane, input) {
                 var selectedValue = $(selectChane).val();
                 var voucherQuantity = $(input);
 
-                if (selectedValue === '0' ||selectedValue === 'Free' ) {
+                if (selectedValue === '0' || selectedValue === 'Free') {
                     // Nếu giá trị là '0' (Không), ngăn người dùng nhập giá trị vào input
                     voucherQuantity.on('keydown', function(e) {
                         e.preventDefault();
@@ -213,7 +214,7 @@
                         itemCount++;
 
                     });
-                 const files = Array.from(document.getElementById("file-upload-product").files);
+                    const files = Array.from(document.getElementById("file-upload-product").files);
                     const uploadPromises = [];
                     const ref = firebase.storage().ref();
 
@@ -455,6 +456,29 @@
                 const link = '{{ route('brand_return_Ajax') }}';
                 const list = '#list-brand';
                 const btnLoad = '#btn-loadmore-brand';
+                returnAjax(link, list, btnLoad)
+            })
+
+            $('#ship-search-btn').click(function(event) {
+                event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
+                const content = $('#ship-search').val();
+                const link = '{{ route('ship.seach.Ajax') }}';
+                const list = '#list-ship';
+                $('#btn-loadmore-ship').hide()
+                searchAjax(content, link, list);
+            });
+            $('#btn-loadmore-ship').click(function() {
+                const stt = $(this).data('stt')
+                const link = '{{ route('ship.loadmore.Ajax') }}';
+                const list = '#list-ship';
+                const id = $(this).data('id');
+                const btn = $(this)
+                loadmoreAjax(stt, id, link, list, btn)
+            })
+            $('#return-ship').click(function() {
+                const link = '{{ route('ship.return.Ajax') }}';
+                const list = '#list-ship';
+                const btnLoad = '#btn-loadmore-ship';
                 returnAjax(link, list, btnLoad)
             })
 
@@ -1388,13 +1412,67 @@
                     reader.readAsDataURL(input.files[0]); // Đọc dữ liệu ảnh và cập nhật src của thẻ img
                 }
             }
-         
+
             $(document).on('click', '.loadModalDeatil', function() {
                 const textNote = $(this).data('text');
                 $('#exampleModal .modal-body .text-mota-table').text(textNote);
                 $('#exampleModal').modal('show');
             });
+            $('.status-payment-item').click(function() {
+                $('.status-payment-item').removeClass('active');
+                $(this).addClass('active');
+                const status=$(this).data('id')
+                getDataPayment(status)
+            });
 
+            function getDataPayment(status) {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('selete_billPayment') }}",
+                    data: {
+                        status: status,
+                    },
+                    success: function(response) {
+                        $('#list-payment').html(response.view)
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+            $('.payment-change').change(function(){
+                const values=$(this).val();
+                if(values==5){
+                    $('.payment-code').hide()
+                    $('.payment-note').hide()
+                    $('.reason-mess').show()
+                }
+                else{
+                    $('.payment-code').show()
+                    $('.payment-note').show()
+                    $('.reason-mess').hide()
+                }
+            })
+             $("#selectOptions").change(function() {
+                var selectedOption = $(this).val();
+                
+                // Kiểm tra giá trị tùy chọn và thực hiện hành động tương ứng
+                if (selectedOption === "select-all") {
+                    // Đánh dấu tất cả các ô input checkbox
+                    $(".checkbox").prop("checked", true);
+                } else if (selectedOption === "deselect-all") {
+                    // Bỏ chọn tất cả các ô input checkbox
+                    $(".checkbox").prop("checked", false);
+                }
+            });
         });
     </script>
 

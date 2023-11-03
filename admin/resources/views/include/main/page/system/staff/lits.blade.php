@@ -99,17 +99,12 @@
                           @endforeach
                           
                         </tbody>
+                        @include('ohther.pagination.pagination', [
+                          'paginator' => $list_staff,
+                      ])
                       </table>
                     </div>
                   </div>
-                  @if ($check===1)
-                  <div class="col-12 flex_center pd-30">
-                    <button type="button" class=" btn-pimar-key btn-icon-text" id="btn-loadmore-staff" data-id="{{ $list_staff->last()->staff_id-1 }}" data-stt="{{$i-1}}">
-                      <i class="mdi mdi-arrow-down"></i>
-                      Xem  thêm
-                    </button>
-                  </div>
-                  @endif
                 </div>
                 </div>
               </div>

@@ -18,31 +18,44 @@
                     {{ session('errorMessage') }}
                 </div>
             @endif
-              <div class="form-group form-input col-6">
-                <i class="mdi mdi-rename-box"></i>
-                <input type="text" name="nameposition" class="form-control" value="{{ old('nameposition') }}" required>
-                <label> Tên ví trí</label>
+              <div class="form-group col-xl-6 col-sm-12">
+                <div class="col-12  form-input">
+                  <i class="mdi mdi-rename-box"></i>
+                  <input type="text" name="nameposition" class="form-control" value="{{ old('nameposition') }}" required>
+                  <label> Tên ví trí</label>
+                </div>
+                <div class="col-12 err">
+                  <span>
+                      @error('nameposition')
+                          {{ $message }}
+                      @enderror
+                  </span>
               </div>
-              <div class="form-group form-input col-6">
-                <i class="mdi mdi-codepen"></i>
-                <input type="text" name="codeposition" class="form-control" value="{{ old('codeposition') }}" required>
-                <label> Mã ví trí</label>
               </div>
-              <div class="col-6 err">
-                <span>
-                    @error('nameposition')
-                        {{ $message }}
-                    @enderror
-                </span>
-            </div>
-              <div class="col-6 err">
-                <span>
-                    @error('codeposition')
-                        {{ $message }}
-                    @enderror
+              <div class="form-group col-xl-6 col-sm-12">
+                <div class="col-12  form-input">
+                  <i class="mdi mdi-codepen"></i>
+                  <input type="text" name="codeposition" class="form-control" value="{{ old('codeposition') }}" required>
+                  <label> Mã ví trí</label>
+                </div>
+                <div class="col-12 err">
+                  <span>
+                      @error('codeposition')
+                          {{ $message }}
+                      @enderror
+                    
+                  </span>
+              </div>
+              </div>
+              <div class="col-12 row pg-50-0">
+                  @foreach ($getPemissionGroup as $item)
+                    <div class="col-xl-4 col-lg-6 col-sm-12 flex_start pg-15-0">
+                      <input type="checkbox" name="pemissionGroup[]" class="mg-right-5" value="{{$item->permission_group_id}}"> {{$item->permission_group_name}}
+                    </div>
+                  @endforeach
                   
-                </span>
-            </div>
+              </div>
+          
               <button type="submit" class=" btn-pimar-key mr-2">Thêm</button>
              
             </form>

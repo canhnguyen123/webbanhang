@@ -93,12 +93,20 @@ exports.deatil=(req,res)=>{
         if (error) {
             return res.status(500).json({ error: 'Database query error' });
         }
-        const arr={
-            user_id:user_id,
-            user_linkImg:results[0].user_linkImg,
-            user_fullname:results[0].user_fullname
+        if (results.length === 0) {
+            return res.json({ status: 'fail', message: 'Không tìm thấy người dùng' });
         }
-        return res.json({ status: 'success',results:arr });
+        
+        const arr = {
+            user_id: user_id,
+            fullname: results[0].user_fullname,
+            phone: results[0].user_phone,
+            img: results[0].user_linkImg,
+            address: results[0].user_address
+        }
+        
+        return res.json({ status: 'success', results: arr });
+        
     });
 }
 

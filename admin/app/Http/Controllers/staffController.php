@@ -13,14 +13,14 @@ class staffController extends Controller
 {
     public function list(){
         $staffModel = new staffModel();
-        $list_staff = $staffModel->paginate(5); 
+        $list_staff = $staffModel->paginate(20); 
         $check = $list_staff->hasMorePages() ? 1 : 0;
         $i = 1;
         return view('include.main.page.system.staff.lits', compact('list_staff', 'i', 'check'));
     }
 public function add(){
     $staffModel = new staffModel();
-    $listPosition = $staffModel->getListTable('tbl_position', 'position_status');
+    $listPosition = $staffModel->getListTable('tbl_position', 'position_status')->get();
     return view('include.main.page.system.staff.add',compact('listPosition'));
 }
 public function post_add(Request $request){
@@ -57,8 +57,10 @@ public function update($staff_id){
   
     $staffModel = new staffModel();
     $item_staff =$staffModel->getDetail($staff_id);
-    $listPosition = $staffModel->getListTable('tbl_position', 'position_status');
-    return view('include.main.page.system.staff.update',compact('item_staff','listPosition'));
+    $listPosition = $staffModel->getListTable('tbl_position', 'position_status')->get();
+    $listPemissionId = $staffModel->getListTable('tbl_permission', 'permission_status')->get();
+    $listMyPemissionId = $staffModel->getMyListTable($staff_id)->get();
+    return view('include.main.page.system.staff.update',compact('item_staff','listPosition','listPemissionId','listMyPemissionId'));
 }
 public function deatil($staff_id){
   
@@ -75,6 +77,7 @@ public function post_update(Request $request,$staff_id){
     $note=$request->note;
     $deatilAddress=$request->deatilAddress;
     $staff_address=$request->staff_address;
+    $pemissionId=$request->pemissionId;
     $address="";
     $img="";
     if(strlen(trim($deatilAddress))===0){
@@ -91,7 +94,8 @@ public function post_update(Request $request,$staff_id){
         $img=$staff->staff_linkimg;
     }
     $staff= new staffModel();
-        $update= $staff-> updatestaff($fullname, $email, $phone, $position_id, $note, $img, $address,$staff_id);
+        $update= $staff-> updatestaff($fullname, $email, $phone, $position_id, $note, $img, $address,$staff_id,$pemissionId);
+        $staff->updatePemission($pemissionId, $staff_id);
         if($imgLink&&$imgLink->isValid()){
             $uploadPath = public_path('upload');
 

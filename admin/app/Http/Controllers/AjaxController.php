@@ -104,6 +104,17 @@ class AjaxController extends Controller
             'primary_id' => 'product_id',
         ];
     }
+
+    private function shipParams()
+    {
+        return [
+            'table_name' => 'tbl_ship',
+            'colum_name1' => 'ship_name',
+            'colum_name2' => 'ship_code',
+            'primary_id' => 'ship_id',
+        ];
+    }
+
     private function categoryParams()
     {
         return [
@@ -362,6 +373,52 @@ class AjaxController extends Controller
 
         return view('ohther.ajax.admin.brand_list')
             ->with('list_brand', $results)
+            ->with('i', $i);
+    }
+
+    public function ship_loadmore(Request $request)
+    {
+        $last_stt = $request->input('stt');
+        $last_id = $request->input('id');
+
+        $params = $this->shipParams();
+        $results = $this->ajaxModel->loadmore_ajax($params['table_name'], $params['primary_id'], $last_id);
+        $list_ship = $results->paginate(5);
+        $last_status_id = $list_ship->lastItem();
+        $new_stt = $last_stt + $list_ship->total();
+        $hasMoreData = $list_ship->hasMorePages();
+
+        return response()->json([
+            'view' => view('ohther.ajax.admin.ship_list')->with('list_ship', $list_ship)->with('i', $last_stt)
+                // ->with('check', $check)
+                ->render(),
+            'last_id' => $last_id + $last_status_id,
+            'hasMoreData' => $hasMoreData,
+            'new_stt' => $new_stt,
+        ]);
+    }
+
+    public function ship_seach(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->shipParams();
+        $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        $i = 1;
+        $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.ship_list')->with('list_ship', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function ship_return()
+    {
+        $params = $this->shipParams();
+        $results = $this->ajaxModel->returnTable_ajax($params['table_name'], $params['primary_id']);
+        $i = 1;
+
+        return view('ohther.ajax.admin.ship_list')
+            ->with('list_ship', $results)
             ->with('i', $i);
     }
 
@@ -683,5 +740,18 @@ class AjaxController extends Controller
             ]);
         }
     }
-  
+    public function selete_bill(Request $request)
+    {
+        $status = $request->status;
+ 
+        $listPayment=$this->ajaxModel->getDatapayment($status)->paginate(30);
+       
+        return response()->json([
+            'view' => view('ohther.ajax.admin.payment_list')->with('list_payment', $listPayment)->with('i', 1)
+                ->render(),
+           
+
+        ]);
+    }
+
 }

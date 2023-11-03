@@ -20,30 +20,66 @@
                    {{ session('errorMessage') }}
                </div>
              @endif
-                <div class="form-group form-input col-6">
+                <div class="form-group  col-xl-6 col-sm-12">
+                  <div class="col-12 form-input">
                     <i class="mdi mdi-rename-box"></i>
                     <input type="text" name="nameposition" class="form-control" value="{{ $item->position_name }}" required>
                     <label> Tên chức vụ</label>
+                  </div>
+                  
+                    <div class="col-12 err">
+                      <span>
+                          @error('nameposition')
+                              {{ $message }}
+                          @enderror
+                      </span>
+                  </div>
                 </div>
-                <div class="form-group form-input col-6">
-                    <i class="mdi mdi-codepen"></i>
-                    <input type="text" name="codeposition" class="form-control" value="{{ $item->position_code }}" required>
-                    <label> Mã chức vụ</label>
+                <div class="form-group  col-xl-6 col-sm-12">
+                    <div class="col-12 form-input">
+                      <i class="mdi mdi-codepen"></i>
+                      <input type="text" name="codeposition" class="form-control" value="{{ $item->position_code }}" required>
+                      <label> Mã chức vụ</label>
+                    </div>
+                              
+                    <div class="col-12 err">
+                      <span>
+                          @error('codeposition')
+                              {{ $message }}
+                          @enderror
+                      </span>
+                  </div>
                 </div>
-                <div class="col-6 err">
-                  <span>
-                      @error('nameposition')
-                          {{ $message }}
-                      @enderror
-                  </span>
+
+                <div class="col-12 row pg-50-0">
+                  @foreach ($getMyPemissionGroup as $Myitem)
+                  <div class="col-xl-4 col-lg-6 col-sm-12 flex_start pg-15-0">
+                    <input type="checkbox" name="pemissionGroup[]" checked class="mg-right-5" value="{{ $Myitem->permission_group_id }}"> {{ $Myitem->permission_group_name }}
+                  </div>
+                  @endforeach
+              
+                  @foreach ($getPemissionGroup as $Myitem)
+                      @php
+                        $isChecked = false;
+                      @endphp
+              
+                      @foreach ($getMyPemissionGroup as $item)
+                      @if ($item->permission_group_id === $Myitem->permission_group_id)
+                          @php
+                              $isChecked = true;
+                              break;
+                          @endphp
+                      @endif
+                      @endforeach
+              
+                      @if (!$isChecked)
+                      <div class="col-xl-4 col-lg-6 col-sm-12 flex_start pg-15-0">
+                        <input type="checkbox" name="pemissionGroup[]" class="mg-right-5" value="{{ $Myitem->permission_group_id }}"> {{ $Myitem->permission_group_name }}
+                      </div>
+                      @endif
+                  @endforeach
               </div>
-                <div class="col-6 err">
-                  <span>
-                      @error('codeposition')
-                          {{ $message }}
-                      @enderror
-                  </span>
-              </div>
+              
                 <button type="submit" class=" btn-pimar-key mr-2">Cập nhật</button>
             </form>
         @endforeach

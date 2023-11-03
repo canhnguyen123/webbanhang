@@ -19,12 +19,14 @@ class positionController extends Controller
         return view('include.main.page.system.position.lits', compact('list_position', 'i', 'check'));
     }
 public function add(){
-    return view('include.main.page.system.position.add');
+    $positionModel = new positionModel();
+    $getPemissionGroup=$positionModel->selectTable('tbl_permission__group','permission_group_id','permission_group_status')->get();
+    return view('include.main.page.system.position.add',compact('getPemissionGroup'));
 }
 public function post_add(positionRequest $request){
     $name=$request->nameposition;
     $code=$request->codeposition;
-    
+    $pemissionGroup=$request->pemissionGroup;
     $position= new positionModel();
     $check=$position->checkDatabase($code);
     if($check){
@@ -32,9 +34,15 @@ public function post_add(positionRequest $request){
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $position->addposition($name,$code);
-        if($add){
-            return " <script> alert('Thêm thành công'); window.location = '".route('position_list')."';</script>";
+        $getId= $position->addposition($name,$code);
+        if($getId){
+            $add= $position->addPemissionGroup($pemissionGroup,$getId);
+            if($add){
+                return " <script> alert('Thêm thành công'); window.location = '".route('position_list')."';</script>";
+            }
+            else{
+                return " <script> alert('Không thêm được nhóm quyền'); window.location = '".route('position_list')."';</script>";
+            }
         }else{
             return " <script> alert('Thêm thất bại'); window.location = '".route('position_list')."';</script>";
         }
@@ -43,12 +51,15 @@ public function post_add(positionRequest $request){
 }
 public function update($position_id){
     $item_position = DB::table('tbl_position')->where('position_id',$position_id)->get();
-     
-    return view('include.main.page.system.position.update',compact('item_position'));
+    $positionModel = new positionModel();
+    $getPemissionGroup=$positionModel->selectTable('tbl_permission__group','permission_group_id','permission_group_status')->get();
+    $getMyPemissionGroup=$positionModel->getDataPemission($position_id)->get();
+    return view('include.main.page.system.position.update',compact('item_position','getPemissionGroup','getMyPemissionGroup'));
 }
 public function post_update(positionRequest $request,$position_id){
     $name=$request->nameposition;
     $code=$request->codeposition;
+    $pemissionGroup=$request->pemissionGroup;
     $position= new positionModel();
     $check_is= $position->checkDatabaseIs($code,$position_id);
     if($check_is){
@@ -58,7 +69,8 @@ public function post_update(positionRequest $request,$position_id){
     }else{
         $update= $position->updateposition($name,$code,$position_id);
        // if($update){
-            return " <script> alert('Cập nhật thành công'); window.location = '".route('position_list')."';</script>";
+        $update= $position-> updatePemissionGroup($pemissionGroup,$position_id);
+            return " <script> alert('Cập nhật thành công '); window.location = '".route('position_list')."';</script>";
         // }else{
         //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('position_list')."';</script>";
         // }

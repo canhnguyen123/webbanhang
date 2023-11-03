@@ -165,6 +165,42 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                <select id="selectOptions" height="40px" class="form-control  form-control-lg">
+                                    <option value="" >Chọn hành động</option>
+                                    <option value="select-all">Chọn tất cả</option>
+                                    <option value="deselect-all">Bỏ tất cả</option>
+                                </select>
+                            </div>
+                            <div class="col-12 row pg-50-0">
+                                @foreach ($listMyPemissionId as $Myitem)
+                                <div class="col-xl-4 col-lg-6 col-sm-12 flex_start pg-15-0">
+                                  <input type="checkbox" name="pemissionId[]" checked class="mg-right-5" value="{{ $Myitem->permission_id }}"> {{ $Myitem->permission_name }}
+                                </div>
+                                @endforeach
+                            
+                                @foreach ($listPemissionId as $Myitem)
+                                    @php
+                                      $isChecked = false;
+                                    @endphp
+                            
+                                    @foreach ($listMyPemissionId as $item)
+                                    @if ($item->permission_id === $Myitem->permission_id)
+                                        @php
+                                            $isChecked = true;
+                                            break;
+                                        @endphp
+                                    @endif
+                                    @endforeach
+                            
+                                    @if (!$isChecked)
+                                    <div class="col-xl-4 col-lg-6 col-sm-12 flex_start pg-15-0">
+                                      <input type="checkbox" class="checkbox" name="pemissionId[]" class="mg-right-5"  value="{{ $Myitem->permission_id }}"> {{ $Myitem->permission_name }}
+                                    </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            
+                            <div class="col-12">
 
                                 <button type="submit" id="btn-upload-staff" class="btn-pimar-key mr-2">Cập nhật</button>
                                 <button type="reset" class="btn btn-light">Reset form</button>

@@ -1,4 +1,4 @@
-@extends('admin')
+  @extends('admin')
 @section('main')
 <div class="content-wrapper">
   <div class="flex_center">
@@ -27,6 +27,14 @@
                 <i class="mdi mdi-codepen"></i>
                 <input type="text" name="codemethodPayment" class="form-control" value="{{ old('codemethodPayment') }}" required>
                 <label> Mã phương thức thanh toán</label>
+              </div>
+              <div class="form-group  col-6">
+                <label> Thể loại thanh toán</label>
+                  <select class="form-select" name="categorymethodPayment">
+                    <option value="0">Thanh toán trả trước</option>
+                    <option value="1">Thanh toán trả sau</option>
+
+                  </select>
               </div>
               <div class="col-6 err">
                 <span>

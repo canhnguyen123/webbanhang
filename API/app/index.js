@@ -8,6 +8,7 @@ const bannerRouter = require('./router/public/banner');
 const productRouter = require('./router/public/product');
 const theloaiRouter = require('./router/public/theloai');
 const cartRouter = require('./router/private/cart');
+const paymentRouter = require('./router/private/payment');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +28,8 @@ app.use('/cart', cartRouter);
 app.use('/banner', bannerRouter);
 app.use('/product'  ,productRouter);
 app.use('/theloai', theloaiRouter);
+app.use('/payment', paymentRouter);
+
 app.listen(4000, () => {
   console.log('Server đang lắng nghe tại cổng 4000');
 });

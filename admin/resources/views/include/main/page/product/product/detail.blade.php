@@ -12,27 +12,31 @@
                                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-indicators">
                                             @foreach ($item_product_Img as $key => $item)
-                                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ $key }}"
+                                                <button type="button" data-bs-target="#carouselExampleIndicators"
+                                                    data-bs-slide-to="{{ $key }}"
                                                     @if ($key === 0) class="active" @endif></button>
                                             @endforeach
                                         </div>
                                         <div class="carousel-inner">
                                             @foreach ($item_product_Img as $key => $item)
                                                 <div class="carousel-item @if ($key === 0) active @endif">
-                                                    <img src="{{ $item->productImg_name }}" class="d-block w-100" alt="Image {{ $key + 1 }}">
+                                                    <img src="{{ $item->productImg_name }}" class="d-block w-100"
+                                                        alt="Image {{ $key + 1 }}">
                                                 </div>
                                             @endforeach
                                         </div>
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
                                         </button>
                                     </div>
-                                    
+
 
                                 </div>
                                 <div class="col-8 row">
@@ -73,7 +77,7 @@
 
                                     </div>
                                     <h4 class="card-title" style="text-align: center">Quản lý số lượng</h4>
-                                  <div class="col-12 req-div-quantity" style="padding-bottom: 20px">
+                                    <div class="col-12 req-div-quantity" style="padding-bottom: 20px">
                                         @foreach ($item_product_Quantity as $item)
                                             <div class="swiper-slide item-quantity">
 

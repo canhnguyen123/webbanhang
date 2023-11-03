@@ -24,6 +24,7 @@ public function add(){
 public function post_add(Request $request){
     $name=$request->namemethodPayment;
     $code=$request->codemethodPayment;
+    $category=$request->categorymethodPayment;
     $note=$request->notemethodPayment;
     $methodPayment= new methodPaymentModel();
 
@@ -33,7 +34,7 @@ public function post_add(Request $request){
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $methodPayment->addmethodPayment($name,$code,$note);
+        $add= $methodPayment->addmethodPayment($name,$code,$category,$note);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('methodPayment_list')."';</script>";
         }else{
@@ -51,6 +52,7 @@ public function post_update(methodPaymentRequest $request,$methodPayment_id){
     $name=$request->namemethodPayment;
     $code=$request->codemethodPayment;
     $note=$request->notemethodPayment;
+    $category=$request->categorymethodPayment;
     $methodPayment= new methodPaymentModel();
     $check_is= $methodPayment->checkDatabaseIs($code,$methodPayment_id);
     if($check_is){
@@ -58,7 +60,7 @@ public function post_update(methodPaymentRequest $request,$methodPayment_id){
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $methodPayment->updatemethodPayment($name,$code,$methodPayment_id,$note);
+        $update= $methodPayment->updatemethodPayment($name,$code,$methodPayment_id,$note,$category);
        // if($update){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('methodPayment_list')."';</script>";
         // }else{

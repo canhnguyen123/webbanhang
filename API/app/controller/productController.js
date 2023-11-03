@@ -123,6 +123,40 @@ exports.getDeatil = (req, res) => {
             });
     }, product_id);
 };
+exports.getCaseProduct = (req, res) => {
+    const theloai_id = req.params.theloai_id;
+    if(theloai_id>0&&!isNaN(theloai_id)){
+        theloaiModel.getName((error, theloai) => {
+            if (error) {
+                return res.status(500).json({ error: 'Database query error' });
+            }
+           if(theloai){
+            productModel.getList((error, productList) => {
+                if (error) {
+                    return res.status(500).json({ error: 'Database query error' });
+                }
+                const listArr = productList.map(product => {
+                   return {
+                        product_id: product.product_id,
+                        product_name: product.product_name,
+                        product_img: product.img,
+                        product_price: product.price
+                    };
+                });
+                return res.json({ status: 'success', theloai_name:theloai[0].theloai_name ,results: listArr });
+        
+            }, theloai_id);
+           }
+           else{
+            return res.json({ status: 'fail', mess:'Không tìm thấy danh sách sản phẩm theo thể loại này' });
+           }
+        }, theloai_id);
+         }
+    else{
+        return res.json({ status: 'fail', mess:'Có lỗi xảy ra' });
+    }
+  
+};
 
 
 

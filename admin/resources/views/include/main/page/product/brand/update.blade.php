@@ -20,24 +20,24 @@
                    {{ session('errorMessage') }}
                </div>
              @endif
-                <div class="form-group form-input col-6">
+                <div class="form-group form-input col-xl-6 col-sm-12">
                     <i class="mdi mdi-rename-box"></i>
                     <input type="text" name="namebrand" class="form-control" value="{{ $item->brand_name }}" required>
                     <label> Tên thương hiệu</label>
                 </div>
-                <div class="form-group form-input col-6">
+                <div class="form-group form-input col-xl-6 col-sm-12">
                     <i class="mdi mdi-codepen"></i>
                     <input type="text" name="codebrand" class="form-control" value="{{ $item->brand_code }}" required>
                     <label> Mã thương hiệu</label>
                 </div>
-                <div class="col-6 err">
+                <div class="col-xl-6 col-sm-12 err">
                   <span>
                       @error('namebrand')
                           {{ $message }}
                       @enderror
                   </span>
               </div>
-                <div class="col-6 err">
+                <div class="col-xl-6 col-sm-12 err">
                   <span>
                       @error('codebrand')
                           {{ $message }}

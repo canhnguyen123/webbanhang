@@ -215,6 +215,9 @@ class AjaxModel extends Model
         
         return $query;
     }
-    
+    public function getDatapayment($status){
+        $results =DB::table('tbl_payment')->where('statusPayment_id',$status);
+        return $results;
+    }
    
 }
