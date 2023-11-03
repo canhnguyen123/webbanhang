@@ -23,6 +23,14 @@ class AjaxController extends Controller
             'primary_id' => 'phanloai_id',
         ];
     }
+    private function materialParams()
+    {
+        return [
+            'table_name' => 'tbl_material',
+            'colum_name' => 'material_name',
+            'primary_id' => 'material_id',
+        ];
+    }
     private function brandParams()
     {
         return [
@@ -219,15 +227,63 @@ class AjaxController extends Controller
         ]);
     }
     public function phanloai_return()
-        {
-            $params = $this->phanloaiParams();
-            $results = $this->ajaxModel->returnTable_ajax($params['table_name'], $params['primary_id']);
-            $i = 1;
+    {
+        $params = $this->phanloaiParams();
+        $results = $this->ajaxModel->returnTable_ajax($params['table_name'], $params['primary_id']);
+        $i = 1;
 
-            return view('ohther.ajax.admin.phanloai_list')
-                ->with('list_phanloai', $results)
-                ->with('i', $i);
-        }
+        return view('ohther.ajax.admin.phanloai_list')
+            ->with('list_phanloai', $results)
+            ->with('i', $i);
+    }
+
+    public function material_seach(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->materialParams();
+        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
+        $i = 1;
+        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.material_list')->with('list_material', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+
+    public function material_loadmore(Request $request)
+    {
+        $last_stt = $request->input('stt');
+        $last_id = $request->input('id');
+
+        $params = $this->materialParams();
+        $results = $this->ajaxModel->loadmore_ajax($params['table_name'], $params['primary_id'], $last_id);
+        $list_material = $results->paginate(5);
+        $last_status_id = $list_material->lastItem();
+        $new_stt = $last_stt + $list_material->total();
+        $hasMoreData = $list_material->hasMorePages();
+
+        return response()->json([
+            'view' => view('ohther.ajax.admin.material_list')->with('list_material', $list_material)->with('i', $last_stt)
+                // ->with('check', $check)
+                ->render(),
+            'last_id' => $last_id + $last_status_id,
+            'hasMoreData' => $hasMoreData,
+            'new_stt' => $new_stt,
+        ]);
+    }
+    public function material_return()
+    {
+        $params = $this->materialParams();
+        $results = $this->ajaxModel->returnTable_ajax($params['table_name'], $params['primary_id']);
+        $i = 1;
+
+        return view('ohther.ajax.admin.material_list')
+            ->with('list_material', $results)
+            ->with('i', $i);
+    }
+
+
     public function staff_return()
     {
         $params = $this->staffParams();
@@ -253,7 +309,7 @@ class AjaxController extends Controller
         ]);
     }
 
-    
+
 
     public function theloai_seach(Request $request)
     {
@@ -268,20 +324,20 @@ class AjaxController extends Controller
 
         ]);
     }
-        public function product_seach(Request $request)
-        {
-            $input = $request->input('content');
-            $params = $this->productParams();
-            $query = $this->ajaxModel->search_ajax_product($params['table_name'], $input);
-            $results =$query->get();
-            $count =$query->count();
-            $i = 1;
-            return response()->json([
-                'view' => view('ohther.ajax.admin.product_list')->with('list_product',  $results)->with('i', $i)->render(),
-                'counMess' => "Có " . $count . " kết quả trả về",
+    public function product_seach(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->productParams();
+        $query = $this->ajaxModel->search_ajax_product($params['table_name'], $input);
+        $results = $query->get();
+        $count = $query->count();
+        $i = 1;
+        return response()->json([
+            'view' => view('ohther.ajax.admin.product_list')->with('list_product',  $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
 
-            ]);
-        }
+        ]);
+    }
     public function color_loadmore(Request $request)
     {
         $last_stt = $request->input('stt');
@@ -521,7 +577,7 @@ class AjaxController extends Controller
     {
         $last_stt = $request->input('stt');
         $last_id = $request->input('id');
-        
+
         $params = $this->statusPaymentParams();
         $results = $this->ajaxModel->loadmore_ajax($params['table_name'], $params['primary_id'], $last_id);
         $list_statusPayment = $results->paginate(5);
@@ -538,7 +594,7 @@ class AjaxController extends Controller
             'new_stt' => $new_stt,
         ]);
     }
-    
+
     public function  user_seach(Request $request)
     {
         $input = $request->input('content');
@@ -715,7 +771,7 @@ class AjaxController extends Controller
             ]);
         }
     }
- 
+
     public function filter_productPlus(Request $request)
     {
         $theloai_id = $request->theloai_id;
@@ -732,7 +788,7 @@ class AjaxController extends Controller
         $filteredResults = $this->ajaxModel->filter_productPlus($theloai_id, $status, $brand_id, $color_product, $size_product, $startPrice, $endPrice, $startQuantity, $endQuantity);
         $results = $filteredResults->get();
         $count = $filteredResults->distinct()->count('tbl_product.product_id');
-         if ($results) {
+        if ($results) {
             return response()->json([
                 'view' => view('ohther.ajax.admin.product_list')->with('list_product', $results)->with('i', $i)->render(),
                 'mess_req' => "Có " . $count . " kết quả trả về",
@@ -743,15 +799,14 @@ class AjaxController extends Controller
     public function selete_bill(Request $request)
     {
         $status = $request->status;
- 
-        $listPayment=$this->ajaxModel->getDatapayment($status)->paginate(30);
-       
+
+        $listPayment = $this->ajaxModel->getDatapayment($status)->paginate(30);
+
         return response()->json([
             'view' => view('ohther.ajax.admin.payment_list')->with('list_payment', $listPayment)->with('i', 1)
                 ->render(),
-           
+
 
         ]);
     }
-
 }

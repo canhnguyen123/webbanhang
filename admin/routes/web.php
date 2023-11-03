@@ -88,6 +88,14 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/post-update/{size_id}', [sizeController::class, 'post_update'])->name('size_post_update');
                     Route::get('/toggle-status/{size_id}/{size_status}', [sizeController::class, 'toogle_status'])->name('size_toogle_status');
                 });
+                Route::prefix('/material')->group(function(){
+                    Route::get('/list', [materialController::class, 'list'])->name('material.list')->middleware('check_permission:check');
+                    Route::get('/add', [materialController::class, 'add'])->name('material.add')->middleware('check_permission:check');
+                    Route::post('/post-add', [materialController::class, 'post_add'])->name('material.add.post');
+                    Route::get('/update/{material_id}', [materialController::class, 'update'])->name('material.update')->middleware('check_permission:check');
+                    Route::put('/post-update/{material_id}', [materialController::class, 'post_update'])->name('material.update.post');
+                    Route::get('/toggle-status/{material_id}/{material_status}', [materialController::class, 'toogle_status'])->name('material.toggle');
+                });
                 Route::prefix('/product')->group(function(){
                     Route::get('/list', [productController::class, 'list'])->name('product_list')->middleware('check_permission:check');
                     Route::get('/add', [productController::class, 'add'])->name('product_add')->middleware('check_permission:check');
@@ -220,7 +228,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/user', [AjaxController::class, 'user_seach'])->name('user_seach_Ajax');
                 Route::get('/voucher', [AjaxController::class, 'voucher_seach'])->name('voucher_seach_Ajax');
                 Route::get('/ship', [AjaxController::class, 'ship_seach'])->name('ship.seach.Ajax');
-    
+                Route::get('/material', [AjaxController::class, 'material_seach'])->name('material.seach.Ajax');
+
             });
            
             Route::prefix('/loadmore')->group(function(){
@@ -233,7 +242,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/methodPayment', [AjaxController::class, 'methodPayment_loadmore'])->name('methodPayment_loadmore_Ajax');
                 Route::post('/statusPayment', [AjaxController::class, 'statusPayment_loadmore'])->name('statusPayment_loadmore_Ajax');
                 Route::post('/ship', [AjaxController::class, 'ship_loadmore'])->name('ship.loadmore.Ajax');
-    
+                Route::post('/material', [AjaxController::class, 'material_loadmore'])->name('material.loadmore.Ajax');
+
             });
             Route::prefix('/return')->group(function(){
                 Route::get('/category', [AjaxController::class, 'category_return'])->name('category_return_Ajax');
@@ -250,7 +260,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/user', [AjaxController::class, 'user_return'])->name('user_return_Ajax');
                 Route::get('/voucher', [AjaxController::class, 'voucher_return'])->name('voucher_return_Ajax');
                 Route::get('/ship', [AjaxController::class, 'ship_return'])->name('ship.return.Ajax');
-    
+                Route::get('/material', [AjaxController::class, 'material_return'])->name('material.return.Ajax');
+
             });
             Route::prefix('/select')->group(function(){ 
                 Route::post('/list-theloai', [AjaxController::class, 'select_data_theloai'])->name('select_data_theloai');

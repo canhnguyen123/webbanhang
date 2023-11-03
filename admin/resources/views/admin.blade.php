@@ -357,6 +357,28 @@
                 loadmoreAjax(stt, id, link, list, btn)
             })
 
+            $('#return-material').click(function() {
+                const link = '{{ route('material.return.Ajax') }}';
+                const list = '#list-material';
+                const btnLoad = '#btn-loadmore-material';
+                returnAjax(link, list, btnLoad)
+            })
+            $('#material-search-btn').click(function(event) {
+                event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
+                const content = $('#material-search').val();
+                const link = '{{ route('material.seach.Ajax') }}';
+                const list = '#list-material';
+                $('#btn-loadmore-material').hide()
+                searchAjax(content, link, list);
+            });
+            $('#btn-loadmore-material').click(function() {
+                const stt = $(this).data('stt')
+                const link = '{{ route('material.loadmore.Ajax') }}';
+                const list = '#list-material';
+                const id = $(this).data('id');
+                const btn = $(this)
+                loadmoreAjax(stt, id, link, list, btn)
+            })
 
             $('#return-position').click(function() {
                 const link = '{{ route('position_return_Ajax') }}';

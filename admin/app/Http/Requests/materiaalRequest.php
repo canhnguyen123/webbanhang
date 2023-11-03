@@ -6,23 +6,36 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class materiaalRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'materialName' => [
+                'required',
+                'max:255',
+                'min:2',
+               
+            ],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'materialName.min' => "Không được nhập :attribute nhỏ hơn :min kí tự",
+            'materialName.max' => "Không được nhập :attribute lớn hơn :max kí tự",
+            'materialName.required' => "Không được bỏ trống :attribute ",
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'materialName' => 'tên chất liệu',
         ];
     }
 }

@@ -191,6 +191,7 @@
           <li class="nav-item"><a class="nav-link" href="{{route('color_list')}}">Màu sắc</a></li>
           <li class="nav-item"><a class="nav-link" href="{{route('brand_list')}}">Thương hiệu</a></li>
           <li class="nav-item"><a class="nav-link" href="{{route('size_list')}}">Kích cỡ</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{route('material.list')}}">Chất liệu</a></li>
           <li class="nav-item"><a class="nav-link" href="{{route('product_list')}}">Sản phẩm</a></li>
           </ul>
       </div>
