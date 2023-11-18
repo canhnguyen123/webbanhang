@@ -30,12 +30,22 @@ class statisticalController extends Controller
     }
     public function productDeatilAcction($product_id,Request $request){
         $statisticalModel = new statisticalModel();
-        $list="";
+        $listLable="";
+        $resultList="";
         $value = $request->value;
         if($value=="6Mouth"){
-            $list=$statisticalModel->sixMonth();
+            $listLable=$statisticalModel->sixMonth();
+            $resultList=$statisticalModel->sixMonthQuantity($product_id);
         }
-        return response()->json(['status' => "success",'result'=>$list]);
+        else if($value=="yearNow"){
+            $listLable=$statisticalModel->yearNow();
+            $resultList=$statisticalModel->yearNowQuantity($product_id);
+        }
+        else if($value=="yearAgo"){
+            $listLable=$statisticalModel->lastYear();
+            $resultList=$statisticalModel->lastYearQuantity($product_id);
+        }
+        return response()->json(['status' => "success",'listLable'=>$listLable,'result'=>$resultList]);
     }
    
 }

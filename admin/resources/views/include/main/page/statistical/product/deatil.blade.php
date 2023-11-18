@@ -42,7 +42,7 @@
 
                 </tbody>
             </table>
-            <div class="row col-12">
+            <div class="row col-12 pg-50-0">
                 <div class="col-md-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="list-titel-statistical">
@@ -67,8 +67,10 @@
                              </div>
     
                     </div>
-                    <div class="card-body">
-                      <p class="card-title">Biểu đồ số lượng bán 6 tháng gần nhất</p>
+                    <div class="card-body ">
+                        <p class="card-title titel-chart-productDetail">
+                             Biểu đồ số lượng bán <span class="titel-compare-product-detail">6 tháng gần nhất</span> 
+                        </p>
                       <div class="d-flex flex-wrap mb-5">
                           <canvas id="order-chart"></canvas>
                      </div>
