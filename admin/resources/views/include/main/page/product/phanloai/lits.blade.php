@@ -98,14 +98,14 @@
                         </tbody>
                         @if ($category===0)
                         @include('ohther.pagination.pagination', [
-                          'paginator' => $list_product,'nameElement'=>$nameElement
+                          'paginator' => $list_phanloai,'nameElement'=>$nameElement
                         ])
                       @endif
                       </table>
                     </div>
                   </div>
                   @if ($check===1&&$category===1)
-                    @include('ohther.pagination.loadmore', ['pagination_nameElement' => $nameElement,'id'=>$list_product->last()->product_id-1,'i'=>$i])
+                    @include('ohther.pagination.loadmore', ['pagination_nameElement' => $nameElement,'id'=>$list_phanloai->last()->phanloai_id-1,'i'=>$i])
                   @endif
                 </div>
                 </div>

@@ -49,7 +49,6 @@ exports.getListHome = (req, res) => {
     });
 }
 exports.getDeatil = (req, res) => {
-    const arr = [];
     const product_id = req.params.product_id;
 
     productModel.deatil((error, results) => {
@@ -57,72 +56,66 @@ exports.getDeatil = (req, res) => {
             return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
         }
 
-        const promises = results.map(item => {
-            return new Promise((resolve, reject) => {
-                const productItem = {
-                    id: item.product_id,
-                    name: item.product_name,
-                    code: item.product_code,
-                    theloai_name: item.theloai_name,
-                    category_name: item.category_name,
-                    phanloai_name: item.phanloai_name,
-                    brand_name: item.brand_name,
-                    brand_code: item.brand_code,
-                    mota: item.product_mota,
-                    dacdiem: item.product_dacdiem,
-                    baoquan: item.product_baoquan,
-                    images: [],
-                    quantity: [],
-                    colorList:[],
-                    sizeList:[],
-                };
+        if (results.length > 0) {
+            const item = results[0]; // Lấy thông tin sản phẩm đầu tiên trong mảng
 
-                // Gọi hàm getDeatilImg để lấy danh sách hình ảnh
-                productModel.getDeatilImg((error, resultsImg) => {
+            const productItem = {
+                id: item.product_id,
+                name: item.product_name,
+                code: item.product_code,
+                theloai_name: item.theloai_name,
+                category_name: item.category_name,
+                phanloai_name: item.phanloai_name,
+                brand_name: item.brand_name,
+                brand_code: item.brand_code,
+                mota: item.product_mota,
+                dacdiem: item.product_dacdiem,
+                baoquan: item.product_baoquan,
+                images: [],
+                quantity: [],
+                colorList: [],
+                sizeList: [],
+            };
+
+            // Gọi hàm getDeatilImg để lấy danh sách hình ảnh
+            productModel.getDeatilImg((error, resultsImg) => {
+                if (error) {
+                    return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+                }
+                
+                const images = resultsImg.map(img => img.productImg_name);
+                productItem.images = images;
+                
+
+                // Gọi hàm getDeatilQuantity bên trong callback của getDeatilImg
+                productModel.getDeatilQuantity((error, resultsQuantity) => {
                     if (error) {
-                        reject(error);
-                    } else {
-                        const arrImg = resultsImg.map(img => ({
-                            link: img.productImg_name
-                        }));
-                        productItem.images = arrImg;
-
-                        // Gọi hàm getDeatilQuantity bên trong callback của getDeatilImg
-                        productModel.getDeatilQuantity((error, resultsQuantity) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                const arrQuantity = resultsQuantity.map(quantity => ({
-                                    size: quantity.productQuantity_size,
-                                    color: quantity.productQuantity_color,
-                                    quantity_: quantity.productQuantity,
-                                    price: quantity.productQuantity_priceOut
-                                }));
-                                const uniqueColors = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_color)));
-                                const uniqueSizes = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_size)));
-                                const arrColor = uniqueColors.map(color => (color));
-                                const arrSize = uniqueSizes.map(size => (size ));
-                                productItem.quantity = arrQuantity;
-                                productItem.colorList = arrColor;
-                                productItem.sizeList = arrSize;
-                                resolve(productItem);
-                            }
-                        }, item.product_id);
+                        return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
                     }
-                }, item.product_id);
-            });
-        });
 
-        Promise.all(promises)
-            .then(arrItem => {
-                res.json({ status: 'success', results: arrItem });
-            })
-            .catch(err => {
-                console.error('Lỗi: ', err);
-                res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
-            });
+                    const arrQuantity = resultsQuantity.map(quantity => ({
+                        size: quantity.productQuantity_size,
+                        color: quantity.productQuantity_color,
+                        quantity_: quantity.productQuantity,
+                        price: quantity.productQuantity_priceOut
+                    }));
+                    const uniqueColors = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_color)));
+                    const uniqueSizes = Array.from(new Set(resultsQuantity.map(q => q.productQuantity_size)));
+                    const arrColor = uniqueColors.map(color => (color));
+                    const arrSize = uniqueSizes.map(size => (size));
+                    productItem.quantity = arrQuantity;
+                    productItem.colorList = arrColor;
+                    productItem.sizeList = arrSize;
+
+                    res.json({ status: 'success', results: productItem });
+                }, item.product_id);
+            }, item.product_id);
+        } else {
+            res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+        }
     }, product_id);
 };
+
 exports.getCaseProduct = (req, res) => {
     const theloai_id = req.params.theloai_id;
     if(theloai_id>0&&!isNaN(theloai_id)){
@@ -137,10 +130,10 @@ exports.getCaseProduct = (req, res) => {
                 }
                 const listArr = productList.map(product => {
                    return {
-                        product_id: product.product_id,
-                        product_name: product.product_name,
-                        product_img: product.img,
-                        product_price: product.price
+                        id: product.product_id,
+                        name: product.product_name,
+                        img: product.img,
+                        price: product.price
                     };
                 });
                 return res.json({ status: 'success', theloai_name:theloai[0].theloai_name ,results: listArr });

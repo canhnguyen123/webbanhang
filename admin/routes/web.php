@@ -25,6 +25,7 @@ use App\Http\Controllers\shipController;
 use App\Http\Controllers\materialController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\paginationController;
+use App\Http\Controllers\statisticalController;
 Route::get('/login', [Controller::class, 'login'])->name('login');
 Route::post('/login-post', [accountController::class, 'postLogin'])->name('login_post');
 Route::middleware(['auth'])->group(function () {
@@ -36,6 +37,15 @@ Route::middleware(['auth'])->group(function () {
     
         });
         Route::prefix('/page')->group(function(){
+            
+            Route::prefix('/statistical')->group(function(){
+                Route::get('/', [statisticalController::class, 'statistical'])->name('statistical');
+                Route::prefix('/product')->group(function(){
+                    Route::get('/', [statisticalController::class, 'statisticalProduct'])->name('statistical.product.list');
+                    Route::get('/deatil/{product_id}', [statisticalController::class, 'productDeatil'])->name('statistical.product.deatil');
+                    Route::get('/deatil-action/{product_id}', [statisticalController::class, 'productDeatilAcction'])->name('statistical.product.deatil.acction');
+                });
+            });
             Route::prefix('/setting')->group(function(){
                 Route::get('/', [settingController::class, 'setting'])->name('setting');
                 Route::prefix('/pagination')->group(function(){

@@ -202,7 +202,12 @@
         <span class="menu-title">Người dùng</span>
       </a>
     </li>
-
+    <li class="nav-item">
+      <a class="nav-link" href="{{route('statistical')}}">
+        <i class="mdi mdi-account-settings menu-icon"></i>
+        <span class="menu-title">Thống kê</span>
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="{{route('banner_list')}}">
         <i class="mdi mdi-image menu-icon"></i>

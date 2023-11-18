@@ -1,6 +1,10 @@
 *{
     box-shadow: none !important ;
 }
+a{
+    color: #333 ;
+    text-decoration: none !important;
+}
 :root {
     --primary-color: #5E50F9;
     --primary-backgroup-color: #5E50F9;
@@ -686,15 +690,58 @@ margin-bottom: 35px;
     flex-wrap: wrap;
     padding: 30px 0;
 }
+
 .status-payment-item{
     min-width: 100px;
     height: 50px;
     padding: 10px 20px;
     cursor: pointer;
 }
+
 .status-payment-item.active{
     background-color: #5E50F9;
     color: white;
     border-radius: 10px;
     box-shadow: 10px 10px 10px #ccc;
+}
+.list-titel-statistical{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+}
+.item-titel-statistical{
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 10px 0;
+     transition: .5s ease-in-out;
+     cursor: pointer;
+}
+.item-titel-statistical.active{
+    background-color: #5E50F9;
+    color: white;
+    box-shadow: 10px 10px 10px #ccc;
+}
+.list-titel-statistical a{
+    color: #000000;
+    text-decoration: none;
+}
+.list-titel-statistical a:hover{
+    text-decoration: none;
+    color: #000000;
+}
+.statistical-content{
+    width: 100%;
+    padding: 30px 10px;
+}
+.pg-50{
+    padding: 50px;
+}
+table a{
+    color: #333  !important;
+}
+.w-150{
+    width: 150px;
+}
+.pg-0-20{
+    padding:0 20px;
 }

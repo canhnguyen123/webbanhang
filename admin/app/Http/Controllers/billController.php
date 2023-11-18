@@ -35,7 +35,7 @@ class billController extends Controller
         return view('include.main.page.payment.bill.deatil', compact('item_bill','item_bill_Deatil'));
     }
     public function action(Request $request,$bill_id)
-    {       $status=$request->change_payment;
+    {       $status=intval($request->change_payment);
             $code=$request->codePayment;
             $note=$request->notePayment;
             $localtion=$request->localtionPayment;
@@ -47,7 +47,7 @@ class billController extends Controller
             $user_id=$paymentDeatil->user_id;
             $codepayment=$paymentDeatil->payment_code;
             $messNotification="";
-            if($status==2){
+            if($status===2){
                 $update_2=$billModel->updateAction($status, $bill_id, $note, $code, $localtion);
                 if($update_2){
                     $messNotification="Shop đã xác nhận đơn hàng của bạn";
@@ -60,7 +60,7 @@ class billController extends Controller
                 }
 
             }
-            elseif($status==3){
+            elseif($status===3){
                 $update_3=$billModel->updateAction($status, $bill_id, $note);
                 if($update_3){
                     $messNotification="Shop đã đóng gói đơn hàng có mã ".$codepayment ." của bạn và chuyển cho bên giao hàng ";
@@ -72,7 +72,7 @@ class billController extends Controller
                     $mess="Xác nhận thất bại";
                 }
             }
-            elseif($status==4){
+            elseif($status===4){
                 $update_4=$billModel->updateAction($status, $bill_id, $note);
                 if($update_4){
                     $messNotification="Đơn hàng có  mã mã ".$codepayment ." của bạn đã giao thành công ";
@@ -84,7 +84,7 @@ class billController extends Controller
                     $mess="Xác nhận thất bại";
                 }
             }
-            elseif($status==5){
+            elseif($status===5){
               
                     $messNotification="Đơn hàng của bạn đã bị hủy bởi lý do : " .$reason_mess;
                     $billModel->createNotification($user_id,$messNotification);
@@ -92,7 +92,7 @@ class billController extends Controller
                     $router=route('payment_list');
                
             }
-            elseif($status==6){
+            elseif($status===6){
                 $update_6=$billModel->updateAction($status, $bill_id, $note);
                 if($update_6){
                     $messNotification="Đơn hàng có  mã mã ".$codepayment ." của bạn đã chuyển vào mục giao thành công ";
