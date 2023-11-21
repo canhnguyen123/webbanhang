@@ -11,8 +11,13 @@
                         <p class="card-title flex_center">Thống kê</p>
                     </div>
                     <div class="list-titel-statistical">
+                        <a href="{{ route('statistical') }}">
+                            <div class="item-titel-statistical  flex_center">
+                                Doanh số
+                            </div>
+                        </a>
                         <a href="{{ route('statistical.product.list') }}">
-                            <div class="item-titel-statistical active flex_center">
+                            <div class="item-titel-statistical  flex_center">
                                 Sản phẩm
                             </div>
                         </a>
@@ -31,11 +36,7 @@
                                 Hóa đơn
                             </div>
                         </a>
-                        <a href="">
-                          <div class="item-titel-statistical  flex_center">
-                              Doanh số
-                          </div>
-                      </a>
+                      
                     </div>
                     @yield('statistical')
                     

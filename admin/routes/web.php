@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/', [statisticalController::class, 'statisticalProduct'])->name('statistical.product.list');
                     Route::get('/deatil/{product_id}', [statisticalController::class, 'productDeatil'])->name('statistical.product.deatil');
                     Route::get('/deatil-action/{product_id}', [statisticalController::class, 'productDeatilAcction'])->name('statistical.product.deatil.acction');
+                    Route::get('/deatil-action-ajax', [statisticalController::class, 'statisticalProductAction'])->name('statistical.product.deatil.acction.ajax');
                 });
             });
             Route::prefix('/setting')->group(function(){

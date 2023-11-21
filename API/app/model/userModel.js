@@ -24,7 +24,7 @@ exports.createUserAccount = (user, callback) => {
 };
 
 exports.checkPhone = (userName, callback) => {
-    connection.query('SELECT * FROM tbl_user WHERE user_username = ?', userName, (error, results) => {
+    connection.query('SELECT * FROM tbl_user WHERE user_username = ? AND user_categoryAccount = 1', userName, (error, results) => {
         if (error) {
             console.error('Lỗi truy vấn cơ sở dữ liệu: ' + error.stack);
             return callback(error, null);

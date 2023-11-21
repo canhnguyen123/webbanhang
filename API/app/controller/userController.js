@@ -5,9 +5,7 @@ const userModel = require('../model/userModel')
 const userValidate = require('../validate/userValidate')
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-// const { v4: uuidv4 } = require('uuid');
 const { response } = require('express');
-
 const secretKey = 'yourSecretKey';
 const bcrypt = require('bcrypt');
 const tokenExpiration = '1h';
@@ -75,7 +73,7 @@ exports.creatUserGGFA = (req, res) => {
         }
 
         if (results.length > 0) {
-            const user_id = results[0].user_id; // Lấy user_id từ mảng kết quả, ví dụ lấy phần tử đầu tiên (index 0)
+            const user_id = results[0].user_id; 
             const token = jwt.sign({ user_id }, secretKey, { expiresIn: tokenExpiration });
         
             return res.json({ status: 'success', mess: 'Đăng nhập thành công', user_id: user_id, token: token });

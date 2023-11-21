@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('BE/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/css/vendor.bundle.base.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.css"
         integrity="sha512-arPZ7r4v4xEkxAQngubdkUNXFBVO8NFFRg1IszNv2AMaaZ9cDiCVRFGSZSjF7o5GHpm826QTqtNdOFNSnHbOYQ=="
@@ -1536,6 +1538,7 @@
                 updateChartTitle(value);
 
                 if (value !== "compare") {
+                    $('.compare-box').hide()
                     const product_id = $(this).data('id');
                     const url = "{{ route('statistical.product.deatil.acction', ['product_id' => 0]) }}";
                     const link = url.slice(0, -1) + product_id;
@@ -1556,10 +1559,32 @@
                         }
                     });
                 } else {
-                    // Handle 'compare' case if needed
+                   $('.compare-box').show()
                 }
             });
+            $('.revenue-action').click(function(){
+                const value=$(this).data('value')
+                $('.revenue-action').removeClass('active');
+                $(this).addClass('active');
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('statistical.product.deatil.acction.ajax') }}",
+                    data: {
+                        value: value,
+                    },
+                    success: function(response) {
+                        if(response.status==="success"){
+                            $('#list-revenue').html(response.view)
+                            updateChart(response.lableChart, response.dataChart)
+                        }
 
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            })
             function updateChartTitle(value) {
                 const titleMap = {
                     '6Mouth': '6 tháng gần nhất',
@@ -1570,6 +1595,7 @@
                 };
 
                 $('.titel-compare-product-detail').text(titleMap[value] || '');
+               
             }
 
             function updateChart(labels, data) {
@@ -1620,6 +1646,34 @@
                 }
             }
 
+            $('.select-change-compare').change(function(){
+                const product_id = $(this).data('id');
+                const valueProductId = $(this).val();
+                const url = "{{ route('statistical.product.deatil.acction', ['product_id' => 0]) }}";
+                    const link = url.slice(0, -1) + product_id;
+                    // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                    // $.ajaxSetup({
+                    //     headers: {
+                    //         'X-CSRF-TOKEN': csrfToken
+                    //     }
+                    // });
+                    $.ajax({
+                        type: "GET",
+                        url: link,
+                        data: {
+                            value: "compare",
+                            comparison_Id:valueProductId
+                        },
+                        success: function(response) {
+                            console.log(response.listLable);
+                            console.log(response.result);
+                            updateChart(response.listLable, response.result);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('Lỗi: ' + error);
+                        }
+                    });
+            });
 
         });
     </script>

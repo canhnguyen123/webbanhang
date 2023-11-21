@@ -9,8 +9,11 @@ use App\Models\statisticalModel;
 class statisticalController extends Controller
 {
     public function statistical(){
-       
-        return view('include.main.page.statistical.statistical');
+        $statisticalModel = new statisticalModel();
+        $allMoney=$statisticalModel->allMoney();
+        $list=$statisticalModel->getRecentMonths();
+        $i=1;
+        return view('include.main.page.statistical.revenue.table', compact('list','i','allMoney'));
     }
     public function statisticalProduct(){
         $statisticalModel = new statisticalModel();
@@ -20,30 +23,50 @@ class statisticalController extends Controller
         $i=1;
         return view('include.main.page.statistical.product.table', compact('countProductSoid','countProductAll','list_productSoid','i'));
     }
+    public function statisticalProductAction(Request $request)
+    {
+        $value = $request->value;
+        $statisticalModel = new statisticalModel();
+      
+        $list = $statisticalModel->getRecentMonths($value);
+        $lableChart = $statisticalModel->getTime($value);
+        $dataChart = $statisticalModel->getDataRevenue($value);
+        $listArray = json_decode(json_encode($list), true);
+        $i = 1;
+        $perPage = 20; 
+        $totalPages = ceil(count($listArray) / $perPage);
+    
+        return response()->json([
+            'status' => "success",
+            'view' => view('ohther.ajax.admin.revenue_list')->with('list', $list)->with('i', $i)->render(),
+            'lableChart'=>$lableChart,
+            'dataChart'=>$dataChart,
+        ]);
+    }
+    
+    
     public function productDeatil($product_id){
         $statisticalModel = new statisticalModel();
+        $selectList=$statisticalModel->selectProductList();
         $deatilTable=$statisticalModel->productSoidDeatil($product_id)->get();
         $total=$statisticalModel->productSoidDeatilTotal($product_id);
         $i=1;
        
-        return view('include.main.page.statistical.product.deatil', compact('deatilTable','i','total','product_id'));
+        return view('include.main.page.statistical.product.deatil', compact('deatilTable','i','total','product_id','selectList'));
     }
     public function productDeatilAcction($product_id,Request $request){
         $statisticalModel = new statisticalModel();
         $listLable="";
         $resultList="";
         $value = $request->value;
-        if($value=="6Mouth"){
-            $listLable=$statisticalModel->sixMonth();
-            $resultList=$statisticalModel->sixMonthQuantity($product_id);
+        $comparison_Id = isset($request->comparison_Id) ? $request->comparison_Id : null;
+         if($value==="compare"){
+            $listLable=[];
+            $resultList=$statisticalModel->compareProduct($product_id,$comparison_Id,1);
         }
-        else if($value=="yearNow"){
-            $listLable=$statisticalModel->yearNow();
-            $resultList=$statisticalModel->yearNowQuantity($product_id);
-        }
-        else if($value=="yearAgo"){
-            $listLable=$statisticalModel->lastYear();
-            $resultList=$statisticalModel->lastYearQuantity($product_id);
+        else{
+            $listLable=$statisticalModel->getTime($value);
+            $resultList=$statisticalModel->getData($value,$product_id);
         }
         return response()->json(['status' => "success",'listLable'=>$listLable,'result'=>$resultList]);
     }

@@ -175,6 +175,9 @@ background-color: white;
         
     }
 }
+.pg-10{
+    padding: 10px 0;
+}
 .pd-0-mg-0-b-0{
     margin: 0 !important;
     border: 0 !important;
@@ -744,4 +747,14 @@ table a{
 }
 .pg-0-20{
     padding:0 20px;
+}
+.load-more-btn{
+    width: 300px;
+    height: 50px;
+    background-color: #5E50F9;
+    border: none;
+    outline: none;
+    margin: 50px 0;
+    color: white;
+    border-radius: 10px;
 }
