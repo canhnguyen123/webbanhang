@@ -20,6 +20,10 @@
           <i class="mdi mdi-keyboard-return"></i>
           <p>Quay lại</p>
         </div>
+        <div class="item-icon active-box flex_center mg-5 icon-edit bg-violet" id="ecxel-brand">
+          <i class="mdi mdi-file-excel"></i>
+          <p>Xuất bản excel</p>
+        </div>
       </div>
     </div>
 </div>
@@ -31,6 +35,16 @@
                 <i id="brand-search-btn" class="mdi icon-search mdi-magnify"></i>
               <i class="fail-icon mdi mdi-close"></i>
             </form>
+          </div>
+        </div>
+        <div class="col-md-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-status-brand">
+              <option disabled>Chọn trạng thái</option>
+              <option value="1">Đang bật</option>
+              <option value="0">Đang tắt</option>
+            </select>
+        
           </div>
         </div>
         <div class="col-12  grid-margin stretch-card ">
@@ -78,12 +92,12 @@
                                   </a>  
 
                                   @if ($item->brand_status===1)
-                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('brand_toogle_status',['brand_id'=>$item->brand_id,'brand_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('brand_toogle_status',['brand_id'=>$item->brand_id])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
                                     <i class="mdi mdi-toggle-switch"></i>
                                     <p>Ẩn</p>
                                   </a>   
                                   @else
-                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('brand_toogle_status',['brand_id'=>$item->brand_id,'brand_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('brand_toogle_status',['brand_id'=>$item->brand_id])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
                                     <i class="mdi mdi-toggle-switch-off"></i>
                                     <p>Hiện</p>
                                   </a> 

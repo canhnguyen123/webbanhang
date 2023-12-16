@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const paymentController =require('../../controller/paymentController');
-
-router.get('/get-status-method', paymentController.getmethod);
+const {checkUser_id}=require("../../middleware/checkUser");
+router.get('/get-method-payment', paymentController.getmethod);
+router.get('/get-status-payment', paymentController.getStatus);
 router.get('/get-ship', paymentController.getship);
-router.post('/add-payment/:user_id', paymentController.addPayment);
+router.post('/add-payment/:user_id',checkUser_id, paymentController.addPayment);
+router.get('/get-myBill/:user_id/:status',checkUser_id, paymentController.getMyBill);
+router.get('/get-deatilBill/:payment_id', paymentController.getDeatilBill);
+router.post('/create-Resquest-Canne-Bill/:user_id/:payment_id',checkUser_id, paymentController.createResquestCanneBill);
 module.exports = router;

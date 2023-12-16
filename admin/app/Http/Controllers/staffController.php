@@ -117,7 +117,7 @@ public function post_update(Request $request,$staff_id){
 }
 public function toogle_status($staff_id,$staff_status){
     $staff= new staffModel();
-    $product=DB::table('tbl_staff')->where('staff_id',$staff_id)->first();
+    $product=$staff->deatil($staff_id)->first();
     $status=0;
     if($product->staff_status==1){
         if($staff_status==0){

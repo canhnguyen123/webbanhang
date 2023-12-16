@@ -1,15 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\brandRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\brandModel;
 
 class brandController extends Controller
-{
+{   
+    private $brandModel;
+
+    public function __construct(brandModel $brandModel)
+    {
+        $this->brandModel = $brandModel;
+    }
     public function list(){
         $brandModel = new brandModel();
         $paginate = $brandModel->getPagination()->first(); 
@@ -26,67 +28,54 @@ public function add(){
 public function post_add(brandRequest $request){
     $name=$request->namebrand;
     $code=$request->codebrand;
-    
-    $brand= new brandModel();
-    $check=$brand->checkDatabase($code);
+    $check=$this->brandModel->checkDatabase($code);
     if($check){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Mã thương hiệu đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $brand->addbrand($name,$code);
+        $add= $this->brandModel->add($name,$code);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('brand_list')."';</script>";
-        }else{
-            return " <script> alert('Thêm thất bại'); window.location = '".route('brand_list')."';</script>";
+        }
+        else{
+            $errorMessage = "Thêm thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
         }
     }
   
 }
-public function update($brand_id){
-    $item_brand = DB::table('tbl_brand')->where('brand_id',$brand_id)->get();
-     
+public function update($id){
+    $item_brand =$this->brandModel->getDeatil($id);
     return view('include.main.page.product.brand.update',compact('item_brand'));
 }
-public function post_update(brandRequest $request,$brand_id){
+public function post_update(brandRequest $request,$id){
     $name=$request->namebrand;
     $code=$request->codebrand;
-    $brand= new brandModel();
-    $check_is= $brand->checkDatabaseIs($code,$brand_id);
+    $check_is=$this->brandModel->checkDatabase($code,$id);
     if($check_is){
         $errorMessage = "Mã danh mục đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $brand->updatebrand($name,$code,$brand_id);
-       // if($update){
-            return " <script> alert('Cập nhật thành công'); window.location = '".route('brand_list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('brand_list')."';</script>";
-        // }
+        $update= $this->brandModel->updateId($name,$code,$id);
+        $mess= $update?"Cập nhật thành công":"Cập nhật thất bại";
+        $route=$update?route('brand_list'):route('brand_update',['color_id'=>$id]);
+        return " <script> alert('".$mess."'); window.location = '".$route."';</script>";
     }
   
 }
-public function toogle_status($brand_id,$brand_status){
-    $brand= new brandModel();
-    $product=DB::table('tbl_brand')->where('brand_id',$brand_id)->first();
-    $status=0;
-    if($product->brand_status==1){
-        if($brand_status==0){
-            $status=1;
-        }else{
-            $status=0;
-        }
+public function toogle_status($id){
+    $getStatus=$this->brandModel->getDeatil($id);
+    $getStatus_now=$getStatus->brand_status;
+    if($getStatus_now===1){
+        $status=0;
+    }else{
+        $status=1;
     }
-     if ($product->brand_status == 0) {
-        if($brand_status==1){
-            $status=0;
-        }else{
-            $status=1;
-        }
-    }
-  
-   $brand->status_toggle($status,$brand_id);
-    return " <script> alert('Cập nhật thành công'); window.location = '".route('brand_list')."';</script>";
+    $result =$this->brandModel->status_toggle($status,$id);
+    $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+   return "<script> alert('$message'); window.location.href = '" . route('brand_list') . "';</script>";
 }
 }

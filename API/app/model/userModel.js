@@ -54,6 +54,21 @@ exports.deatil = (user_id, callback) => {
         return callback(null, results);
     });
 };
+exports.update = (callback, data, user_id) => {
+    connection.query(
+        'UPDATE tbl_user SET ? WHERE user_id = ?',
+        [data, user_id],
+        (error, results) => {
+            if (error) {
+                console.error('Lỗi truy vấn cơ sở dữ liệu: ' + error.stack);
+                return callback(error, null);
+            }
+
+            return callback(null, results);
+        }
+    );
+};
+
 // exports.checkPass = (userName, password, callback) => {
 //     connection.query('SELECT * FROM tbl_user WHERE user_username = ? AND user_password = ?', [userName, password], (error, results) => {
 //         if (error) {
@@ -64,3 +79,27 @@ exports.deatil = (user_id, callback) => {
 //         return callback(null, results);
 //     });
 // };
+exports.checkUserExistence = (callback, user_id) => {
+    connection.query('SELECT COUNT(*) as userCount FROM tbl_user WHERE user_id = ?', [user_id], (error, results) => {
+        if (error) {
+            console.error('Lỗi truy vấn cơ sở dữ liệu: ' + error.stack);
+            return callback(error, null);
+        }
+
+        const userCount = results[0].userCount;
+        return callback(null, userCount > 0);
+    });
+};
+
+exports.checkUserId = (callback, user_id) => {
+    connection.query('SELECT COUNT(*) as userCount FROM tbl_user WHERE user_id = ?', [user_id], (error, results) => {
+      if (error) {
+        console.error('Lỗi truy vấn cơ sở dữ liệu: ' + error.stack);
+        return callback(error, null);
+      }
+  
+      const userCount = results[0].userCount;
+      return callback(null, userCount > 0);
+    });
+};
+

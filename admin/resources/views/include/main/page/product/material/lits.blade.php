@@ -20,6 +20,10 @@
           <i class="mdi mdi-keyboard-return"></i>
           <p>Quay lại</p>
         </div>
+        <div class="item-icon active-box flex_center mg-5 icon-edit bg-violet" id="ecxel-material">
+          <i class="mdi mdi-file-excel"></i>
+          <p>Xuất bản excel</p>
+        </div>
       </div>
     </div>
 </div>
@@ -33,7 +37,16 @@
             </form>
           </div>
         </div>
-    
+        <div class="col-md-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-status-material">
+              <option disabled>Chọn trạng thái</option>
+              <option value="1">Đang bật</option>
+              <option value="0">Đang tắt</option>
+            </select>
+        
+          </div>
+        </div>
         <div class="col-12  grid-margin stretch-card ">
 
             <span class="req-text-mess"></span>
@@ -76,12 +89,12 @@
                                   </a>  
 
                                   @if ($item->material_status===1)
-                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id,'material_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
                                     <i class="mdi mdi-toggle-switch"></i>
                                     <p>Ẩn</p>
                                   </a>   
                                   @else
-                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id,'material_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
                                     <i class="mdi mdi-toggle-switch-off"></i>
                                     <p>Hiện</p>
                                   </a> 
@@ -94,16 +107,17 @@
                           @endforeach
                           
                         </tbody>
+                        @if ($category===0)
+                        @include('ohther.pagination.pagination', [
+                          'paginator' => $list_material,'nameElement'=>$nameElement
+                        ])
+                      @endif
                       </table>
                     </div>
                   </div>
-                  @if ($check===1)
-                  <div class="col-12 flex_center pd-30">
-                    <button type="button" class="  btn-pimar-key btn-icon-text" id="btn-loadmore-material" data-id="{{ $list_material->last()->material_id-1 }}" data-stt="{{$i-1}}">
-                      <i class="mdi mdi-arrow-down"></i>
-                      Xem  thêm
-                    </button>
-                  </div>
+                  
+                  @if ($check===1&&$category===1)
+                    @include('ohther.pagination.loadmore', ['pagination_nameElement' => $nameElement,'id'=>$list_material->last()->color_id-1,'i'=>$i])
                   @endif
                 </div>
                 </div>

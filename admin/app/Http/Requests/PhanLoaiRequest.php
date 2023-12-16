@@ -23,14 +23,6 @@ class phanloaiRequest extends FormRequest
                 //     $this->validateVietnameseCharacters($attribute, $value, $fail);
                 // },
             ],
-            'codephanloai' => [
-                'required',
-                'integer',
-                'min:1',
-                // function ($attribute, $value, $fail) {
-                //     $this->validateVietnameseCharacters($attribute, $value, $fail);
-                // },
-            ],
         ];
     }
 
@@ -39,8 +31,7 @@ class phanloaiRequest extends FormRequest
         return [
             'namephanloai.min' => "Không được nhập :attribute nhỏ hơn :min kí tự",
             'namephanloai.max' => "Không được nhập :attribute nhỏ hơn :max kí tự",
-            'codephanloai.integer' => "Không được nhập :attribute kí tự ngoài số nguyên",
-            'codephanloai.min' => "Không được nhập :attribute nhỏ hơn :min kí tự",
+        
         ];
     }
 
@@ -48,7 +39,6 @@ class phanloaiRequest extends FormRequest
     {
         return [
             'namephanloai' => 'tên phân loại',
-            'codephanloai' => 'mã phân loại',
         ];
     }
 

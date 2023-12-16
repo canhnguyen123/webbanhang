@@ -15,73 +15,74 @@ class productModel extends Model
     protected $primaryKey = 'product_id';
     protected $primaryKeyImg = 'productImg_id';
     protected $primaryKeyQuantity = 'productQuantity_id'; // Tên cột khóa chính của bảng
-     protected $pagination = 'tbl_pagination';  
-    public function getPagination(){
-        $result=DB::table($this->pagination)->where('pagination_tbl',$this->table);
-       return $result;
-   }
-    public function addproduct($theloai_id,$product_name,$product_code,$brand_product,$baoquan_product,$mota_product,$dacdiem_product,$listImg,$listQuantity,$materialId)
-{
-    $data = [
-        'product_name' => $product_name,
-        'product_code' => $product_code,
-        'theloai_id' => $theloai_id,
-        'product_status' => 1,
-        'brand_id' => $brand_product,
-        'product_mota' => $dacdiem_product,
-        'product_dacdiem' => $mota_product,
-        'product_baoquan' => $baoquan_product,
-    ];
-
-    try {
-        $result = DB::table($this->table)->insertGetId($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
+    protected $pagination = 'tbl_pagination';
+    public function getPagination()
+    {
+        $result = DB::table($this->pagination)->where('pagination_tbl', $this->table);
+        return $result;
     }
-}
-
-public function addImg($listImg, $id)
-{
-    $success = true; // Sử dụng biến này để theo dõi kết quả
-    foreach ($listImg as $item) {
+    public function addproduct($theloai_id, $product_name, $product_code, $brand_product, $baoquan_product, $mota_product, $dacdiem_product)
+    {
         $data = [
-            'product_id' => $id,
-            'productImg_name' => $item,
-            'productImg_status' => 1,
+            'product_name' => $product_name,
+            'product_code' => $product_code,
+            'theloai_id' => $theloai_id,
+            'product_status' => 1,
+            'brand_id' => $brand_product,
+            'product_mota' => $dacdiem_product,
+            'product_dacdiem' => $mota_product,
+            'product_baoquan' => $baoquan_product,
         ];
+
         try {
-            $result = DB::table('tbl_product_img')->insert($data);
-            if (!$result) {
-                $success = false;
-            }
+            $result = DB::table($this->table)->insertGetId($data);
+            return $result; // Trả về true nếu thành công, false nếu thất bại
         } catch (\Exception $e) {
-            $success = false;
+            return false;
         }
     }
-    return $success; 
-}
-public function addMaterial($MaterialId, $id)
-{
-    $success = true; // Sử dụng biến này để theo dõi kết quả
-    foreach ($MaterialId as $item) {
-        $data = [
-            'product_id' => $id,
-            'material_id' => $item,
-            'product_material_status' => 1,
-        ];
-        try {
-            $result = DB::table('tbl_product_material')->insert($data);
-            if (!$result) {
+
+    public function addImg($listImg, $id)
+    {
+        $success = true; // Sử dụng biến này để theo dõi kết quả
+        foreach ($listImg as $item) {
+            $data = [
+                'product_id' => $id,
+                'productImg_name' => $item,
+                'productImg_status' => 1,
+            ];
+            try {
+                $result = DB::table('tbl_product_img')->insert($data);
+                if (!$result) {
+                    $success = false;
+                }
+            } catch (\Exception $e) {
                 $success = false;
             }
-        } catch (\Exception $e) {
-            $success = false;
         }
+        return $success;
     }
-    return $success; 
-}
-function addProductQuantity($listQuantity, $product_id)
+    public function addMaterial($MaterialId, $id)
+    {
+        $success = true; // Sử dụng biến này để theo dõi kết quả
+        foreach ($MaterialId as $item) {
+            $data = [
+                'product_id' => $id,
+                'material_id' => $item,
+                'product_material_status' => 1,
+            ];
+            try {
+                $result = DB::table('tbl_product_material')->insert($data);
+                if (!$result) {
+                    $success = false;
+                }
+            } catch (\Exception $e) {
+                $success = false;
+            }
+        }
+        return $success;
+    }
+    function addProductQuantity($listQuantity, $product_id)
     {
         try {
             // Bắt đầu giao dịch
@@ -113,78 +114,102 @@ function addProductQuantity($listQuantity, $product_id)
             return false; // Trả về false nếu có lỗi
         }
     }
-    function getDeatil($product_id){
-        $result=DB::table('tbl_product')
-        ->join('tbl_brand',"tbl_product.brand_id","=","tbl_brand.brand_id")
-        ->join('tbl_theloai',"tbl_product.theloai_id","=","tbl_theloai.theloai_id")
-        ->join("tbl_category", "tbl_theloai.category_id", "=", "tbl_category.category_id")
-        ->join("tbl_phanloai", "tbl_theloai.phanloai_id", "=", "tbl_phanloai.phanloai_id")
-        ->where('tbl_product.product_id', $product_id)
-        ->select("tbl_product.*", "tbl_theloai.*", "tbl_category.*", "tbl_phanloai.*","tbl_brand.*")
-        ->get();
-        return $result;
-    }
-    
-    public function getQuantity($product_id){
-        $result=DB::table($this->tableQuantity)
-        ->where($this->primaryKey,$product_id)
-        ->get();
-        return $result;
-    }
-    public  function getDeatilImg($product_id){
-        $result=DB::table($this->tableImg)
-        ->where($this->primaryKey,$product_id)
-        ->get();
-        return $result;
-    }
-    public function getDeatilMaterial($product_id){
-        $result=DB::table($this->tableMaterial)
-        ->join('tbl_material','tbl_product_material.material_id','=','tbl_material.material_id')
-        ->select('tbl_material.material_name','tbl_product_material.material_id','tbl_product_material.product_material_status')
-        ->where('tbl_product_material.product_id',$product_id)
-        ->get();
-        return $result;
-    }
-    
-    function addProductQuantityDeatil($size,$color,$quantity,$priceInt,$priceOut, $product_id)
+    function getDeatil($product_id)
     {
-    
-          
-                $data = [
-                    'product_id' => $product_id,
-                    'productQuantity_color' => $color,
-                    'productQuantity_size' => $size,
-                    'productQuantity' => $quantity,
-                    'productQuantity_priceInt' => $priceInt,
-                    'productQuantity_priceOut' => $priceOut,
-                    'productQuantity_status' => 1,
-                ];
-
-                // Thêm mục vào bảng
-              $result=  DB::table($this->tableQuantity)->insert($data);
+        $result = DB::table('tbl_product')
+            ->join('tbl_brand', "tbl_product.brand_id", "=", "tbl_brand.brand_id")
+            ->join('tbl_theloai', "tbl_product.theloai_id", "=", "tbl_theloai.theloai_id")
+            ->join("tbl_category", "tbl_theloai.category_id", "=", "tbl_category.category_id")
+            ->join("tbl_phanloai", "tbl_theloai.phanloai_id", "=", "tbl_phanloai.phanloai_id")
+            ->where('tbl_product.product_id', $product_id)
+            ->select("tbl_product.*", "tbl_theloai.*", "tbl_category.*", "tbl_phanloai.*", "tbl_brand.*")
+            ->get();
         return $result;
-
-        
     }
-    function updateProductQuantityDeatil($size,$color,$quantity,$priceInt,$priceout,  $productQuantity_id)
+
+    public function getQuantity($product_id)
     {
-    
-          
-                $data = [
-                   
-                    'productQuantity_color' => $color,
-                    'productQuantity_size' => $size,
-                    'productQuantity' => $quantity,
-                    'productQuantity_priceInt' => $priceInt,
-                    'productQuantity_priceOut' => $priceout,
-                   
-                ];
-
-                // Thêm mục vào bảng
-              $result=  DB::table($this->tableQuantity)->where($this->primaryKeyQuantity,$productQuantity_id)->update($data);
+        $result = DB::table($this->tableQuantity)
+            ->where($this->primaryKey, $product_id)
+            ->get();
         return $result;
+    }
+    public  function getDeatilImg($product_id)
+    {
+        $result = DB::table($this->tableImg)
+            ->where($this->primaryKey, $product_id)
+            ->get();
+        return $result;
+    }
+    public function getDeatilMaterial($product_id)
+    {
+        $result = DB::table($this->tableMaterial)
+            ->join('tbl_material', 'tbl_product_material.material_id', '=', 'tbl_material.material_id')
+            ->select('tbl_material.material_name', 'tbl_product_material.material_id', 'tbl_product_material.product_material_status')
+            ->where('tbl_product_material.product_id', $product_id)
+            ->get();
+        return $result;
+    }
+    public function getCmtDeatilAdmin($product_id)
+{
+    $results = DB::table('tbl_comment as main_comment')
+        ->leftJoin('tbl_user', 'main_comment.user_id', '=', 'tbl_user.user_id')
+        ->leftJoin('tbl_comment as sub_comment', 'main_comment.comment_id', '=', 'sub_comment.comment_resMessId')
+        ->select(
+            'main_comment.comment_context',
+            'main_comment.comment_id',
+            'main_comment.created_at',
+            'main_comment.user_id',
+            DB::raw('IFNULL(tbl_user.user_fullname, "null") as user_fullname'),
+            DB::raw('IFNULL(tbl_user.user_linkImg, "null") as user_linkImg'),
+            DB::raw('COUNT(sub_comment.comment_id) as sub_comment_count'),
+            DB::raw('SUM(CASE WHEN sub_comment.comment_resMessId = main_comment.comment_id THEN 1 ELSE 0 END) as feedback_count')
+        )
+        ->where('main_comment.product_id', $product_id)
+        ->where('main_comment.comment_resMessId', null)
+        ->groupBy('main_comment.comment_context', 'main_comment.comment_id', 'main_comment.created_at', 'main_comment.user_id', 'user_fullname', 'user_linkImg')
+        ->get();
 
-        
+    return $results;
+}
+
+
+
+    function addProductQuantityDeatil($size, $color, $quantity, $priceInt, $priceOut, $product_id)
+    {
+
+
+        $data = [
+            'product_id' => $product_id,
+            'productQuantity_color' => $color,
+            'productQuantity_size' => $size,
+            'productQuantity' => $quantity,
+            'productQuantity_priceInt' => $priceInt,
+            'productQuantity_priceOut' => $priceOut,
+            'productQuantity_status' => 1,
+        ];
+
+        // Thêm mục vào bảng
+        $result =  DB::table($this->tableQuantity)->insert($data);
+        return $result;
+    }
+    function updateProductQuantityDeatil($size, $color, $quantity, $priceInt, $priceout,  $productQuantity_id)
+    {
+
+
+        $data = [
+
+            'productQuantity_color' => $color,
+            'productQuantity_size' => $size,
+            'productQuantity' => $quantity,
+            'productQuantity_priceInt' => $priceInt,
+            'productQuantity_priceOut' => $priceout,
+
+        ];
+
+        // Thêm mục vào bảng
+        $result =  DB::table($this->tableQuantity)->where($this->primaryKeyQuantity, $productQuantity_id)->update($data);
+        return $result;
     }
     public function getListTable($setTable, $setcolumstatus)
     {
@@ -192,7 +217,7 @@ function addProductQuantity($listQuantity, $product_id)
         return $result;
     }
 
-    public function updateproduct($theloai_id, $product_name,$product_code,$brand_product,$baoquan_product,$mota_product,$dacdiem_product, $product_id)
+    public function updateproduct($theloai_id, $product_name, $product_code, $brand_product, $baoquan_product, $mota_product, $dacdiem_product, $product_id)
     {
         $data = [
             'product_name' => $product_name,
@@ -237,7 +262,6 @@ function addProductQuantity($listQuantity, $product_id)
                     ->where('product_id', $product_id)
                     ->whereNotIn('material_id', $material)
                     ->update(['product_material_status' => 0]);
-            
             }
             return true;
         } catch (\Exception $e) {
@@ -258,7 +282,7 @@ function addProductQuantity($listQuantity, $product_id)
             ->where('product_id', '<>', $product_id)
             ->exists();
     }
-    public function checkDatabaseQuantity($size,$color, $product_id)
+    public function checkDatabaseQuantity($size, $color, $product_id)
     {
         return DB::table($this->tableQuantity)
             ->where('productQuantity_color', $color)
@@ -266,13 +290,13 @@ function addProductQuantity($listQuantity, $product_id)
             ->where('product_id', $product_id)
             ->exists();
     }
-    public function checkDatabaseIsQuantity($size,$color, $product_id,$productQuantity_id)
+    public function checkDatabaseIsQuantity($size, $color, $product_id, $productQuantity_id)
     {
         return DB::table($this->tableQuantity)
             ->where('productQuantity_color', $color)
             ->where('productQuantity_size', $size)
             ->where('product_id', $product_id)
-            ->where('productQuantity_id', "<>",$productQuantity_id)
+            ->where('productQuantity_id', "<>", $productQuantity_id)
             ->exists();
     }
     public function status_toggle($status, $product_id)
@@ -299,9 +323,9 @@ function addProductQuantity($listQuantity, $product_id)
 
     public function deleteImg($productImg_id)
     {
-  
+
         try {
-            $result =DB::table($this->tableImg)->where($this->primaryKeyImg, $productImg_id)->delete();
+            $result = DB::table($this->tableImg)->where($this->primaryKeyImg, $productImg_id)->delete();
             return $result; // Trả về true nếu thành công, false nếu thất bại
         } catch (\Exception $e) {
             return false;
@@ -318,30 +342,35 @@ function addProductQuantity($listQuantity, $product_id)
             return false;
         }
     }
-    public function getList(){
+    public function getList()
+    {
         $result = DB::table('tbl_product')
-        ->join('tbl_theloai', 'tbl_product.theloai_id', '=', 'tbl_theloai.theloai_id')
-        ->join('tbl_category', 'tbl_theloai.category_id', '=', 'tbl_category.category_id')
-        ->join('tbl_phanloai', 'tbl_theloai.phanloai_id', '=', 'tbl_phanloai.phanloai_id')
-        ->select('tbl_product.*',
-        'tbl_theloai.theloai_name', 
-        'tbl_category.category_name',
-         'tbl_phanloai.phanloai_name',)
-         ->addSelect($this->getProductImageUrl());
+            ->join('tbl_theloai', 'tbl_product.theloai_id', '=', 'tbl_theloai.theloai_id')
+            ->join('tbl_category', 'tbl_theloai.category_id', '=', 'tbl_category.category_id')
+            ->join('tbl_phanloai', 'tbl_theloai.phanloai_id', '=', 'tbl_phanloai.phanloai_id')
+            ->select(
+                'tbl_product.*',
+                'tbl_theloai.theloai_name',
+                'tbl_category.category_name',
+                'tbl_phanloai.phanloai_name',
+            )
+            ->addSelect($this->getProductImageUrl());
         return $result;
     }
-    private function getProductImageUrl() {
+    private function getProductImageUrl()
+    {
         return DB::raw('(SELECT productImg_name FROM tbl_product_img WHERE product_id = tbl_product.product_id ORDER BY productImg_id ASC LIMIT 1) as productImg_name');
     }
-    public function showHome($status){
-        $result=   DB::table('tbl_producthot')
-        ->join('tbl_product', 'tbl_producthot.product_id', '=', 'tbl_product.product_id')
-        ->join('tbl_theloai', 'tbl_product.theloai_id', '=', 'tbl_theloai.theloai_id')
-        ->join('tbl_category', 'tbl_theloai.category_id', '=', 'tbl_category.category_id')
-        ->join('tbl_phanloai', 'tbl_theloai.phanloai_id', '=', 'tbl_phanloai.phanloai_id')
-        ->where('tbl_producthot.productHot_status',$status)
-        ->select('tbl_product.*','tbl_theloai.theloai_name', 'tbl_category.category_name', 'tbl_phanloai.phanloai_name')->addSelect($this->getProductImageUrl())    
-        ->get();
+    public function showHome($status)
+    {
+        $result =   DB::table('tbl_producthot')
+            ->join('tbl_product', 'tbl_producthot.product_id', '=', 'tbl_product.product_id')
+            ->join('tbl_theloai', 'tbl_product.theloai_id', '=', 'tbl_theloai.theloai_id')
+            ->join('tbl_category', 'tbl_theloai.category_id', '=', 'tbl_category.category_id')
+            ->join('tbl_phanloai', 'tbl_theloai.phanloai_id', '=', 'tbl_phanloai.phanloai_id')
+            ->where('tbl_producthot.productHot_status', $status)
+            ->select('tbl_product.*', 'tbl_theloai.theloai_name', 'tbl_category.category_name', 'tbl_phanloai.phanloai_name')->addSelect($this->getProductImageUrl())
+            ->get();
         return $result;
     }
     public function updateShowHome($listProduct)
@@ -349,7 +378,7 @@ function addProductQuantity($listQuantity, $product_id)
         try {
             // Lấy danh sách theloai_id từ bảng tbl_theloaishowhome
             $existingIds = DB::table('tbl_producthot')->pluck('product_id')->all();
-    
+
             // Trường hợp 1: Thêm mới bản ghi cho theloai_id chưa tồn tại
             foreach ($listProduct as $product_id) {
                 if (!in_array($product_id, $existingIds)) {
@@ -359,21 +388,21 @@ function addProductQuantity($listQuantity, $product_id)
                     ]);
                 }
             }
-    
+
             // Trường hợp 2: Cập nhật trạng thái từ 1 thành 0 nếu không nằm trong listTheLoai
             DB::table('tbl_producthot')
                 ->whereNotIn('product_id', $listProduct)
                 ->where('productHot_status', 1)
                 ->update(['productHot_status' => 0]);
-    
+
             // Trường hợp 3: Cập nhật trạng thái từ 0 thành 1 nếu nằm trong listTheLoai
             DB::table('tbl_producthot')
                 ->whereIn('product_id', $listProduct)
                 ->where('productHot_status', 0)
                 ->update(['productHot_status' => 1]);
-    
+
             // Trường hợp 4: Giữ nguyên trạng thái nếu đã tồn tại và trạng thái đã là 1
-    
+
             return true;
         } catch (\Exception $e) {
             // Xử lý lỗi nếu cần

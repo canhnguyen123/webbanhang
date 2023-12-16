@@ -6,8 +6,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title" style="text-align: center">Cập nhật chất liệu</h4>
-                            @foreach ($item_material as $item)
-                            <form class="forms-sample row" action="{{ route('material.update.post',['material_id'=>$item->material_id]) }}" method="post">
+                            <form class="forms-sample row" action="{{ route('material.update.post',['material_id'=>$item_material->material_id]) }}" method="post">
                                 {{ @csrf_field() }}
                                 @method('put')
                                 @if ($errors->any())
@@ -24,7 +23,7 @@
                                     <div class="col-12">
                                         <i class="mdi mdi-rename-box"></i>
                                         <input type="text" name="materialName" class="form-control"
-                                            value="{{ $item->material_name }}" required>
+                                            value="{{ $item_material->material_name }}" required>
                                         <label> Tên chất liệu</label>
     
                                     </div>
@@ -39,9 +38,7 @@
                                 <button type="submit" class=" btn-pimar-key mr-2" style="width: 200px;">Cập nhật</button>
     
                             </form>  
-                            @endforeach
-                     
-                    </div>
+                     </div>
                 </div>
             </div>
         </div>

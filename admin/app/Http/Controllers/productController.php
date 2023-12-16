@@ -10,7 +10,12 @@ use App\Models\productModel;
 
 class productController extends Controller
 {
+    private $productModel;
 
+    public function __construct(productModel $productModel)
+    {
+        $this->productModel = $productModel;
+    }
     public function list()
     {
         $productModel = new productModel();
@@ -41,7 +46,7 @@ class productController extends Controller
         return view('include.main.page.product.product.add', compact('listCategory', 'listPhanLoai', 'listSize', 'listColor', 'listBrand','listMaterial'));
     }
     
-    public function post_add(productRequest $request){
+    public function post_add(Request $request){
         $theloai_id = $request->theloai_id;
         $product_name = $request->product_name;
         $product_code = $request->product_code;
@@ -52,14 +57,8 @@ class productController extends Controller
         $listImg = $request->listImg;
         $materialId = $request->materialId;
         $listQuantity = json_decode($request->listQuantity);
-        $product= new productModel();
-        // $errors = $request->validator->errors();
-        // if($errors){
-        //      return response()->json(['status'=>'fail', 'mess' => $errors]);
-
-        // }       
+      
         try {
-            // Kiểm tra mã sản phẩm tồn tại trong database
             $check = DB::table('tbl_product')->where('product_code', $product_code)->exists();
             if ($check) {
                 return response()->json([
@@ -69,17 +68,27 @@ class productController extends Controller
                     'route' => ''
                 ]);
             } else {
-                $result=$product->addproduct($theloai_id,$product_name,$product_code,$brand_product,$baoquan_product,$mota_product,$dacdiem_product,$listImg,$listQuantity,$materialId);
-                $resultImg= $product->addImg($listImg, $result);
-           
-                $resultQuantity= $product->addProductQuantity($listQuantity, $result);
-                $resultMaterial= $product->addMaterial($materialId, $result);
-                if($result&&$resultImg&&$resultQuantity&&$resultMaterial){
+                $product= new productModel();     
+                $result=$product->addproduct($theloai_id,$product_name,$product_code,$brand_product,$baoquan_product,$mota_product,$dacdiem_product);
+               
+                if($result){
+                    $resultImg= $product->addImg($listImg, $result);
+                    $resultQuantity= $product->addProductQuantity($listQuantity, $result);
+                    $resultMaterial= $product->addMaterial($materialId, $result);
+                    if($resultImg&&$resultMaterial&&$resultQuantity){
+                        return response()->json([
+                            'status' => 'success',
+                            'mess' => 'Thêm thành công ',
+                            'route' => route('product_list')
+                        ]);
+                    }
+                   else{
                     return response()->json([
-                        'status' => 'success',
-                        'mess' => 'Thêm thành công ',
+                        'status' => 'fail',
+                        'mess' => 'Không thêm được các phần tử phụ',
                         'route' => route('product_list')
                     ]);
+                   }
                 }
                else{
                 return response()->json([
@@ -88,7 +97,7 @@ class productController extends Controller
                     'mess' => 'Thêm thất bại',
                     'route' => ''
                 ]);
-               }
+               } 
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -120,7 +129,8 @@ class productController extends Controller
         $item_product_Quantity = $productModel->getQuantity($product_id);
         $item_product_Img = $productModel->getDeatilImg($product_id);
         $item_product_Material = $productModel->getDeatilMaterial($product_id);
-        return view('include.main.page.product.product.detail', compact('item_product','item_product_Quantity','item_product_Img','item_product_Material'));
+        $listCmt = $productModel->getCmtDeatilAdmin($product_id);
+        return view('include.main.page.product.product.detail', compact('item_product','item_product_Quantity','item_product_Img','item_product_Material','product_id','listCmt'));
 
     }
     public function deatil_Quantity($product_id)
@@ -315,13 +325,10 @@ class productController extends Controller
     }
     public function post_add_img(Request $request, $product_id)
     {
-        
-     
         $listImg = $request->listImg;
-     
-        $product= new productModel();
+         $product= new productModel();
         try {
-            $add=$product->addProductImg($listImg, $product_id);
+            $add=$product->addImg($listImg, $product_id);
             if($add){
                     return response()->json([
                         'status' => 'success',
@@ -342,7 +349,7 @@ class productController extends Controller
             return response()->json([
                 'status' => 'fail',
                 'errPosition' => 'all',
-                'mess' => 'Thêm thất bại -- ' . $e->getMessage(),
+                'mess' => 'Thêm thất bại ',
                 'route' => ''
             ]);
         }

@@ -46,7 +46,6 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="list-titel-statistical">
-
                             <div class="item-titel-statistical active flex_center product-deatil-action" data-value="6Mouth"
                                 data-id={{ $product_id }}>
                                 6 tháng gần nhất

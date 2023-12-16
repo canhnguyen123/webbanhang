@@ -20,6 +20,10 @@
           <i class="mdi mdi-keyboard-return"></i>
           <p>Quay lại</p>
         </div>
+        <div class="item-icon active-box flex_center mg-5 icon-edit bg-violet" id="ecxel-color">
+          <i class="mdi mdi-file-excel"></i>
+          <p>Xuất bản excel</p>
+        </div>
       </div>
     </div>
 </div>
@@ -33,11 +37,19 @@
             </form>
           </div>
         </div>
-        <div class="col-12  grid-margin stretch-card ">
-
-          <span class="req-text-mess"></span>
+        <div class="col-md-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-status-color">
+              <option disabled>Chọn trạng thái</option>
+              <option value="1">Đang bật</option>
+              <option value="0">Đang tắt</option>
+            </select>
         
-      </div>
+          </div>
+        </div>
+        <div class="col-12  grid-margin stretch-card ">
+            <span class="req-text-mess"></span>
+         </div>
 
        
         <div class="col-md-12 grid-margin stretch-card">
@@ -79,12 +91,12 @@
                                   </a>  
 
                                   @if ($item->color_status===1)
-                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id,'color_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+                                  <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
                                     <i class="mdi mdi-toggle-switch"></i>
                                     <p>Ẩn</p>
                                   </a>   
                                   @else
-                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id,'color_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+                                  <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
                                     <i class="mdi mdi-toggle-switch-off"></i>
                                     <p>Hiện</p>
                                   </a> 

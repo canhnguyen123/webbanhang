@@ -90,6 +90,7 @@ exports.addCart = (req, res) => {
 };
 exports.getListHome = (req, res) => {
     const user_id = req.params.user_id;
+
     if (!Number.isInteger(user_id) && user_id > 0) {
         cartModel.getListCart((error, results) => {
             if (error) {
@@ -118,8 +119,6 @@ exports.deleteCart = (req, res) => {
     const user_id = req.params.user_id;
     const arrId = req.body.arrId;
     let itemsToDelete = arrId.length;
-    console.log(arrId)
-    console.log(itemsToDelete)
     let deletedCount = 0; // Số mục đã bị xóa
 
     if (!Number.isInteger(user_id) && user_id > 0) {
@@ -133,8 +132,6 @@ exports.deleteCart = (req, res) => {
                 if (results.affectedRows > 0) {
                     deletedCount++;
                 }
-
-                // Kiểm tra nếu đã xóa tất cả các mục
                 if (deletedCount === itemsToDelete) {
                     return res.json({ status: 'success', mess: "Xóa thành công" });
                 }
@@ -144,23 +141,40 @@ exports.deleteCart = (req, res) => {
         return res.json({ status: 'fail', mess: "Không tìm thấy tài khoản" });
     }
 };
+exports.updateCart = (req, res) => {
+    const cart_id = req.params.cart_id;
+    const quantity = req.body.quantity;
+    
 
-
+    if (!Number.isInteger(cart_id) && cart_id > 0 && quantity > 0) {
+        cartModel.updateCart((error, results) => {
+            if (error) {
+                console.error('Lỗi xảy ra: ' + error.stack);
+                return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+            }
+    
+           if(results){
+            return res.json({ status: 'success', mess: "Cập nhật thành công" });
+           }
+           return res.json({ status: 'fail', mess: "Cập nhật thất bại " });
+        },cart_id,quantity);
+    } else {
+        return res.json({ status: 'fail', mess: "Kiểm tra lại dữ liệu" });
+    }   
+};
 exports.getDeatil = (req, res) => {
-    const user_id = req.params.user_id;
     const list_id = req.body.list_id;
     const arr = [];
     let completedCount = 0;
-
-    if (!isNaN(user_id) && user_id > 0&&list_id.length>0) {
-        list_id.forEach(item => {
+    
+    list_id.forEach(item => {
             cartModel.getDetailProduct((error, results) => {
                 if (error) {
                     console.error('Lỗi xảy ra: ' + error.stack);
                     return res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
                 }
-                const product_id = results[0].product_id;
-                const size = results[0].card_size;
+                const product_id = results[0].product_id||"";
+                const size = results[0].card_size||"";
                 const color = results[0].card_color;
                 cartModel.getPrice((error, priceResults) => {
                     if (error) {
@@ -171,7 +185,7 @@ exports.getDeatil = (req, res) => {
                     const quantity = results[0].card_quatity;
 
                     const arrList = {
-                        product_id: results[0].product_id,
+                        product_id: product_id,
                         name: results[0].product_name,
                         quantity: quantity, 
                         img: results[0].product_image,
@@ -184,18 +198,12 @@ exports.getDeatil = (req, res) => {
 
                     completedCount++;
                     if (completedCount === list_id.length) {
-                        return res.json({ status: 'success', mess:"xóa thành công", results: arr });
+                        return res.json({ status: 'success',  results: arr });
                     }
                 }, product_id, color, size);
-            }, item);
+            }, Number(item));
         });
-    } else {
-        return res.json({ status: 'fail', mess: "Kiểm tra lại dữ  liệu" });
-    }
 };
-
-
-
 exports.getList = (req, res) => {
     const user_id = req.params.user_id;
     const limit = 20;

@@ -18,33 +18,23 @@
                     {{ session('errorMessage') }}
                 </div>
             @endif
-              <div class="form-group form-input col-6">
-                <i class="mdi mdi-rename-box"></i>
-                <input type="text" name="nameCategory" class="form-control" value="{{ old('nameCategory') }}" required>
-                <label> Tên danh mục</label>
+            <div class="col-12">
+                <div class="form-group form-input">
+                  <i class="mdi mdi-rename-box"></i>
+                  <input type="text" name="nameCategory" class="form-control" value="{{ old('nameCategory') }}" required>
+                  <label> Tên danh mục</label>
+                </div>
+                <div class="err">
+                  <span>
+                      @error('nameCategory')
+                          {{ $message }}
+                      @enderror
+                  </span>
               </div>
-              <div class="form-group form-input col-6">
-                <i class="mdi mdi-codepen"></i>
-                <input type="text" name="codeCategory" class="form-control" value="{{ old('codeCategory') }}" required>
-                <label> Mã danh mục</label>
-              </div>
-              <div class="col-6 err">
-                <span>
-                    @error('nameCategory')
-                        {{ $message }}
-                    @enderror
-                </span>
             </div>
-              <div class="col-6 err">
-                <span>
-                    @error('codeCategory')
-                        {{ $message }}
-                    @enderror
-                  
-                </span>
-            </div>
+              
+             
               <button type="submit" class=" btn-pimar-key mr-2">Thêm</button>
-              <button type="reset" class="btn btn-light">Reset form</button>
             </form>
           </div>
         </div>

@@ -128,17 +128,29 @@ exports.deleteCart = (callback, cart_id) => {
         }
     );
 };
-
+exports.updateCart = (callback, cart_id,quantity) => {
+    connection.query(
+        `UPDATE tbl_cart SET card_quatity=?
+         WHERE cart_id=?`,
+         [quantity,cart_id],
+        (error, results) => {
+            if (error) {
+                console.error('Lỗi truy vấn cơ sở dữ liệu: ' + error.stack);
+                return callback(error, null);
+            }
+            return callback(null, results);
+        }
+    );
+};
 exports.getDetailProduct = (callback, cart_id) => {
     let sql = `
         SELECT
             tbl_cart.*,
-            tbl_product.product_id,
             tbl_product.product_name,
             tbl_product_img.productImg_name AS product_image
         FROM
             tbl_cart
-        INNER JOIN tbl_product ON tbl_cart.product_id = tbl_product.product_id
+        INNER JOIN tbl_product ON tbl_cart.product_id= tbl_product.product_id
         LEFT JOIN (
             SELECT
                 product_id,

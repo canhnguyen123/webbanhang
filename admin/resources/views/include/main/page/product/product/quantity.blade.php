@@ -5,7 +5,7 @@
             <div class=" with-form-100w grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title" style="text-align: center">Thêm mới sản phẩm</h4>
+                        <h4 class="card-title" style="text-align: center">Quản lý số lượng</h4>
                         <form class="forms-sample row">
                           <div class="col-12 row">
                                   <div class="form-group col-12">
@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="col-12 pg-0-0-20-0">
                                     <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="add-quantity-item" data-product="{{$product_id}}">Thêm</button>
-                                    <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="update-quantity-item" data-product="{{$product_id}}" style="display: none">Cập nhật</button>
+                                    <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="  " data-product="{{$product_id}}" style="display: none">Cập nhật</button>
                                 </div>
                                 <div class="col-12 req-div-quantity">
                                     @foreach ($item_product_Quantity as $item)
@@ -78,11 +78,11 @@
                                             <p>Số lượng: <span class="quantity-product">{{ $item->productQuantity }}</span></p>
                                         </div>
                                         <div class="item-quantity-div item-quantity-price-import">
-                                            <p>Giá nhập: <span class="priceInt-quantity">{{ number_format($item->productQuantity_priceInt,0) }} VNĐ
-                                            </span></p>
+                                            <p>Giá nhập: <span class="priceInt-quantity">{{ number_format($item->productQuantity_priceInt,0) }} 
+                                            </span>VNĐ</p>
                                         </div>
                                         <div class="item-quantity-div item-quantity-price-out">
-                                            <p>Giá bán: <span class="priceOut-quantity">{{ number_format($item->productQuantity_priceOut,0) }} VNĐ</span></p>
+                                            <p>Giá bán: <span class="priceOut-quantity">{{ number_format($item->productQuantity_priceOut,0) }} </span> VNĐ</p>
                                         </div>
                                         <div class="item-quantity-div ">
                                             <p>Trạng thái: <span>

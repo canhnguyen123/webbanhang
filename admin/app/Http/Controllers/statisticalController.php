@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\DB;
 use App\Models\statisticalModel;
 
 class statisticalController extends Controller
@@ -23,7 +21,7 @@ class statisticalController extends Controller
         $i=1;
         return view('include.main.page.statistical.product.table', compact('countProductSoid','countProductAll','list_productSoid','i'));
     }
-    public function statisticalProductAction(Request $request)
+    public function statisticalAction(Request $request)
     {
         $value = $request->value;
         $statisticalModel = new statisticalModel();
@@ -44,7 +42,7 @@ class statisticalController extends Controller
         ]);
     }
     
-    
+ 
     public function productDeatil($product_id){
         $statisticalModel = new statisticalModel();
         $selectList=$statisticalModel->selectProductList();
@@ -70,5 +68,19 @@ class statisticalController extends Controller
         }
         return response()->json(['status' => "success",'listLable'=>$listLable,'result'=>$resultList]);
     }
-   
+    public function productAllAcction(Request $request){
+        $statisticalModel = new statisticalModel();
+        $value = $request->value;
+        $listLable=$statisticalModel->getTime($value);
+        $resultList=$statisticalModel->getDataAll($value);
+        return response()->json(['status' => "success",'listLable'=>$listLable,'result'=>$resultList]);
+    }
+    public function paymentAcction(Request $request){
+        $statisticalModel = new statisticalModel();
+        $value = $request->value;
+        $listLable=$statisticalModel->getTime($value);
+        $resultListFail=$statisticalModel->getDataPayment($value,5);
+        $resultListSuccess=$statisticalModel->getDataPayment($value,6);
+        return response()->json(['status' => "success",'listLable'=>$listLable,'resultListFail'=>$resultListFail,'resultListSuccess'=>$resultListSuccess]);
+    }
 }

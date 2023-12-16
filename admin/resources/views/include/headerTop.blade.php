@@ -29,57 +29,34 @@
                 </p>
               </div>
             </a>
-            <a class="dropdown-item preview-item">
-              <div class="preview-thumbnail">
-                <div class="preview-icon bg-warning">
-                  <i class="ti-settings mx-0"></i>
-                </div>
-              </div>
-              <div class="preview-item-content">
-                
-                <a class="navbar-brand brand-logo mr-5" class="preview-subject font-weight-normal">setting</a>
-                <p class="font-weight-light small-text mb-0 text-muted">
-                  Private message
-                </p>
-              </div>
-            </a>
-            <a class="dropdown-item preview-item">
-              <div class="preview-thumbnail">
-                <div class="preview-icon bg-info">
-                  <i class="ti-user mx-0"></i>
-                </div>
-              </div>
-              <div class="preview-item-content">
-                <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                <p class="font-weight-light small-text mb-0 text-muted">
-                  2 days ago
-                </p>
-              </div>
-            </a>
+          
           </div>
         </li>
         <li class="nav-item nav-profile dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-            <img src="{{asset('upload/BE/'.session('img'))}}" alt="profile"/>
-
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{{ asset('upload/BE/' . request()->cookie('img')) }}" alt="profile"/>
           </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item" 
-            {{-- href="{{route('infroDeatil',['user_id'=>session('user_id')])}}" --}}
-            >
-              <i class="ti-settings text-primary"></i>
+              <a class="dropdown-item" 
+              href="{{route('infroDeatil')}}"
+              >
+              <i class="mdi mdi-account"></i>
               Thông tin cá nhân
             </a>
             <a class="dropdown-item" href="{{route('setting')}}">
               <i class="ti-settings text-primary"></i>
               Cài đặt
             </a>
-            <a class="dropdown-item">
-              <i class="ti-settings text-primary"></i>
+            <a class="dropdown-item" href="{{route('update.password')}}">
+              <i class="mdi mdi-account-key"></i>
                 Đổi mật khẩu
             </a>
+            <a class="dropdown-item" href="{{route('restore.password')}}">
+              <i class="mdi mdi-lock"></i>
+                Khôi phục mật khẩu
+            </a>  
             <a class="dropdown-item" href="{{route('logout')}}">
-              <i class="ti-power-off text-primary"></i>
+              <i class="mdi mdi-logout"></i>
               Đăng xuất
             </a>
           </div>

@@ -1,18 +1,33 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class AjaxModel extends Model
+use Illuminate\Support\Carbon;
+class AjaxModel extends indexModel
 {
-    function search_ajax($table_name, $colum_name, $input)
+    public function search_ajax($table_name, array $datacolum_name, $input)
+    {   
+        try {
+            $query = DB::table($table_name);
+    
+            foreach ($datacolum_name as $item) {
+                     $query->orWhere($item, 'LIKE', '%' . $input . '%');
+            }
+            $results = $query;
+            return $results;
+        } catch (\Exception $e) {
+            // Xử lý ngoại lệ nếu có
+            return null;
+        }
+    }
+    
+    function filter_ajax($table_name, $colum_name, $status)
     {
         $results = DB::table($table_name)
-            ->where($colum_name, 'LIKE', '%' . $input . '%')
-            ->get();
+            ->where($colum_name,$status);
         return $results;
     }
     function search_ajax2Colum($table_name, $colum_name1, $colum_name2, $input)
@@ -81,6 +96,13 @@ class AjaxModel extends Model
         $results = DB::table($table_name)
             ->orderBy($primary_id, 'asc')
             ->paginate(5);
+        return $results;
+    }
+    function getDataExcel($table_name, $primary_id)
+    {
+        $results = DB::table($table_name)
+            ->orderBy($primary_id, 'asc')
+            ->get();
         return $results;
     }
     function returnTable_ajaxP($table_name, $primary_id)
@@ -219,5 +241,38 @@ class AjaxModel extends Model
         $results =DB::table('tbl_payment')->where('statusPayment_id',$status);
         return $results;
     }
-   
+   public function post_cmt($context,$resId,$product_id){
+        $data=[
+            'staff_id'=>Auth::id(),
+            'comment_resMessId'=>$resId,
+            'product_id'=>$product_id,
+            'comment_context'=>$context,
+            'comment_status'=>1,
+            'created_at'=>Carbon::now()
+        ];
+        $results=DB::table('tbl_comment')->insertGetId($data);
+        return $results;
+   }
+  
+   public function getCmtDeatilAdmin($product_id,$cmt_id){
+    $results = DB::table('tbl_comment as main_comment')
+    ->leftJoin('tbl_user', 'main_comment.user_id', '=', 'tbl_user.user_id')
+    ->leftJoin('tbl_comment as sub_comment', 'main_comment.comment_id', '=', 'sub_comment.comment_resMessId')
+    ->select(
+        'main_comment.comment_context',
+        'main_comment.comment_id',
+        'main_comment.created_at',
+        'main_comment.user_id',
+        DB::raw('IFNULL(tbl_user.user_fullname, "null") as user_fullname'),
+        DB::raw('IFNULL(tbl_user.user_linkImg, "null") as user_linkImg'),
+        DB::raw('COUNT(sub_comment.comment_id) as sub_comment_count'),
+        DB::raw('SUM(CASE WHEN sub_comment.comment_resMessId = main_comment.comment_id THEN 1 ELSE 0 END) as feedback_count')
+    )
+    ->where('main_comment.product_id', $product_id)
+    ->where('main_comment.comment_resMessId', null)
+    ->where('main_comment.comment_id', $cmt_id)
+    ->groupBy('main_comment.comment_context', 'main_comment.comment_id', 'main_comment.created_at', 'main_comment.user_id', 'user_fullname', 'user_linkImg')
+    ->first();
+        return $results;
+   }
 }

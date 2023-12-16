@@ -21,6 +21,7 @@ class AjaxController extends Controller
             'table_name' => 'tbl_phanloai',
             'colum_name' => 'phanloai_name',
             'primary_id' => 'phanloai_id',
+            'status' => 'phanloai_status',
         ];
     }
     private function materialParams()
@@ -29,8 +30,10 @@ class AjaxController extends Controller
             'table_name' => 'tbl_material',
             'colum_name' => 'material_name',
             'primary_id' => 'material_id',
+            'status' => 'material_status',
         ];
     }
+    
     private function brandParams()
     {
         return [
@@ -38,6 +41,7 @@ class AjaxController extends Controller
             'colum_name1' => 'brand_name',
             'colum_name2' => 'brand_code',
             'primary_id' => 'brand_id',
+            'status' => 'brand_status',
         ];
     }
     private function PermissionParams()
@@ -47,6 +51,7 @@ class AjaxController extends Controller
             'colum_name1' => 'permission_name',
             'colum_name2' => 'permission_code',
             'primary_id' => 'permission_id',
+            'status' => 'permission_status',
         ];
     }
     private function PermissionGroupParams()
@@ -56,6 +61,7 @@ class AjaxController extends Controller
             'colum_name1' => 'permission_group_name',
             'colum_name2' => 'permission_group_code',
             'primary_id' => 'permission_group_id',
+            'status' => 'permission_group_status',
         ];
     }
     private function voucherParams()
@@ -74,6 +80,7 @@ class AjaxController extends Controller
             'colum_name1' => 'user_username',
             'colum_name2' => 'user_fullname',
             'primary_id' => 'user_id',
+            'status' => 'user_status',
         ];
     }
     private function methodPaymentParams()
@@ -83,6 +90,7 @@ class AjaxController extends Controller
             'colum_name1' => 'methodPayment_name',
             'colum_name2' => 'methodPayment_code',
             'primary_id' => 'methodPayment_id',
+            'status'=>'methodPayment_status'
         ];
     }
     private function statusPaymentParams()
@@ -92,6 +100,7 @@ class AjaxController extends Controller
             'colum_name1' => 'statusPayment_name',
             'colum_name2' => 'statusPayment_code',
             'primary_id' => 'statusPayment_id',
+            'status'=>'statusPayment_status'
         ];
     }
     private function positionParams()
@@ -101,6 +110,7 @@ class AjaxController extends Controller
             'colum_name1' => 'position_name',
             'colum_name2' => 'position_code',
             'primary_id' => 'position_id',
+            'status' => 'position_status',
         ];
     }
     private function staffParams()
@@ -110,6 +120,7 @@ class AjaxController extends Controller
             'colum_name1' => 'staff_fullname',
             'colum_name2' => 'staff_username',
             'primary_id' => 'staff_id',
+            'status' => 'staff_status',
         ];
     }
     private function theloaiParams()
@@ -138,6 +149,7 @@ class AjaxController extends Controller
             'colum_name1' => 'ship_name',
             'colum_name2' => 'ship_code',
             'primary_id' => 'ship_id',
+            'status' => 'ship_status',
         ];
     }
 
@@ -147,6 +159,7 @@ class AjaxController extends Controller
             'table_name' => 'tbl_category',
             'colum_name' => 'category_name',
             'primary_id' => 'category_id',
+            'status' => 'category_status',
         ];
     }
 
@@ -156,6 +169,7 @@ class AjaxController extends Controller
             'table_name' => 'tbl_size',
             'colum_name' => 'size_name',
             'primary_id' => 'size_id',
+            'status' => 'size_status',
         ];
     }
     private function colorParams()
@@ -164,14 +178,33 @@ class AjaxController extends Controller
             'table_name' => 'tbl_color',
             'colum_name' => 'color_name',
             'primary_id' => 'color_id',
+            'status' => 'color_statuss',
         ];
     }
-    public function category_seach(Request $request)
+            public function category_search(Request $request)
+        {
+            $input = $request->input('content');
+            $params = $this->categoryParams();
+            $data =
+            [
+                 $params['colum_name']
+            ];
+            $results = $this->ajaxModel->search_ajax($params['table_name'], $data, $input)->get();
+            $count = $this->ajaxModel->search_ajax($params['table_name'], $data, $input)->count();
+            $i = 1;
+
+            return response()->json([
+                'view' => view('ohther.ajax.admin.category_list')->with('list_category', $results)->with('i', $i)->render(),
+                'counMess' => "Có " . $count . " kết quả trả về",
+            ]);
+        }
+
+    public function category_filter(Request $request)
     {
         $input = $request->input('content');
         $params = $this->categoryParams();
-        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
-        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
         $i = 1;
         return response()->json([
             'view' => view('ohther.ajax.admin.category_list')->with('list_category', $results)->with('i', $i)->render(),
@@ -179,7 +212,6 @@ class AjaxController extends Controller
 
         ]);
     }
-
     public function category_loadmore(Request $request)
     {
         $last_stt = $request->input('stt');
@@ -213,16 +245,32 @@ class AjaxController extends Controller
     {
         $input = $request->input('content');
         $params = $this->phanloaiParams();
-        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
+        $data=[
+            $params['colum_name']
+        ];
+        $results = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->get();
         $i = 1;
-        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        $count = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.phanloai_list')->with('list_phanloai', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
 
         ]);
     }
+    public function phanloai_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->phanloaiParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        $i = 1;
+        return response()->json([
+            'view' => view('ohther.ajax.admin.phanloai_list')->with('list_phanloai', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
 
+        ]);
+    }
+    
     public function phanloai_loadmore(Request $request)
     {
         $last_stt = $request->input('stt');
@@ -259,16 +307,18 @@ class AjaxController extends Controller
     {
         $input = $request->input('content');
         $params = $this->materialParams();
-        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
+        $data=[
+            $params['colum_name'],
+        ];
+        $results = $this->ajaxModel->search_ajax($params['table_name'],$data,$input)->get();
         $i = 1;
-        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        $count = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.material_list')->with('list_material', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
 
         ]);
     }
-
     public function material_loadmore(Request $request)
     {
         $last_stt = $request->input('stt');
@@ -301,6 +351,33 @@ class AjaxController extends Controller
             ->with('i', $i);
     }
 
+    public function material_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->materialParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.material_list')->with('list_material', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function user_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->userParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.user_list')->with('list_user', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    
 
     public function staff_return()
     {
@@ -327,7 +404,19 @@ class AjaxController extends Controller
         ]);
     }
 
+    public function staff_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->staffParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.staff_list')->with('list_staff', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
 
+        ]);
+    }
 
     public function theloai_seach(Request $request)
     {
@@ -384,9 +473,25 @@ class AjaxController extends Controller
     {
         $input = $request->input('content');
         $params = $this->colorParams();
-        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
+        $data=[
+            $params['colum_name']
+        ];
+        $results = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->get();
         $i = 1;
-        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        $count = $this->ajaxModel->search_ajax($params['table_name'], $data, $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.color_list')->with('list_color', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function color_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->colorParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        $i = 1;
         return response()->json([
             'view' => view('ohther.ajax.admin.color_list')->with('list_color', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -430,9 +535,26 @@ class AjaxController extends Controller
     {
         $input = $request->input('content');
         $params = $this->brandParams();
-        $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        $data=[
+            $params['colum_name1'],
+            $params['colum_name2']
+        ];
+        $results = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->get();
         $i = 1;
-        $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        $count = $this->ajaxModel->search_ajax($params['table_name'],$data, $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.brand_list')->with('list_brand', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function brand_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->brandParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        $i = 1;
         return response()->json([
             'view' => view('ohther.ajax.admin.brand_list')->with('list_brand', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -463,6 +585,18 @@ class AjaxController extends Controller
             'counMess' => "Có " . $count . " kết quả trả về",
        ]);
     }
+    public function permission_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->PermissionParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.permission_list')->with('list_permission', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+       ]);
+    }
     public function permission_return()
     {
         $params = $this->PermissionParams();
@@ -482,6 +616,19 @@ class AjaxController extends Controller
         $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
         $i = 1;
         $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.permissionGroup_list')->with('list_permissionGroup', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function permissionGroup_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->PermissionGroupParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.permissionGroup_list')->with('list_permissionGroup', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -529,6 +676,19 @@ class AjaxController extends Controller
         $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
         $i = 1;
         $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.ship_list')->with('list_ship', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function ship_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->shipParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.ship_list')->with('list_ship', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -583,6 +743,19 @@ class AjaxController extends Controller
 
         ]);
     }
+    public function methodPayment_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->methodPaymentParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.methodPayment_list')->with('list_methodPayment', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
     public function methodPayment_return()
     {
         $params = $this->methodPaymentParams();
@@ -624,6 +797,19 @@ class AjaxController extends Controller
         $results = $this->ajaxModel->search_ajax2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
         $i = 1;
         $count = $this->ajaxModel->search_ajaxCount2Colum($params['table_name'], $params['colum_name1'], $params['colum_name2'], $input);
+        return response()->json([
+            'view' => view('ohther.ajax.admin.statusPayment_list')->with('list_statusPayment', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function statusPayment_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->statusPaymentParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.statusPayment_list')->with('list_statusPayment', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -699,6 +885,19 @@ class AjaxController extends Controller
 
         ]);
     }
+    public function position_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->positionParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.position_list')->with('list_position', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
     public function position_return()
     {
         $params = $this->positionParams();
@@ -726,9 +925,23 @@ class AjaxController extends Controller
     {
         $input = $request->input('content');
         $params = $this->sizeParams();
-        $results = $this->ajaxModel->search_ajax($params['table_name'], $params['colum_name'], $input);
+        $data = [$params['colum_name']];
+        $results = $this->ajaxModel->search_ajax($params['table_name'], $data, $input)->get();
         $i = 1;
-        $count = $this->ajaxModel->search_ajaxCount($params['table_name'], $params['colum_name'], $input);
+        $count = $this->ajaxModel->search_ajax($params['table_name'], $data, $input)->count();
+        return response()->json([
+            'view' => view('ohther.ajax.admin.size_list')->with('list_size', $results)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+
+        ]);
+    }
+    public function size_filter(Request $request)
+    {
+        $input = $request->input('content');
+        $params = $this->sizeParams();
+        $results = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->get();
+        $i = 1;
+        $count = $this->ajaxModel->filter_ajax($params['table_name'], $params['status'], $input)->count();
         return response()->json([
             'view' => view('ohther.ajax.admin.size_list')->with('list_size', $results)->with('i', $i)->render(),
             'counMess' => "Có " . $count . " kết quả trả về",
@@ -873,8 +1086,135 @@ class AjaxController extends Controller
         return response()->json([
             'view' => view('ohther.ajax.admin.payment_list')->with('list_payment', $listPayment)->with('i', 1)
                 ->render(),
-
-
+         ]);
+    }
+    public function postCmt(Request $request){
+        $context=$request->input('context');
+        $resId=$request->input('resId')?: null;
+        $product_id=$request->input('product_id');
+        $cmt_id = $this->ajaxModel->post_cmt($context,$resId,$product_id);
+        $getCmt=$this->ajaxModel->getCmtDeatilAdmin($product_id,$cmt_id);
+        if($resId!==null){
+            return response()->json([
+                'view' => view('ohther.ajax.admin.cmt_deatilReqly')->with('cmt_deatil',$getCmt)->with('i', 1)
+                    ->render(),
+                'cmt_id'=>$cmt_id,
+            ]);
+        }
+        return response()->json([
+            'view' => view('ohther.ajax.admin.cmt_deatil')->with('cmt_deatil',$getCmt)->with('i', 1)
+                ->render(),
+            'cmt_id'=>$cmt_id
         ]);
+    }
+    public function getdataCategoryExcel()
+    {
+        $params = $this->categoryParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Danh mục'
+         ]);
+    }
+    public function getdataPhanLoaiExcel()
+    {
+        $params = $this->phanloaiParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Phân loại'
+         ]);
+    }
+    public function getdatacolorExcel()
+    {
+        $params = $this->colorParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Màu sắc'
+         ]);
+    }
+    public function getdatasizeExcel()
+    {
+        $params = $this->sizeParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'kích cỡ'
+         ]);
+    }
+    public function getdatabrandeExcel()
+    {
+        $params = $this->brandParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'thương hiệu'
+         ]);
+    }
+    public function getdatabmaterialeExcel()
+    {
+        $params = $this->materialParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'chất liệu'
+         ]);
+    }
+    public function getdatabPermissionGroupExcel()
+    {
+        $params = $this->PermissionGroupParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'nhóm quyền'
+         ]);
+    }
+    public function getdatabPositionExcel()
+    {
+        $params = $this->positionParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'chức vụ'
+         ]);
+    }
+    public function getdatabMethodPaymentExcel()
+    {
+        $params = $this->methodPaymentParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Phương thức thanh toán'
+         ]);
+    }
+    public function getdatastatusPaymentExcel()
+    {
+        $params = $this->statusPaymentParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Trạng thái đơn hàng'
+         ]);
+    }
+    public function getdataShipExcel()
+    {
+        $params = $this->shipParams();
+        $results = $this->ajaxModel->getDataExcel($params['table_name'], $params['primary_id']);
+        return response()->json([
+            'status' => 'success',
+            'results' => $results,
+            'title'=>'Phương thức ship'
+         ]);
     }
 }

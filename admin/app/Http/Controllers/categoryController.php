@@ -1,16 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\categoryRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\categoryModel;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 class categoryController extends Controller
 {    
-   
+    private $categoryModel;
+
+    public function __construct(CategoryModel $categoryModel)
+    {
+        $this->categoryModel = $categoryModel;
+    }
     public function list(){
             $categoryModel = new categoryModel();
             $paginate = $categoryModel->getPagination()->first(); 
@@ -26,68 +29,63 @@ class categoryController extends Controller
     }
     public function post_add(categoryRequest $request){
         $name=$request->nameCategory;
-        $code=$request->codeCategory;
-        
-        $category= new categoryModel();
-        $check=$category->checkDatabase($code);
+        $check=$this->categoryModel->checkDatabase($name);
         if($check){
-            $errorMessage = "Mã danh mục đã tồn tại";
+            $errorMessage = "Tên danh mục đã tồn tại";
             session()->flash('errorMessage', $errorMessage);
             return redirect()->back();
         }else{
-            $add= $category->addCategory($name,$code);
+            $add= $this->categoryModel->add($name);
             if($add){
                 return " <script> alert('Thêm thành công'); window.location = '".route('category_list')."';</script>";
-            }else{
-                return " <script> alert('Thêm thất bại'); window.location = '".route('category_list')."';</script>";
+            }
+            else{
+                $errorMessage = "Thêm thất bại";
+                session()->flash('errorMessage', $errorMessage);
+                return redirect()->back();
             }
         }
       
     }
     public function update($category_id){
-        $item_category = DB::table('tbl_category')->where('category_id',$category_id)->get();
-         
+        $item_category =$this->categoryModel->getDeatil($category_id);
         return view('include.main.page.product.category.update',compact('item_category'));
     }
-    public function post_update(categoryRequest $request,$category_id){
+    
+    public function post_update(categoryRequest $request,$id){
         $name=$request->nameCategory;
-        $code=$request->codeCategory;
-        $category= new categoryModel();
-        $check_is= $category->checkDatabaseIs($code,$category_id);
+        $check_is= $this->categoryModel->checkDatabase($name,$id);
         if($check_is){
             $errorMessage = "Mã danh mục đã tồn tại";
             session()->flash('errorMessage', $errorMessage);
             return redirect()->back();
         }else{
-            $update= $category->updateCategory($name,$code,$category_id);
-           // if($update){
-                return " <script> alert('Cập nhật thành công'); window.location = '".route('category_list')."';</script>";
-            // }else{
-            //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('category_list')."';</script>";
-            // }
+            $update=$this->categoryModel->updateCategory($name,$id);
+            if($update){
+                return " <script> alert('Cập nhâth thành công'); window.location = '".route('category_list')."';</script>";
+            }
+            else{
+                $errorMessage = "Sửa thất bại";
+                session()->flash('errorMessage', $errorMessage);
+                return redirect()->back();
+            }
         }
       
     }
-    public function toogle_status($category_id,$category_status){
-        $category= new categoryModel();
-        $product=DB::table('tbl_category')->where('category_id',$category_id)->first();
-        $status=0;
-        if($product->category_status==1){
-            if($category_status==0){
-                $status=1;
-            }else{
-                $status=0;
-            }
+    public function toogle_status($id){
+        $getStatus=$this->categoryModel->getDeatil($id);
+        
+        $getStatus_now=$getStatus->category_status;
+        if($getStatus_now===1){
+            $status=0;
+        }else{
+            $status=1;
         }
-         if ($product->category_status == 0) {
-            if($category_status==1){
-                $status=0;
-            }else{
-                $status=1;
-            }
-        }
-      
-       $category->status_toggle($status,$category_id);
-        return " <script> alert('Cập nhật thành công'); window.location = '".route('category_list')."';</script>";
-   }
+        $result = $this->categoryModel->status_toggle($status,$id);
+        $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+    
+        return "<script> alert('$message'); window.location.href = '" . route('category_list') . "';</script>";
+ 
+       }
+  
 }

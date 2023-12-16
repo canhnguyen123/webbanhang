@@ -3,38 +3,42 @@
     <div class="content-wrapper">
         <div class="flex_center">
             <div class=" with-form-800  grid-margin stretch-card">
-              @foreach ($deatilItem as $item)
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title" style="text-align: center">Chi tiết người dùng</h4>
-                        <div class="list-item-titel col-12 mg-50">
-        
-                          <div class="item-icon toggle-search flex_center mg-5 icon-edit bg-violet">
-                            <i class="mdi mdi-magnify"></i>
-                            <p>Tìm kiếm</p>
-                          </div>
-                          <div class="item-icon toggle-filter flex_center mg-5 icon-edit bg-violet">
-                            <i class="mdi mdi-filter"></i>
-                            <p>Lọc</p>
-                          </div>
-                          <div class="item-icon  flex_center mg-5 icon-edit bg-violet" id="return-user">
-                            <i class="mdi mdi-keyboard-return"></i>
-                            <p>Quay lại</p>
-                          </div>
-                          
-                          @if ($item->user_status===1)
-                          <a onclick="return confirm('Bạn có khóa tải khoản này không ?')" href="{{route('user_toogle_status',['user_id'=>$item->user_id,'user_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
-                            <i class="mdi mdi-toggle-switch"></i>
-                            <p>Khóa</p>
-                          </a>   
-                          @else
-                          <a onclick="return confirm('Bạn có muốn mở khóa tài khoản này không ?')" href="{{route('user_toogle_status',['user_id'=>$item->user_id,'user_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
-                            <i class="mdi mdi-toggle-switch-off"></i>
-                            <p>Mở khóa</p>
-                          </a> 
-                          @endif
-                        </div>
-                      
+                @foreach ($deatilItem as $item)
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title" style="text-align: center">Chi tiết người dùng</h4>
+                            <div class="list-item-titel col-12 mg-50">
+
+                                <div class="item-icon toggle-search flex_center mg-5 icon-edit bg-violet">
+                                    <i class="mdi mdi-magnify"></i>
+                                    <p>Tìm kiếm</p>
+                                </div>
+                                <div class="item-icon toggle-filter flex_center mg-5 icon-edit bg-violet">
+                                    <i class="mdi mdi-filter"></i>
+                                    <p>Lọc</p>
+                                </div>
+                                <div class="item-icon  flex_center mg-5 icon-edit bg-violet" id="return-user">
+                                    <i class="mdi mdi-keyboard-return"></i>
+                                    <p>Quay lại</p>
+                                </div>
+
+                                @if ($item->user_status === 1)
+                                    <a onclick="return confirm('Bạn có khóa tải khoản này không ?')"
+                                        href="{{ route('user_toogle_status', ['user_id' => $item->user_id, 'user_status' => 1]) }}"
+                                        class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+                                        <i class="mdi mdi-toggle-switch"></i>
+                                        <p>Khóa</p>
+                                    </a>
+                                @else
+                                    <a onclick="return confirm('Bạn có muốn mở khóa tài khoản này không ?')"
+                                        href="{{ route('user_toogle_status', ['user_id' => $item->user_id, 'user_status' => 0]) }}"
+                                        class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+                                        <i class="mdi mdi-toggle-switch-off"></i>
+                                        <p>Mở khóa</p>
+                                    </a>
+                                @endif
+                            </div>
+
                             <div class="col-12 row">
                                 <div class="col-5">
                                     <img class="img-user"
@@ -70,9 +74,9 @@
                                             @if ($item->user_categoryAccount === 1)
                                                 Tài khoản bình thường
                                             @elseif($item->user_categoryAccount === 2)
-                                                Tài khoản facebok
-                                            @elseif($item->user_categoryAccount === 3)
                                                 Tài khoản google
+                                            @elseif($item->user_categoryAccount === 3)
+                                                Tài khoản facebook
                                             @endif
                                         </p>
                                     </div>
@@ -83,10 +87,8 @@
                                         <p> <label> Tình trạng</label>:
                                             @if ($item->user_status === 1)
                                                 Hoạt động bình thường <i class="pass-icon mdi mdi-check"></i>
-                                               
                                             @else
                                                 Bị khóa <i class="fail-icon mdi mdi-close"></i>
-                                             
                                             @endif
                                         </p>
                                     </div>
@@ -97,9 +99,34 @@
 
 
                             </div>
-               
+                            <h4 class="card-title" style="text-align: center">Đơn hàng </h4>
+                            <div class="list-payment-user row">
+                                @foreach ($listPayment as $item) 
+                            
+                                        <a class="col-xl-4 col-lg-6 col-sm-12 item-payment-user-box"  href="{{ route('payment_deatil', ['payment_id' => $item->payment_id]) }}">
+                                            <div class=" item-payment-user">
+                                                <p>Mã đơn :
+                                                    {{ strlen($item->payment_code) === 0 ? 'Chưa tạo mã đơn' : $item->payment_code }}
+
+                                                </p>
+                                                <p>
+                                                    Tổng tiền : {{ number_format($item->payment_allPrice) }} VNĐ
+                                                </p>
+                                                <p>
+                                                    Thời gian đặt : {{ $item->created_at }}
+                                                </p>
+                                                <p>
+                                                    Thời gian hoàn thành :
+                                                    {{ $item->updated_at === null ? 'Chưa hoàn thành' : $item->updated_at }}
+                                                </p>
+                                          
+                                        </div>
+                                    </a>
+                                @endforeach
+
+                            </div>
+                        </div>
                     </div>
-                </div>
                 @endforeach
             </div>
         </div>

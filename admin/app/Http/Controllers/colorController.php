@@ -1,16 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\colorRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\colorModel;
 
 
 class colorController extends Controller
-{
+{   
+    private $colorModel;
+
+    public function __construct(colorModel $colorModel)
+    {
+        $this->colorModel = $colorModel;
+    }
     public function list(){
         $colorModel = new colorModel();
         $paginate = $colorModel->getPagination()->first(); 
@@ -27,67 +28,59 @@ public function add(){
 public function post_add(colorRequest $request){
     $name=$request->namecolor;
     $code=$request->color_code;
-    
-    $color= new colorModel();
-    $check=$color->checkDatabase($code);
+    $check=$this->colorModel->checkDatabase($code);
     if($check){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Mã màu đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $color->addcolor($name,$code);
+        $add=$this->colorModel->add($name,$code);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('color_list')."';</script>";
-        }else{
-            return " <script> alert('Thêm thất bại'); window.location = '".route('color_list')."';</script>";
+        }
+        else{
+            $errorMessage = "Thêm thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
         }
     }
   
 }
-public function update($color_id){
-    $item_color = DB::table('tbl_color')->where('color_id',$color_id)->get();
-     
+public function update($id){
+    $item_color =$this->colorModel->getDeatil($id);
     return view('include.main.page.product.color.update',compact('item_color'));
 }
-public function post_update(colorRequest $request,$color_id){
+public function post_update(colorRequest $request,$id){
     $name=$request->namecolor;
     $code=$request->color_code;
-    $color= new colorModel();
-    $check_is= $color->checkDatabaseIs($code,$color_id);
+    $check_is= $this->colorModel->checkDatabase($code,$id);
     if($check_is){
         $errorMessage = "Mã danh mục đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $color->updatecolor($name,$code,$color_id);
-       // if($update){
+        $update=$this->colorModel->updateId($name,$code,$id);
+        if($update){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('color_list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('color_list')."';</script>";
-        // }
+        }
+        else{
+            $errorMessage = "Cập nhật thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
+        }
     }
   
 }
-public function toogle_status($color_id,$color_status){
-    $color= new colorModel();
-    $product=DB::table('tbl_color')->where('color_id',$color_id)->first();
-    $status=0;
-    if($product->color_status==1){
-        if($color_status==0){
-            $status=1;
-        }else{
-            $status=0;
-        }
+public function toogle_status($id){
+    $getStatus=$this->colorModel->getDeatil($id);
+    $getStatus_now=$getStatus->color_status;
+    if($getStatus_now===1){
+        $status=0;
+    }else{
+        $status=1;
     }
-     if ($product->color_status == 0) {
-        if($color_status==1){
-            $status=0;
-        }else{
-            $status=1;
-        }
-    }
-  
-   $color->status_toggle($status,$color_id);
-    return " <script> alert('Cập nhật thành công'); window.location = '".route('color_list')."';</script>";
+    $result = $this->colorModel->status_toggle($status,$id);
+    $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+   return "<script> alert('$message'); window.location.href = '" . route('color_list') . "';</script>";
 }
 }

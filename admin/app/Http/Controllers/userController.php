@@ -24,7 +24,8 @@ class userController extends Controller
 public function deatil($user_id){
     $userModel= new userModel();
      $deatilItem= $userModel->deatil($user_id)->get();
-    return view('include.main.page.user.deatil',compact('deatilItem'));
+     $listPayment= $userModel->getList($user_id)->get();
+    return view('include.main.page.user.deatil',compact('deatilItem','listPayment'));
 }
 
 public function toogle_status($user_id,$user_status){

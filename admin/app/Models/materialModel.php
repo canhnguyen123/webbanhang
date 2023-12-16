@@ -1,62 +1,62 @@
 <?php
 namespace App\Models;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-class materialModel extends Model
+class materialModel extends indexModel
 {
    
     protected $table = 'tbl_material'; // Tên bảng mà model này liên kết với
-    protected $primaryKey = 'material_id'; // Tên cột khóa chính của bảng
-    public function getDeatil($material_id){
-        $result=DB::table($this->table)->where($this->primaryKey,$material_id);   
-        return $result;
+    protected $primaryKey = 'material_id';
+    protected $pagination = 'tbl_pagination'; 
+    protected $fillable = ['material_name','material_status'];
+    public $timestamps = false; // Không sử dụng các trường created_at và updated_at
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTableName($this->table);
+        $this->setPrimaryKey($this->primaryKey);
     }
-    public function addmarerial($name)
+
+   public function getPagination(){
+        $result=DB::table($this->pagination)->where('pagination_tbl',$this->table);
+       return $result;
+   }
+   public function getDeatil($id){
+        $result=$this->getDeatilId($id);
+       return $result;
+   }
+    public function add($name)
 {
     $data = [
         'material_name' => $name,
         'material_status' => 1,
     ];
-
-    try {
-        $result = DB::table($this->table)->insert($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
-    }
+    $result = $this->createData($data);
+    return $result;
+  
 }
-public function updateMaterial($name,$id)
-{
-    $data = [
-        'material_name' => $name,
-    ];
-
-    try {
-        $result = DB::table($this->table)->where($this->primaryKey,$id)->update($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
-    }
-}
-    public function checkDatabase($name) {
-        return DB::table($this->table)
-            ->Where('material_name', $name)
-            ->exists();
-    }
-    public function checkDatabaseIs($name, $material_id) {
-        return DB::table($this->table)
-            ->where('material_name', $name)
-            ->where($this->primaryKey, '<>', $material_id)
-            ->exists();
-    }
-    public function status_toggle($status,$material_id){
-        $data['material_status']=$status;
+    public function updateId($name,$id)
+    {
+        $data = [
+            'material_name' => $name,
+        ];
         try {
-            $result =   DB::table($this->table)->where($this->primaryKey,$material_id)->update($data); 
-            return $result; // Trả về true nếu thành công, false nếu thất bại
+            $result =$this->edit($data, $id);
+            return $result;
         } catch (\Exception $e) {
             return false;
+        }
+    }
+    public function checkDatabase($code,$id=null) {
+        $result=$this->checkColum('material_name', $code, $id);
+        return $result ;
+    }
+    public function status_toggle($status,$id){
+        $data['material_status']=$status;
+        try {
+            $result =  $this->toggleStatus($id,$data); 
+            return $result; // Trả về true nếu thành công, false nếu thất bại
+        } catch (\Exception $e) {
+            return $result;
         }
     }
 }

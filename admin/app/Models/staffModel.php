@@ -43,7 +43,8 @@ class staffModel extends Model implements Authenticatable
     public function checkLoginCredentials($username, $password)
     {
         $getID =DB::table($this->table)-> where('staff_username', $username)->first();
-        $staff = self::where('staff_id',$getID->staff_id)->first();
+        if ($getID) {
+            $staff = self::where('staff_id',$getID->staff_id)->first();
 
         if ($staff && Hash::check($password, $staff->staff_password)) {
             if ($staff->staff_status !== 1) {
@@ -54,6 +55,8 @@ class staffModel extends Model implements Authenticatable
             }
             return $staff;
         }
+        }
+        
 
         return null;
     }
@@ -218,7 +221,8 @@ class staffModel extends Model implements Authenticatable
     {
         $result = DB::table('tbl_staff_permission')
             ->join('tbl_permission', 'tbl_staff_permission.permission_id', '=', 'tbl_permission.permission_id')
-            ->select('tbl_staff_permission.permission_id', 'tbl_permission.permission_name')
+            ->join('tbl_permission__group', 'tbl_permission.permission_group_id', '=', 'tbl_permission__group.permission_group_id')
+            ->select('tbl_staff_permission.permission_id', 'tbl_permission.permission_name', 'tbl_permission__group.permission_group_name')
             ->where('tbl_staff_permission.staff_permission_status', 1)
             ->where('tbl_staff_permission.staff_id', $staff_id);
         return $result;
@@ -228,9 +232,45 @@ class staffModel extends Model implements Authenticatable
         $result = DB::table($this->table)
             ->join('tbl_position', 'tbl_staff.position_id', '=', 'tbl_position.position_id')
             ->where('tbl_staff.staff_id', $staff_id)
-            ->select('tbl_staff.*', 'tbl_position.position_name') // Thay đổi chỗ này
+            ->select('tbl_staff.*', 'tbl_position.position_name') 
             ->get();
 
+        return $result;
+    }
+    public function updatePass($staff_id,$password)
+    {   
+        $data = [
+            'staff_password' => bcrypt($password),
+        ];
+        $result = DB::table($this->table)
+            ->where($this->primaryKey, $staff_id)
+            ->update($data);
+
+        return $result;
+    }
+    public function restorePass($staff_id,$password)
+    {   
+        $data = [
+            'staff_password' => $password,
+        ];
+        $result = DB::table($this->table)
+            ->where($this->primaryKey, $staff_id)
+            ->update($data);
+
+        return $result;
+    }
+    public function checkPassword($staff_id, $password)
+{
+    $staff = self::where($this->primaryKey, $staff_id)->first();
+    if ($staff) {
+        if (Hash::check($password, $staff->staff_password)) {
+            return $staff;
+        }
+    }
+    return null;
+}
+    public function deatil($staff_id){
+        $result= DB::table('tbl_staff')->where('staff_id',$staff_id);
         return $result;
     }
 }

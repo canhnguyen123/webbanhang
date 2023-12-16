@@ -34,6 +34,34 @@ class billController extends Controller
         $item_bill_Deatil =$billModel->getPaymentDeatil($bill_id)->get();
         return view('include.main.page.payment.bill.deatil', compact('item_bill','item_bill_Deatil'));
     }
+    public function canneBill()
+    {    $billModel = new billModel();
+         $getCanneBill =$billModel->getCanneBill()->get();
+         $i=1;
+        return view('include.main.page.payment.bill.canneBill', compact('getCanneBill','i'));
+    }
+    public function canneBillAction(Request $request,$request_cancellation_id)   
+    {     $billModel = new billModel();
+        $status=$request->status;
+        $context=$request->context;
+        $user_id=$request->user_id;
+        $payment_id=$request->payment_id;
+        
+        if($status===true){// Không hủy đơn
+            $billModel->createNotification($user_id,$context);
+        }else{ // Hủy đơn
+          $updateStatusCanneBill= $billModel->updateStatusCanneBill($request_cancellation_id);
+         
+           if($updateStatusCanneBill){
+                $updatePaymentStatus=$billModel->updatePaymentStatus($payment_id);
+                if($updatePaymentStatus){
+                 $billModel->createNotification($user_id,$context);
+                }
+           }
+        }
+        return response()->json(['status'=>'success','mess'=>"Cập nhật thành công"]);
+
+    }
     public function action(Request $request,$bill_id)
     {       $status=intval($request->change_payment);
             $code=$request->codePayment;
@@ -85,19 +113,24 @@ class billController extends Controller
                 }
             }
             elseif($status===5){
-              
-                    $messNotification="Đơn hàng của bạn đã bị hủy bởi lý do : " .$reason_mess;
-                    $billModel->createNotification($user_id,$messNotification);
-                    $mess="Đã xác nhận hủy đơn hàng";
-                    $router=route('payment_list');
-               
-            }
+                    $update_5=$billModel->updateAction($status, $bill_id, $note);
+                    if($update_5){
+                        $messNotification="Đơn hàng của bạn đã bị hủy bởi lý do : " .$reason_mess;
+                        $billModel->createNotification($user_id,$messNotification);
+                        $mess="Đã xác nhận hủy đơn hàng";
+                        $router=route('payment_list');
+                    }
+                    else{
+                        $mess="Xác nhận thất bại";
+                    }
+                }
             elseif($status===6){
                 $update_6=$billModel->updateAction($status, $bill_id, $note);
-                if($update_6){
+                $update_6Quantity=$billModel->updateQuantity($bill_id);
+                if($update_6&&$update_6Quantity){
                     $messNotification="Đơn hàng có  mã mã ".$codepayment ." của bạn đã chuyển vào mục giao thành công ";
                     $createNotification=$billModel->createNotification($user_id,$messNotification);
-                    $mess="Đã xác nhận chuyển đơn vào mục hoàn thành";
+                    $mess="Đã xác nhận chuyển đơn vào mục hoàn thành và đã trừ đi số lượng ";
                     $router=route('payment_list');
                 }
                 else{

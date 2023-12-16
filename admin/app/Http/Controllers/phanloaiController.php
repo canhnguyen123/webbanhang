@@ -1,15 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\phanloaiRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\phanloaiModel;
 
 class phanloaiController extends Controller
-{
+{   
+    private $phanloaiModel;
+
+    public function __construct(phanloaiModel $phanloaiModel)
+    {
+        $this->phanloaiModel = $phanloaiModel;
+    }
     public function list(){
         $phanloaiModel = new phanloaiModel();
         $paginate = $phanloaiModel->getPagination()->first(); 
@@ -25,68 +27,62 @@ public function add(){
 }
 public function post_add(phanloaiRequest $request){
     $name=$request->namephanloai;
-    $code=$request->codephanloai;
-    
-    $phanloai= new phanloaiModel();
-    $check=$phanloai->checkDatabase($code);
+    $check=$this->phanloaiModel->checkDatabase($name);
     if($check){
         $errorMessage = "Mã danh mục đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $phanloai->addphanloai($name,$code);
+        $add=$this->phanloaiModel->addphanloai($name);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('phanloai_list')."';</script>";
-        }else{
-            return " <script> alert('Thêm thất bại'); window.location = '".route('phanloai_list')."';</script>";
+        }
+        else{
+            $errorMessage = "Thêm thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
         }
     }
   
 }
-public function update($phanloai_id){
-    $item_phanloai = DB::table('tbl_phanloai')->where('phanloai_id',$phanloai_id)->get();
+public function update($id){
+    $item_phanloai =$this->phanloaiModel->getDeatil($id);
      
     return view('include.main.page.product.phanloai.update',compact('item_phanloai'));
 }
-public function post_update(phanloaiRequest $request,$phanloai_id){
+public function post_update(phanloaiRequest $request,$id){
     $name=$request->namephanloai;
-    $code=$request->codephanloai;
-    $phanloai= new phanloaiModel();
-    $check_is= $phanloai->checkDatabaseIs($code,$phanloai_id);
+    $check_is=$this->phanloaiModel->checkDatabase($name,$id);
     if($check_is){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Tên phân loại đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $phanloai->updatephanloai($name,$code,$phanloai_id);
-       // if($update){
+        $update= $this->phanloaiModel->updatephanloai($name,$id);
+        if($update){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('phanloai_list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('phanloai_list')."';</script>";
-        // }
+        }
+        else{
+            $errorMessage = "Cập nhật thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
+        }
     }
   
 }
-public function toogle_status($phanloai_id,$phanloai_status){
-    $phanloai= new phanloaiModel();
-    $product=DB::table('tbl_phanloai')->where('phanloai_id',$phanloai_id)->first();
-    $status=0;
-    if($product->phanloai_status==1){
-        if($phanloai_status==0){
-            $status=1;
-        }else{
-            $status=0;
-        }
+public function toogle_status($id){
+    $getStatus=$this->phanloaiModel->getDeatil($id);
+        
+    $getStatus_now=$getStatus->phanloai_status;
+    if($getStatus_now===1){
+        $status=0;
+    }else{
+        $status=1;
     }
-     if ($product->phanloai_status == 0) {
-        if($phanloai_status==1){
-            $status=0;
-        }else{
-            $status=1;
-        }
-    }
-  
-   $phanloai->status_toggle($status,$phanloai_id);
-    return " <script> alert('Cập nhật thành công'); window.location = '".route('phanloai_list')."';</script>";
+    $result = $this->phanloaiModel->status_toggle($status,$id);
+    $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+
+    return "<script> alert('$message'); window.location.href = '" . route('phanloai_list') . "';</script>";
+
 }
 }

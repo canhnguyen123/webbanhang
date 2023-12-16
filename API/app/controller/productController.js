@@ -186,4 +186,28 @@ exports.getListsProduct = (req, res) => {
 };
 
 
+exports.search = (req, res) => {
+    const value = req.body.value;
 
+    if (value && value.trim().length === 0) {
+        return res.json({ status: 'fall',mess:"Vui lòng không bỏ trống ô nhập" });
+    }else{
+        productModel.searchProduct((error, productList) => {
+            if (error) {
+                return res.status(500).json({ error: 'Database query error' });
+            }
+            const listArr = productList.map(product => {
+               return {
+                    id: product.product_id,
+                    name: product.product_name,
+                    img: product.img,
+                    price: product.price
+                };
+            });
+            return res.json({ status: 'success',mess: "Tìm kiếm thành công",results: listArr });
+    
+        },value);
+    }
+
+  
+};

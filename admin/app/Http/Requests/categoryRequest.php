@@ -18,17 +18,6 @@ class categoryRequest extends FormRequest
                 'required',
                 'max:35',
                 'min:2',
-                // function ($attribute, $value, $fail) {
-                //     $this->validateVietnameseCharacters($attribute, $value, $fail);
-                // },
-            ],
-            'codeCategory' => [
-                'required',
-                'integer',
-                'min:1',
-                // function ($attribute, $value, $fail) {
-                //     $this->validateVietnameseCharacters($attribute, $value, $fail);
-                // },
             ],
         ];
     }
@@ -38,8 +27,6 @@ class categoryRequest extends FormRequest
         return [
             'nameCategory.min' => "Không được nhập :attribute nhỏ hơn :min kí tự",
             'nameCategory.max' => "Không được nhập :attribute nhỏ hơn :max kí tự",
-            'codeCategory.integer' => "Không được nhập :attribute kí tự ngoài số nguyên",
-            'codeCategory.min' => "Không được nhập :attribute nhỏ hơn :min kí tự",
         ];
     }
 
@@ -47,7 +34,6 @@ class categoryRequest extends FormRequest
     {
         return [
             'nameCategory' => 'tên danh mục',
-            'codeCategory' => 'mã danh mục',
         ];
     }
 

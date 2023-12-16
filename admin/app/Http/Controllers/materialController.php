@@ -5,79 +5,81 @@ use App\Http\Requests\materiaalRequest;
 use App\Models\materialModel;
 
 class materialController extends Controller
-{
+{   
+    private $materialModel;
+
+    public function __construct(materialModel $materialModel)
+    {
+        $this->materialModel = $materialModel;
+    }
     public function list(){
+      
         $materialModel = new materialModel();
-        $list_material = $materialModel->paginate(5); 
+        $paginate = $materialModel->getPagination()->first(); 
+        $list_material = $materialModel->paginate($paginate->pagination_limitDeaful); 
         $check = $list_material->hasMorePages() ? 1 : 0;
+        $category=$paginate->pagination_category;
+        $nameElement=$paginate->pagination_nameElement;
         $i = 1;
-        return view('include.main.page.product.material.lits', compact('list_material', 'i', 'check'));
+        return view('include.main.page.product.material.lits', compact('list_material', 'i', 'check','category','nameElement'));
     }
 public function add(){
     return view('include.main.page.product.material.add');
 }
 public function post_add(materiaalRequest $request){
     $name=$request->materialName;
-    $material= new materialModel();
-    $check=$material->checkDatabase($name);
+    $check=$this->materialModel->checkDatabase($name);
     if($check){
-        $errorMessage = "Tên danh mục đã tồn tại";
+        $errorMessage = "Tên chất liệu đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $material->addmarerial($name);
+        $add= $this->materialModel->add($name);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('material.list')."';</script>";
-        }else{
-            return " <script> alert('Thêm thất bại'); window.location = '".route('material.add')."';</script>";
+        }
+        else{
+            $errorMessage = "Thêm thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
         }
     }
   
 }
-public function update($material_id){
-    $material= new materialModel();
-    $item_material = $material->getDeatil($material_id)->get();
-     
+public function update($id){
+    $item_material = $this->materialModel->getDeatil($id);
     return view('include.main.page.product.material.update',compact('item_material'));
 }
-public function post_update(materiaalRequest $request,$material_id){
+public function post_update(materiaalRequest $request,$id){
     $name=$request->materialName;
-    $material= new materialModel();
-    $check_is= $material->checkDatabaseIs($name,$material_id);
+    $check_is= $this->materialModel->checkDatabase($name,$id);
     if($check_is){
-        $errorMessage = "Tên danh mục đã tồn tại";
+        $errorMessage = "Tên chất liệu đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $material->updateMaterial($name,$material_id);
-       // if($update){
+        $update=$this->materialModel->updateId($name,$id);
+        if($update){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('material.list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('material_list')."';</script>";
-        // }
+        }
+        else{
+            $errorMessage = "Cập nhật thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
+        }
     }
   
 }
-public function toogle_status($material_id,$material_status){
-    $material= new materialModel();
-    $product=$material->getDeatil($material_id)->first();
-    $status=0;
-    if($product->material_status==1){
-        if($material_status==0){
-            $status=1;
-        }else{
-            $status=0;
-        }
+public function toogle_status($id){
+    $getStatus=$this->materialModel->getDeatil($id);
+    $getStatus_now=$getStatus->material_status;
+    if($getStatus_now===1){
+        $status=0;
+    }else{
+        $status=1;
     }
-     if ($product->material_status == 0) {
-        if($material_status==1){
-            $status=0;
-        }else{
-            $status=1;
-        }
-    }
-  
-    $material->status_toggle($status,$material_id);
-    return " <script> alert('Cập nhật thành công'); window.location = '".route('material.list')."';</script>";
+    $result =$this->materialModel->status_toggle($status,$id);
+    $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+   return "<script> alert('$message'); window.location.href = '" . route('material.list') . "';</script>";
 }
 }

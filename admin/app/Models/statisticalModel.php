@@ -16,6 +16,11 @@ class statisticalModel extends Model
         $result = DB::table($tableName)->select($colomSelect)->distinct()->pluck($colomSelect);
         return $result;
     }
+    public function getNoProcess($tableName, $status)
+    {
+        $result = DB::table($tableName)->where($status,1);
+        return $result;
+    }
     public function selectProductList()
     {
         $result = DB::table('tbl_product')
@@ -160,6 +165,92 @@ class statisticalModel extends Model
 
         return array_reverse($result);
     }
+    public function getDataAll($value)/// lấy số lượng tất cả sản phẩm
+    {
+        $result = [];
+        $currentMonth = Carbon::now();
+
+        switch ($value) {
+            case "6Mouth":
+                $currentMonth->subMonth(); // Bắt đầu từ tháng trước
+                for ($i = 0; $i < 6; $i++) {
+                    $result[] = $this->getALLTotalQuantityForMonth($currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            case "yearNow":
+                $monthYearNow = $currentMonth->month;
+                for ($i = 0; $i < $monthYearNow; $i++) {
+                    $result[] = $this->getALLTotalQuantityForMonth($currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            case "yearAgo":
+                $currentMonth->startOfYear()->subMonth(); // Bắt đầu từ tháng 1 năm ngoái
+                for ($i = 0; $i < 12; $i++) {
+                    $result[] = $this->getALLTotalQuantityForMonth($currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            case "annualRevenue":
+                $currentYear = now()->year;
+                for ($i = 0; $i < 5; $i++) {
+                    $startOfYear = Carbon::create($currentYear - $i, 1, 1, 0, 0, 0)->startOfYear();
+                    $endOfYear = Carbon::create($currentYear - $i, 12, 31, 23, 59, 59)->endOfYear();
+                    $result[] = $this->getTotalAllQuantityForYear($startOfYear, $endOfYear);
+                }
+                break;
+        }
+
+        return array_reverse($result);
+    }
+
+    public function getDataPayment($value,$status)/// lấy số lượng
+    {
+        $result = [];
+        $currentMonth = Carbon::now();
+
+        switch ($value) {
+            case "6Mouth":
+                $currentMonth->subMonth(); // Bắt đầu từ tháng trước
+                for ($i = 0; $i < 6; $i++) {
+                    $result[] = $this->getPaymentRatio($status,$currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            case "yearNow":
+                $monthYearNow = $currentMonth->month;
+                for ($i = 0; $i < $monthYearNow; $i++) {
+                    $result[] = $this->getPaymentRatio($status,$currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            case "yearAgo":
+                $currentMonth->startOfYear()->subMonth(); // Bắt đầu từ tháng 1 năm ngoái
+                for ($i = 0; $i < 12; $i++) {
+                    $result[] = $this->getPaymentRatio($status,$currentMonth);
+                    $currentMonth->subMonth();
+                }
+                break;
+
+            // case "annualRevenue":
+            //     $currentYear = now()->year;
+            //     for ($i = 0; $i < 5; $i++) {
+            //         $startOfYear = Carbon::create($currentYear - $i, 1, 1, 0, 0, 0)->startOfYear();
+            //         $endOfYear = Carbon::create($currentYear - $i, 12, 31, 23, 59, 59)->endOfYear();
+            //         $result[] = $this->getTotalQuantityForYear($startOfYear, $endOfYear, $product_id);
+            //     }
+            //     break;
+        }
+
+        return array_reverse($result);
+    }
+
     public function getDataRevenue($value)//// biểu đồ lấy doanh thu
     {
         $result = [];
@@ -216,6 +307,20 @@ class statisticalModel extends Model
             ->where('tbl_payment.statusPayment_id', 6)
             ->sum('tbl_payment_deatil.product_quantity');
     }
+    public function getALLTotalQuantityForMonth($currentMonth)//// lấy tổng số lương 1 sản phẩm
+    {
+        $startOfMonth = $currentMonth->copy()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
+
+        // Tính tổng số lượng bán được trong tháng
+        return DB::table('tbl_payment_deatil')
+            ->join('tbl_payment', 'tbl_payment_deatil.payment_id', '=', 'tbl_payment.payment_id')
+            ->whereBetween('tbl_payment.updated_at', [$startOfMonth, $endOfMonth])
+            ->where('tbl_payment.statusPayment_id', 6)
+            ->sum('tbl_payment_deatil.product_quantity');
+    }
+
+ 
 
     public function getTotalAllQuantityForMonth($currentMonth)//// lấy tổng số lương tất cả sản phẩm theo tháng
     {
@@ -258,6 +363,15 @@ class statisticalModel extends Model
         return DB::table('tbl_payment_deatil')
             ->join('tbl_payment', 'tbl_payment_deatil.payment_id', '=', 'tbl_payment.payment_id')
             ->where('tbl_payment_deatil.product_id', $product_id)
+            ->whereBetween('tbl_payment.updated_at', [$startOfYear, $endOfYear])
+            ->where('tbl_payment.statusPayment_id', 6)
+            ->sum('tbl_payment_deatil.product_quantity');
+    }
+    public function getTotalAllQuantityForYear($startOfYear, $endOfYear)/// tổng số lượng theo năm
+    {
+        // Tính tổng số lượng bán được trong năm
+        return DB::table('tbl_payment_deatil')
+            ->join('tbl_payment', 'tbl_payment_deatil.payment_id', '=', 'tbl_payment.payment_id')
             ->whereBetween('tbl_payment.updated_at', [$startOfYear, $endOfYear])
             ->where('tbl_payment.statusPayment_id', 6)
             ->sum('tbl_payment_deatil.product_quantity');
@@ -342,7 +456,7 @@ class statisticalModel extends Model
         $result = array_reverse($result);
         return $result;
     }
-
+   
     protected function getRecentMonthsForLastSixMonths($currentMonth)
     {
         $result = [];
@@ -384,7 +498,7 @@ class statisticalModel extends Model
     }
 
     protected function getAnnualRevenueData($currentMonth)
-    {
+    {   
         $result = [];
         $currentYear = now()->year;
 
@@ -409,4 +523,55 @@ class statisticalModel extends Model
             'money' => $this->getTotalMoneyForMonth($currentMonth)
         ];
     }
-}
+    public function getProduct1st($limit = null, $isGetArray = null)
+    {
+        $currentMonth = Carbon::now();
+        $startOfMonth = $currentMonth->copy()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
+        $limit = $limit ?? 10;
+        $result = [];
+    
+        $query = DB::table('tbl_payment_deatil')
+            ->select(
+                'tbl_product.product_name',
+                'tbl_product.product_id',
+                'tbl_product.product_code',
+                DB::raw('SUM(tbl_payment_deatil.product_quantity) as total_quantity')
+            )
+            ->join('tbl_product', 'tbl_payment_deatil.product_id', '=', 'tbl_product.product_id')
+            ->join('tbl_payment', 'tbl_payment_deatil.payment_id', '=', 'tbl_payment.payment_id')
+            ->whereBetween('tbl_payment.updated_at', [$startOfMonth, $endOfMonth])
+            ->groupBy('tbl_product.product_id', 'tbl_product.product_name', 'tbl_product.product_code')
+            ->orderByDesc('total_quantity')
+            ->limit($limit);
+    
+        if ($isGetArray && $isGetArray !== null && $isGetArray === true) {
+            $query->addSelect(
+                DB::raw(
+                    'GROUP_CONCAT(DISTINCT CONCAT(product_quantity, " - ", product_size, " - ", product_color)) as variants'
+                )
+            );
+        }
+    
+        $maxTotalRevenueItems = $query->get();
+    
+        foreach ($maxTotalRevenueItems as $item) {
+            array_push($result, $item);
+        }
+    
+        return $result;
+    }
+
+
+
+    public function getPaymentRatio($status,$current){
+       
+        $startOfMonth=$current->copy()->startOfMonth();
+        $endOfMonth=$current->copy()->endOfMonth();
+        $result=DB::table('tbl_payment')
+        ->where('statusPayment_id',$status)
+        ->whereBetween('updated_at',[$startOfMonth,$endOfMonth])
+        ->count();
+        return $result;
+    }
+}    

@@ -19,12 +19,12 @@
         </a>  
 
         @if ($item->color_status===1)
-        <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id,'color_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+        <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
           <i class="mdi mdi-toggle-switch"></i>
           <p>Ẩn</p>
         </a>   
         @else
-        <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id,'color_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+        <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('color_toogle_status',['color_id'=>$item->color_id])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
           <i class="mdi mdi-toggle-switch-off"></i>
           <p>Hiện</p>
         </a> 

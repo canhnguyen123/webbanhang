@@ -20,6 +20,10 @@
           <i class="mdi mdi-keyboard-return"></i>
           <p>Quay lại</p>
         </div>
+        <div class="item-icon active-box flex_center mg-5 icon-edit bg-violet" id="ecxel-statusPayment">
+          <i class="mdi mdi-file-excel"></i>
+          <p>Xuất bản excel</p>
+        </div>
       </div>
     </div>
 </div>
@@ -33,7 +37,16 @@
             </form>
           </div>
         </div>
-    
+        <div class="col-md-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-status-statusPayment">
+              <option disabled>Chọn trạng thái</option>
+              <option value="1">Đang dùng</option>
+              <option value="0">Đang không dùng </option>
+            </select>
+        
+          </div>
+        </div>
         <div class="col-12  grid-margin stretch-card ">
 
             <span class="req-text-mess"></span>

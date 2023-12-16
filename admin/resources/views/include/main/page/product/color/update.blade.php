@@ -6,8 +6,7 @@
         <div class="card">
           <div class="card-body">
             <h4 class="card-title" style="text-align: center">Cập nhật màu sắc</h4>
-            @foreach ($item_color as $item)
-            <form class="forms-sample row" action="{{ route('color_post_update',['color_id'=>$item->color_id]) }}" method="post">
+            <form class="forms-sample row" action="{{ route('color_post_update',['color_id'=>$item_color->color_id]) }}" method="post">
                 @csrf
                 @method('put')
                 @if ($errors->any())
@@ -20,14 +19,14 @@
                    {{ session('errorMessage') }}
                </div>
              @endif
-                <div class="form-group form-input col-6">
+                <div class="form-group form-input col-xl-6 col-lg-6 col-md-6 col-sm-12">
                     <i class="mdi mdi-rename-box"></i>
-                    <input type="text" name="namecolor" class="form-control" value="{{ $item->color_name }}" required>
+                    <input type="text" name="namecolor" class="form-control" value="{{ $item_color->color_name }}" required>
                     <label> Tên màu sắc</label>
                 </div>
-                <div class="form-group form-input col-6">
+                <div class="form-group form-input col-xl-6 col-lg-6 col-md-6 col-sm-12">
                     <i class="mdi mdi-codepen"></i>
-                    <input type="text" name="color_code" class="form-control" value="{{ $item->color_code }}" required>
+                    <input type="text" name="color_code" class="form-control" value="{{ $item_color->color_code }}" required>
                     <label> Mã màu sắc</label>
                 </div>
                 <div class="col-6 err">
@@ -45,11 +44,8 @@
                   </span>
               </div>
                 <button type="submit" class=" btn-pimar-key mr-2">Cập nhật</button>
-                <button type="reset" class="btn btn-light">Reset form</button>
             </form>
-        @endforeach
         
-         
           </div>
         </div>
       </div>

@@ -17,6 +17,12 @@ class userModel extends Model
      $result=   DB::table('tbl_user')->where('user_id',$user_id);
         return $result;
     }
+    public function getList($user_id){
+        $result=   DB::table('tbl_payment')
+        ->select('payment_allPrice','created_at','updated_at','payment_id','payment_code')
+        ->where('user_id',$user_id);
+           return $result;
+       }
     public function checkDatabase( $code) {
         return DB::table($this->table)
             ->Where('user_code', $code)

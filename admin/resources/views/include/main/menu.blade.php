@@ -21,7 +21,7 @@
   <i class="settings-close ti-close"></i>
   <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+      <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">Việc cần làm</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
@@ -32,8 +32,7 @@
       <div class="add-items d-flex px-3 mb-0">
         <form class="form w-100">
           <div class="form-group d-flex">
-            <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
-            <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add</button>
+            <a href="{{route('todolist.add')}}" class="btn btn-primary" >Thêm mới</a>
           </div>
         </form>
       </div>
@@ -86,25 +85,7 @@
           </li>
         </ul>
       </div>
-      <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
-      <div class="events pt-4 px-3">
-        <div class="wrapper d-flex mb-2">
-          <i class="ti-control-record text-primary mr-2"></i>
-          <span>Feb 11 2018</span>
-        </div>
-        <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
-        <p class="text-gray mb-0">The total number of sessions</p>
-      </div>
-      <div class="events pt-4 px-3">
-        <div class="wrapper d-flex mb-2">
-          <i class="ti-control-record text-primary mr-2"></i>
-          <span>Feb 7 2018</span>
-        </div>
-        <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
-        <p class="text-gray mb-0 ">Call Sarah Graves</p>
-      </div>
     </div>
-    <!-- To do section tab ends -->
     <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
       <div class="d-flex align-items-center justify-content-between border-bottom">
         <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
@@ -239,6 +220,7 @@
           <li class="nav-item"> <a class="nav-link" href="{{route('methodPayment_list')}}">Phương thức TT</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('statusPayment_list')}}">Trạng thái đơn hàng</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('ship.list')}}">Vận chuyển</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('payment.canne.bill')}}">Yêu cầu hủy đơn</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('payment_list')}}">Đơn hàng</a></li>
         </ul>
    

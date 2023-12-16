@@ -33,7 +33,16 @@
             </form>
           </div>
         </div>
-    
+        <div class="col-md-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-status-staff">
+              <option disabled>Chọn trạng thái</option>
+              <option value="1">Đang hoạt động</option>
+              <option value="0">Đang bị khóa</option>
+            </select>
+        
+          </div>
+        </div>
         <div class="col-12  grid-margin stretch-card ">
 
             <span class="req-text-mess"></span>

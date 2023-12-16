@@ -140,12 +140,8 @@
 
                                 </div>
                                 <div class="col-12 req-div-quantity">
-
-
-                                </div>
-
-
-                                <div class="col-xl-6 col-sm-12 pd-0-mg-0-b-0">
+                                 </div>
+                                 <div class="col-xl-6 col-sm-12 pd-0-mg-0-b-0">
                                     <div class="form-group col-12">
                                         <label>Thương hiệu</label>
 

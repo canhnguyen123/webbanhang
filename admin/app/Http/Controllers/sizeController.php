@@ -1,15 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use App\Http\Requests\sizeRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\sizeModel;
 
 class sizeController extends Controller
-{
+{   
+    private $sizeModel;
+
+    public function __construct(sizeModel $sizeModel)
+    {
+        $this->sizeModel = $sizeModel;
+    }
     public function list(){
         $sizeModel = new sizeModel();
         $paginate = $sizeModel->getPagination()->first();
@@ -26,67 +28,61 @@ public function add(){
 public function post_add(sizeRequest $request){
     $name=$request->namesize;
     $mota=$request->motasize;
-    
-    $size= new sizeModel();
-    $check=$size->checkDatabase($name);
+    $check=$this->sizeModel->checkDatabase($name);
     if($check){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Mã size đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $add= $size->addsize($name,$mota);
+        $add=$this->sizeModel->addsize($name,$mota);
         if($add){
             return " <script> alert('Thêm thành công'); window.location = '".route('size_list')."';</script>";
-        }else{
-            return " <script> alert('Thêm thất bại'); window.location = '".route('size_list')."';</script>";
+        }
+        else{
+            $errorMessage = "Thêm thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
         }
     }
   
 }
-public function update($size_id){
-    $item_size = DB::table('tbl_size')->where('size_id',$size_id)->get();
-     
+public function update($id){
+    $item_size =$this->sizeModel->getDeatil($id);
     return view('include.main.page.product.size.update',compact('item_size'));
 }
-public function post_update(sizeRequest $request,$size_id){
+public function post_update(sizeRequest $request,$id){
     $name=$request->namesize;
     $mota=$request->motasize;
-    $size= new sizeModel();
-    $check_is= $size->checkDatabaseIs($name,$size_id);
+    $check_is= $this->sizeModel->checkDatabase($name,$id);
     if($check_is){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Mã size đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{
-        $update= $size->updatesize($name,$mota,$size_id);
-       // if($update){
+        $update=  $this->sizeModel->updateId($name,$mota,$id);
+        if($update){
             return " <script> alert('Cập nhật thành công'); window.location = '".route('size_list')."';</script>";
-        // }else{
-        //     return " <script> alert('Cập nhật thất bại'); window.location = '".route('size_list')."';</script>";
-        // }
+        }
+        else{
+            $errorMessage = "Cập nhật thất bại";
+            session()->flash('errorMessage', $errorMessage);
+            return redirect()->back();
+        }
     }
   
 }
-public function toogle_status($size_id,$size_status){
-    $size= new sizeModel();
-    $product=DB::table('tbl_size')->where('size_id',$size_id)->first();
-    $status=0;
-    if($product->size_status==1){
-        if($size_status==0){
-            $status=1;
-        }else{
-            $status=0;
-        }
+public function toogle_status($id){
+    $getStatus=$this->sizeModel->getDeatil($id);
+        
+    $getStatus_now=$getStatus->size_status;
+    if($getStatus_now===1){
+        $status=0;
+    }else{
+        $status=1;
     }
-     if ($product->size_status == 0) {
-        if($size_status==1){
-            $status=0;
-        }else{
-            $status=1;
-        }
-    }
-  
-   $size->status_toggle($status,$size_id);
-    return " <script> alert('Cập nhật thành công'); window.location = '".route('size_list')."';</script>";
+    $result = $this->sizeModel->status_toggle($status,$id);
+    $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
+
+    return "<script> alert('$message'); window.location.href = '" . route('size_list') . "';</script>";
 }
 }

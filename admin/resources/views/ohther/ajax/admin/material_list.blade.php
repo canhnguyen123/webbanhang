@@ -18,12 +18,12 @@
         </a>  
 
         @if ($item->material_status===1)
-        <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id,'material_status'=>1])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
+        <a onclick="return confirm('Bạn có muốn ẩn không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id])}}" class="item-icon mg-5 flex_center icon-edit bg-red-blink">
           <i class="mdi mdi-toggle-switch"></i>
           <p>Ẩn</p>
         </a>   
         @else
-        <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id,'material_status'=>0])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
+        <a onclick="return confirm('Bạn có muốn hiện không ?')" href="{{route('material.toggle',['material_id'=>$item->material_id])}}" class="item-icon mg-5 flex_center icon-edit bg-yellow-green">
           <i class="mdi mdi-toggle-switch-off"></i>
           <p>Hiện</p>
         </a> 

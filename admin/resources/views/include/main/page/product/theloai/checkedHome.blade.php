@@ -9,16 +9,41 @@
                 </div>
                 <form action="{{route('theloai_post_checked')}}" class="col-12" method="post">
                   {{@csrf_field()}}
-                  <div class="list-checkbox">
+                  <table id="example" class="display expandable-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th colspan="1">Hành động</th>
+                            <th colspan="2">Thể loại</th>
+                            <th colspan="1" >Danh mục</th>
+                            <th colspan="1" >Phân loại</th>
+                            <th colspan="1" style="text-align: center">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="list-product">
                     @foreach ($listChecked as $itemShow)
-                        <div class="item-checkbox mg-10">
-                            <input type="checkbox" name="theloai_id[]" value="{{$itemShow->theloai_id}}" checked>{{$itemShow->theloai_name}}--{{$itemShow->category_name}}--{{$itemShow->phanloai_name}}
-                            @if ($itemShow->theloai_status===1)
-                            <i class="pass-icon mdi mdi-check"></i> 
+                    <tr>
+                        <td colspan="1">
+                            <input type="checkbox" name="theloai_id[]" value="{{ $itemShow->theloai_id }}"
+                            checked>
+                        
+                        </td>
+                        <td colspan="2">
+                            {{ $itemShow->theloai_name }}
+                        </td>
+                        <td colspan="1">
+                            {{ $itemShow->category_name }}
+                        </td>
+                        <td colspan="1">
+                            {{ $itemShow->phanloai_name }}
+                        </td>
+                        <td colspan="1" style="text-align: center">
+                            @if ($itemShow->theloai_status === 1)
+                                <i class="pass-icon mdi mdi-check"></i>
                             @else
-                            <i class="fail-icon mdi mdi-close"></i> 
+                                <i class="fail-icon mdi mdi-close"></i>
                             @endif
-                        </div>
+                        </td>
+                     </tr>
                     @endforeach
                 
                     <?php $matched = false; ?>
@@ -31,19 +56,35 @@
                         @endforeach
                 
                         @if (!$matched)
-                            <div class="item-checkbox mg-10">
-                                <input type="checkbox" name="theloai_id[]" value="{{$item->theloai_id}}">{{$item->theloai_name}}--{{$item->category_name}}--{{$item->phanloai_name}} 
-                                @if ($item->theloai_status===1)
-                                <i class="pass-icon mdi mdi-check"></i> 
+                        <tr>
+                            <td colspan="1">
+                                <input type="checkbox" name="theloai_id[]" value="{{ $item->theloai_id }}"
+                                >
+                            
+                            </td>
+                            <td colspan="2">
+                                {{ $item->theloai_name }}
+                            </td>
+                            <td colspan="1">
+                                {{ $item->category_name }}
+                            </td>
+                            <td colspan="1">
+                                {{ $item->phanloai_name }}
+                            </td>
+                            <td colspan="1" style="text-align: center">
+                                @if ($item->theloai_status === 1)
+                                    <i class="pass-icon mdi mdi-check"></i>
                                 @else
-                                <i class="fail-icon mdi mdi-close"></i> 
+                                    <i class="fail-icon mdi mdi-close"></i>
                                 @endif
-                            </div>
+                            </td>
+                         </tr>
                         @endif
                 
                         <?php $matched = false; ?> 
                     @endforeach
-                </div>
+                </tbody>
+            </table>
                 
                 <button type="submit"  class="btn-pimar-key mr-2">Cập nhật</button>
                 </form>

@@ -26,6 +26,7 @@ use App\Http\Controllers\materialController;
 use App\Http\Controllers\settingController;
 use App\Http\Controllers\paginationController;
 use App\Http\Controllers\statisticalController;
+use App\Http\Controllers\todolistController;
 Route::get('/login', [Controller::class, 'login'])->name('login');
 Route::post('/login-post', [accountController::class, 'postLogin'])->name('login_post');
 Route::middleware(['auth'])->group(function () {
@@ -33,19 +34,34 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::prefix('/account')->group(function(){
             Route::get('/logout', [accountController::class, 'logout'])->name('logout');
-            Route::get('/infro/{user_id}', [accountController::class, 'infro'])->name('infroDeatil');
-    
+            Route::get('/infro', [accountController::class, 'infro'])->name('infroDeatil');
+            Route::get('/update-password', [accountController::class, 'updatePass'])->name('update.password');
+            Route::put('/update-password', [accountController::class, 'updatePassPut'])->name('update.password.put');
+            Route::get('/restore-password', [accountController::class, 'restorePassword'])->name('restore.password');
+            Route::put('/restore-password', [accountController::class, 'restorePasswordPut'])->name('restore.password.put');
+        });
+        Route::prefix('/todolist')->group(function(){
+            Route::get('/list', [todolistController::class, 'list'])->name('todolist.list')->middleware('check_permission:check');
+            Route::get('/add', [todolistController::class, 'add'])->name('todolist.add')->middleware('check_permission:check');
+            Route::post('/post-add', [todolistController::class, 'post_add'])->name('todolist.post.add');
+            Route::get('/update/{todolist_id}', [todolistController::class, 'update'])->name('todolist.update')->middleware('check_permission:check');
+            Route::put('/post-update/{todolist_id}', [todolistController::class, 'post_update'])->name('todolist.post.update');
+            Route::get('/toggle-status/{todolist_id}/{todolist_status}', [todolistController::class, 'toogle_status'])->name('todolist.toogle');
         });
         Route::prefix('/page')->group(function(){
             
             Route::prefix('/statistical')->group(function(){
                 Route::get('/', [statisticalController::class, 'statistical'])->name('statistical');
+                Route::get('/revenue-action-ajax', [statisticalController::class, 'statisticalAction'])->name('statistical.acction.ajax');
+
                 Route::prefix('/product')->group(function(){
                     Route::get('/', [statisticalController::class, 'statisticalProduct'])->name('statistical.product.list');
                     Route::get('/deatil/{product_id}', [statisticalController::class, 'productDeatil'])->name('statistical.product.deatil');
                     Route::get('/deatil-action/{product_id}', [statisticalController::class, 'productDeatilAcction'])->name('statistical.product.deatil.acction');
-                    Route::get('/deatil-action-ajax', [statisticalController::class, 'statisticalProductAction'])->name('statistical.product.deatil.acction.ajax');
+                    Route::get('/all-action', [statisticalController::class, 'productAllAcction'])->name('statistical.product.all.acction');
                 });
+                Route::prefix('/payment')->group(function(){
+                    Route::get('/action', [statisticalController::class, 'paymentAcction'])->name('statistical.payment.acction');                });
             });
             Route::prefix('/setting')->group(function(){
                 Route::get('/', [settingController::class, 'setting'])->name('setting');
@@ -65,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [categoryController::class, 'post_add'])->name('category_post_add');
                     Route::get('/update/{category_id}', [categoryController::class, 'update'])->name('category_update')->middleware('check_permission:check');
                     Route::put('/post-update/{category_id}', [categoryController::class, 'post_update'])->name('category_post_update');
-                    Route::get('/toggle-status/{category_id}/{category_status}', [categoryController::class, 'toogle_status'])->name('category_toogle_status');
+                    Route::get('/toggle-status/{category_id}', [categoryController::class, 'toogle_status'])->name('category_toogle_status');
                 });
                 Route::prefix('/phanloai')->group(function(){
                     Route::get('/list', [phanloaiController::class, 'list'])->name('phanloai_list')->middleware('check_permission:check');
@@ -73,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [phanloaiController::class, 'post_add'])->name('phanloai_post_add');
                     Route::get('/update/{phanloai_id}', [phanloaiController::class, 'update'])->name('phanloai_update')->middleware('check_permission:check');
                     Route::put('/post-update/{phanloai_id}', [phanloaiController::class, 'post_update'])->name('phanloai_post_update');
-                    Route::get('/toggle-status/{phanloai_id}/{phanloai_status}', [phanloaiController::class, 'toogle_status'])->name('phanloai_toogle_status');
+                    Route::get('/toggle-status/{phanloai_id}', [phanloaiController::class, 'toogle_status'])->name('phanloai_toogle_status');
                 });
                 Route::prefix('/theloai')->group(function(){
                     Route::get('/list', [theloaiController::class, 'list'])->name('theloai_list')->middleware('check_permission:check');
@@ -81,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [theloaiController::class, 'post_add'])->name('theloai_post_add');
                     Route::get('/update/{theloai_id}', [theloaiController::class, 'update'])->name('theloai_update')->middleware('check_permission:check');
                     Route::put('/post-update/{theloai_id}', [theloaiController::class, 'post_update'])->name('theloai_post_update');
-                    Route::get('/toggle-status/{theloai_id}/{theloai_status}', [theloaiController::class, 'toogle_status'])->name('theloai_toogle_status');
+                    Route::get('/toggle-status/{theloai_id}', [theloaiController::class, 'toogle_status'])->name('theloai_toogle_status');
                     Route::get('/show-home', [theloaiController::class, 'showHome'])->name('theloai_showHome');
                     Route::post('/post-show-home', [theloaiController::class, 'postShowHome'])->name('theloai_post_showHome');
                     Route::get('/checked-home', [theloaiController::class, 'checkedHome'])->name('theloai_checked');
@@ -93,7 +109,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [colorController::class, 'post_add'])->name('color_post_add');
                     Route::get('/update/{color_id}', [colorController::class, 'update'])->name('color_update')->middleware('check_permission:check');
                     Route::put('/post-update/{color_id}', [colorController::class, 'post_update'])->name('color_post_update');
-                    Route::get('/toggle-status/{color_id}/{color_status}', [colorController::class, 'toogle_status'])->name('color_toogle_status');
+                    Route::get('/toggle-status/{color_id}', [colorController::class, 'toogle_status'])->name('color_toogle_status');
                 });
                 Route::prefix('/brand')->group(function(){
                     Route::get('/list', [brandController::class, 'list'])->name('brand_list')->middleware('check_permission:check');
@@ -101,7 +117,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [brandController::class, 'post_add'])->name('brand_post_add');
                     Route::get('/update/{brand_id}', [brandController::class, 'update'])->name('brand_update')->middleware('check_permission:check');
                     Route::put('/post-update/{brand_id}', [brandController::class, 'post_update'])->name('brand_post_update');
-                    Route::get('/toggle-status/{brand_id}/{brand_status}', [brandController::class, 'toogle_status'])->name('brand_toogle_status');
+                    Route::get('/toggle-status/{brand_id}', [brandController::class, 'toogle_status'])->name('brand_toogle_status');
                 });
                 Route::prefix('/size')->group(function(){
                     Route::get('/list', [sizeController::class, 'list'])->name('size_list')->middleware('check_permission:check');
@@ -109,7 +125,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [sizeController::class, 'post_add'])->name('size_post_add');
                     Route::get('/update/{size_id}', [sizeController::class, 'update'])->name('size_update')->middleware('check_permission:check');
                     Route::put('/post-update/{size_id}', [sizeController::class, 'post_update'])->name('size_post_update');
-                    Route::get('/toggle-status/{size_id}/{size_status}', [sizeController::class, 'toogle_status'])->name('size_toogle_status');
+                    Route::get('/toggle-status/{size_id}', [sizeController::class, 'toogle_status'])->name('size_toogle_status');
                 });
                 Route::prefix('/material')->group(function(){
                     Route::get('/list', [materialController::class, 'list'])->name('material.list')->middleware('check_permission:check');
@@ -117,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add', [materialController::class, 'post_add'])->name('material.add.post');
                     Route::get('/update/{material_id}', [materialController::class, 'update'])->name('material.update')->middleware('check_permission:check');
                     Route::put('/post-update/{material_id}', [materialController::class, 'post_update'])->name('material.update.post');
-                    Route::get('/toggle-status/{material_id}/{material_status}', [materialController::class, 'toogle_status'])->name('material.toggle');
+                    Route::get('/toggle-status/{material_id}', [materialController::class, 'toogle_status'])->name('material.toggle');
                 });
                 Route::prefix('/product')->group(function(){
                     Route::get('/list', [productController::class, 'list'])->name('product_list')->middleware('check_permission:check');
@@ -135,7 +151,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/post-add-img/{product_id}', [productController::class, 'post_add_img'])->name('product_post_add_Img');
                     Route::get('/post-update-img/{product_id}/{productImg_id}/{productQuantity_status}', [productController::class, 'post_toggle_img'])->name('toggle_img');
                     Route::get('/delete-img/{product_id}/{productImg_id}', [productController::class, 'delete_img'])->name('delete_img');
-                    Route::get('/show-home', [productController::class, 'showHo me'])->name('product_showHome');
+                    Route::get('/show-home', [productController::class, 'showHome'])->name('product_showHome');
                     Route::post('/post-show-home', [productController::class, 'postShowHome'])->name('product_post_showHome');
                 });
             });
@@ -218,11 +234,13 @@ Route::middleware(['auth'])->group(function () {
                 });
                 Route::prefix('/payment')->group(function(){
                     Route::get('/list', [billController::class, 'list'])->name('payment_list')->middleware('check_permission:check');
-                    Route::get('/deatil/{payment_id}/', [billController::class, 'deatil'])->name('payment_deatil')->middleware('check_permission:check');
+                    Route::get('/deatil/{payment_id}', [billController::class, 'deatil'])->name('payment_deatil')->middleware('check_permission:check');
                     Route::post('/action/{payment_id}', [billController::class, 'action'])->name('payment_action');
                     Route::get('/update/{payment_id}', [billController::class, 'update'])->name('payment_update');
                     Route::put('/post-update/{payment_id}', [billController::class, 'post_update'])->name('payment_update');
                     Route::get('/toggle-status/{payment_id}/{statusPayment_status}', [billController::class, 'toogle_status'])->name('payment_toogle_status');
+                    Route::get('/list-Resquest-Canne-Bill', [billController::class, 'canneBill'])->name('payment.canne.bill')->middleware('check_permission:check');
+                    Route::post('/Resquest-Canne-Bill-action/{request_cancellation_id}', [billController::class, 'canneBillAction'])->name('payment.canne.bill.action');
                 });
                 Route::prefix('/ship')->group(function(){
                     Route::get('/list', [shipController::class, 'list'])->name('ship.list')->middleware('check_permission:check');
@@ -237,7 +255,7 @@ Route::middleware(['auth'])->group(function () {
         
         Route::prefix('/ajax')->group(function(){
             Route::prefix('/search')->group(function(){
-                Route::get('/category', [AjaxController::class, 'category_seach'])->name('category_seach_Ajax');
+                Route::get('/category', [AjaxController::class, 'category_search'])->name('category_seach_Ajax');
                 Route::get('/phanloai', [AjaxController::class, 'phanloai_seach'])->name('phanloai_seach_Ajax');
                 Route::get('/color', [AjaxController::class, 'color_seach'])->name('color_seach_Ajax');
                 Route::get('/theloai', [AjaxController::class, 'theloai_seach'])->name('theloai_seach_Ajax');
@@ -256,7 +274,22 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/permission', [AjaxController::class, 'permission_seach'])->name('permission.seach.Ajax');
 
             });
-           
+            Route::prefix('/filter')->group(function(){
+                Route::get('/category', [AjaxController::class, 'category_filter'])->name('category.filter.Ajax');
+                Route::get('/phanloai', [AjaxController::class, 'phanloai_filter'])->name('phanloai.filter.Ajax');
+                Route::get('/color', [AjaxController::class, 'color_filter'])->name('color.filter.Ajax');
+                Route::get('/brand', [AjaxController::class, 'brand_filter'])->name('brand.filter.Ajax');
+                Route::get('/size', [AjaxController::class, 'size_filter'])->name('size.filter.Ajax');
+                Route::get('/material', [AjaxController::class, 'material_filter'])->name('material.filter.Ajax');
+                Route::get('/user', [AjaxController::class, 'user_filter'])->name('user.filter.Ajax');
+                Route::get('/position', [AjaxController::class, 'position_filter'])->name('position.filter.Ajax');
+                Route::get('/staff', [AjaxController::class, 'staff_filter'])->name('staff.filter.Ajax');
+                Route::get('/permissions', [AjaxController::class, 'permission_filter'])->name('permission.filter.Ajax');
+                Route::get('/permission-group', [AjaxController::class, 'permissionGroup_filter'])->name('permission.group.filter.Ajax');
+                Route::get('/methodPayment', [AjaxController::class, 'methodPayment_filter'])->name('method.payment.filter.Ajax');
+                Route::get('/statusPayment', [AjaxController::class, 'statusPayment_filter'])->name('status.payment.filter.Ajax');
+                Route::get('/ship', [AjaxController::class, 'ship_filter'])->name('ship.filter.Ajax');
+            });
             Route::prefix('/loadmore')->group(function(){
                 Route::post('/category', [AjaxController::class, 'category_loadmore'])->name('category_loadmore_Ajax');
                 Route::post('/phanloai', [AjaxController::class, 'phanloai_loadmore'])->name('phanloai_loadmore_Ajax');
@@ -268,7 +301,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/statusPayment', [AjaxController::class, 'statusPayment_loadmore'])->name('statusPayment_loadmore_Ajax');
                 Route::post('/ship', [AjaxController::class, 'ship_loadmore'])->name('ship.loadmore.Ajax');
                 Route::post('/material', [AjaxController::class, 'material_loadmore'])->name('material.loadmore.Ajax');
-
+                
             });
             Route::prefix('/return')->group(function(){
                 Route::get('/category', [AjaxController::class, 'category_return'])->name('category_return_Ajax');
@@ -299,6 +332,23 @@ Route::middleware(['auth'])->group(function () {
             Route::prefix('/get-list')->group(function(){ 
                 Route::post('/payment', [AjaxController::class, 'selete_bill'])->name('selete_billPayment');
     
+            });
+            Route::prefix('/post')->group(function(){ 
+                Route::get('/post-cmt', [AjaxController::class, 'postCmt'])->name('post.cmt');
+    
+            });
+            Route::prefix('/excel')->group(function(){ 
+                Route::get('/category', [AjaxController::class, 'getdataCategoryExcel'])->name('get.category.excel');
+                Route::get('/phanloai', [AjaxController::class, 'getdataPhanLoaiExcel'])->name('get.phanloai.excel');
+                Route::get('/color', [AjaxController::class, 'getdatacolorExcel'])->name('get.color.excel');
+                Route::get('/size', [AjaxController::class, 'getdatasizeExcel'])->name('get.size.excel');
+                Route::get('/brand', [AjaxController::class, 'getdatabrandExcel'])->name('get.brand.excel');
+                Route::get('/material', [AjaxController::class, 'getdatabmaterialeExcel'])->name('get.material.excel');
+                Route::get('/position', [AjaxController::class, 'getdatabpositionExcel'])->name('get.position.excel');
+                Route::get('/permission-group', [AjaxController::class, 'getdatabPermissionGroupExcel'])->name('get.permission.group.excel');
+                Route::get('/method-payment', [AjaxController::class, 'getdatabMethodPaymentExcel'])->name('get.method.payment.excel');
+                Route::get('/status-payment', [AjaxController::class, 'getdatastatusPaymentExcel'])->name('get.status.payment.excel');
+                Route::get('/ship', [AjaxController::class, 'getdataShipExcel'])->name('get.ship.excel');
             });
         });
     });

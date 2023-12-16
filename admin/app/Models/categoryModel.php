@@ -1,67 +1,65 @@
 <?php
 
+
 namespace App\Models;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class categoryModel extends Model
+class categoryModel extends indexModel   
 {
     protected $table = 'tbl_category'; // Tên bảng mà model này liên kết với
     protected $primaryKey = 'category_id';
-    protected $pagination = 'tbl_pagination'; // Tên cột khóa chính của bảng
+    protected $pagination = 'tbl_pagination';
+    protected $fillable = ['category_name','category_status'];
     public $timestamps = false; // Không sử dụng các trường created_at và updated_at
-   
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTableName($this->table);
+        $this->setPrimaryKey($this->primaryKey);
+    }
+
    public function getPagination(){
         $result=DB::table($this->pagination)->where('pagination_tbl',$this->table);
        return $result;
    }
-    public function addCategory($name, $code)
+   public function getDeatil($id){
+        $result=$this->getDeatilId($id);
+       return $result;
+   }
+    public function add($name)
 {
     $data = [
         'category_name' => $name,
-        'category_code' => $code,
         'category_status' => 1,
     ];
-
-    try {
-        $result = DB::table($this->table)->insert($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
-    }
+    $result = $this->createData($data);
+    return $result;
+  
 }
-    public function updateCategory($name, $code,$category_id)
+    public function updateCategory($name,$id)
     {
         $data = [
             'category_name' => $name,
-            'category_code' => $code,
         ];
         try {
-            $result = DB::table($this->table)->where('category_id',$category_id)->update($data);
-            return $result; // Trả về true nếu thành công, false nếu thất bại
+            $result =$this->edit($data, $id);
+            return $result;
         } catch (\Exception $e) {
             return false;
         }
     }
-    public function checkDatabase( $code) {
-        return DB::table($this->table)
-            ->Where('category_code', $code)
-            ->exists();
+    public function checkDatabase($code,$id=null) {
+        $result=$this->checkColum('category_name', $code, $id);
+        return $result ;
     }
-    public function checkDatabaseIs($code, $category_id) {
-        return DB::table($this->table)
-            ->where('category_code', $code)
-            ->where('category_id', '<>', $category_id)
-            ->exists();
-    }
-    public function status_toggle($status,$category_id){
+    public function status_toggle($status,$id){
         $data['category_status']=$status;
         try {
-            $result =   DB::table($this->table)->where('category_id',$category_id)->update($data); 
+            $result =  $this->toggleStatus($id,$data); 
             return $result; // Trả về true nếu thành công, false nếu thất bại
         } catch (\Exception $e) {
-            return false;
+            return $result;
         }
     }
+   
+ 
 }

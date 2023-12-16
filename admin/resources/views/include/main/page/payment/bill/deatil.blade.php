@@ -20,14 +20,14 @@
                 </div>
             @endif
              @if ($item->statusPayment_id===1)
-             <div class="form-group  col-6">
+             <div class="form-group  col-6 pd-10px">
               <label> Tạo đơn cho khách</label>
               <select class="form-select he-46 payment-change" name="change_payment" id="payment-change">
                 <option value="2">Xác nhận tạo đơn</option>
                 <option value="5">Hủy không tạo đơn</option>
               </select>
             </div>
-            <div class="form-group col-6 tran-0-5 payment-code" id="payment-code">
+            <div class="form-group col-6 pd-10px tran-0-5 payment-code" id="payment-code">
               <label> Mã đơn hàng</label>
               <input type="text" name="codePayment" id="" class="form-control" required>          
             </div>
@@ -43,11 +43,11 @@
                 <label> Lý do không tạo đơn</label>
                 <textarea name="reason_mess" class="editor" cols="30" rows="10"></textarea>
               </div>
-              <div class="col-6 flex_start">
+              <div class="col-6 pd-10px flex_start">
                 <button type="submit" class=" btn-pimar-key mr-2" style="width: 200px;">Lưu</button>
              </div>
               @elseif ($item->statusPayment_id===2)
-              <div class="form-group  col-6">
+              <div class="form-group  col-6 pd-10px">
                 <label> Đóng gói và chuyển cho bên vận chuyển</label>
                 <select class="form-select he-46 payment-change" name="change_payment" id="payment-change">
                   <option value="3">Xác nhận</option>
@@ -62,12 +62,12 @@
                   <label> Lý do không tạo đơn</label>
                   <textarea name="reason_mess"  class="editor" cols="30" rows="10"></textarea>
                 </div>
-                <div class="col-6 flex_start">
+                <div class="col-6 pd-10px flex_start">
                   <button type="submit" class=" btn-pimar-key mr-2" style="width: 200px;">Lưu</button>
                </div>
             
              @elseif ($item->statusPayment_id===3)
-             <div class="form-group  col-6">
+             <div class="form-group  col-6 pd-10px">
                <label> Xác nhận giao hàng thành công</label>
                <select class="form-select he-46 payment-change" name="change_payment" id="payment-change">
                  <option value="4">Xác nhận</option>
@@ -82,11 +82,11 @@
                  <label> Lý do không tạo đơn</label>
                  <textarea name="reason_mess"  class="editor" cols="30" rows="10"></textarea>
                </div>
-               <div class="col-6 flex_start">
+               <div class="col-6 pd-10px flex_start">
                  <button type="submit" class=" btn-pimar-key mr-2" style="width: 200px;">Lưu</button>
               </div>
               @elseif ($item->statusPayment_id===4)
-             <div class="form-group  col-6">
+             <div class="form-group  col-6 pd-10px">
                <label> Chuyển đơn hàng vào mục hoàn thành</label>
                <select class="form-select he-46 payment-change" name="change_payment" id="payment-change">
                  <option value="6">Xác nhận</option>
@@ -101,7 +101,7 @@
                  <label> Lý do không chuyển</label>
                  <textarea name="reason_mess" class="editor" cols="30" rows="10"></textarea>
                </div>
-               <div class="col-6 flex_start">
+               <div class="col-6 pd-10px flex_start">
                  <button type="submit" class=" btn-pimar-key mr-2" style="width: 200px;">Lưu</button>
               </div>
           
@@ -109,19 +109,19 @@
             </form>
             <div class="payment-infro pd-100-0 row">
               
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Tên người đặt :</label> {{$item->user_fullname}} </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">SĐT người đặt :</label> {{$item->user_phone}} </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Tên người nhận :</label> {{$item->payment_nameUser}} </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">SĐT người đặt :</label> {{$item->payment_phoneUser}} </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Vị trí gửi :</label> 
                         @if (strlen($item->payment_localtion)===0)
                               Chưa tạo vị trí
@@ -130,7 +130,7 @@
                         @endif
                       </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Mã đơn :</label> 
                         @if (strlen($item->payment_code)===0)
                               Chưa mã đơn
@@ -139,22 +139,18 @@
                         @endif
                          </p>
                     </div>
-                    <div class="col-12">
-                      <p><label for="">Địa chỉ nhận :</label> 
-                       {{$item->payment_addressUser}}
-                         </p>
-                    </div>
-                    <div class="col-6">
+                    
+                    <div class="col-6 pd-10px">
                       <p><label for="">Phương thức thanh toán :</label> 
                        {{$item->methodPayment_name}}
                          </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Trạng thái đơn hàng:</label> 
                        {{$item->statusPayment_name}}
                          </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Trạng thái thanh toán :</label> 
                         @if ($item->isPayment===0)
                              Chưa thanh toán
@@ -163,15 +159,20 @@
                         @endif
                          </p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 pd-10px">
                       <p><label for="">Tổng tiền :</label> 
                         {{number_format($item->payment_allPrice)}} VNĐ
                         </p>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 pd-10px">
                       <p><label for="">Ghi chú :</label> 
                         {{$item->payment_note}} 
                         </p>
+                    </div>
+                    <div class="col-12 pd-10px">
+                      <p><label for="">Địa chỉ nhận :</label> 
+                       {{$item->payment_addressUser}}
+                         </p>
                     </div>
                 @endforeach
               

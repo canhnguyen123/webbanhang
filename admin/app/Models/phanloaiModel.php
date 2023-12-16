@@ -2,64 +2,63 @@
 
 namespace App\Models;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class phanloaiModel extends Model
+class phanloaiModel extends indexModel
 {
-    protected $table = 'tbl_phanloai'; 
+    protected $table = 'tbl_phanloai'; // Tên bảng mà model này liên kết với
     protected $primaryKey = 'phanloai_id';
-    protected $pagination = 'tbl_pagination';  
-    public function getPagination(){
+    protected $pagination = 'tbl_pagination';
+    protected $fillable = ['phanloai_name','phanloai_status'];
+    public $timestamps = false; // Không sử dụng các trường created_at và updated_at
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTableName($this->table);
+        $this->setPrimaryKey($this->primaryKey);
+    }
+
+   public function getPagination(){
         $result=DB::table($this->pagination)->where('pagination_tbl',$this->table);
        return $result;
    }
-    public function addphanloai($name, $code)
+   public function getDeatil($id){
+        $result=$this->getDeatilId($id);
+       return $result;
+   }
+    public function addphanloai($name)
 {
     $data = [
         'phanloai_name' => $name,
-        'phanloai_code' => $code,
         'phanloai_status' => 1,
     ];
-
-    try {
-        $result = DB::table($this->table)->insert($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
-    }
+    $result = $this->createData($data);
+    return $result;
+  
 }
-    public function updatephanloai($name, $code,$phanloai_id)
+    public function updatephanloai($name,$id)
     {
         $data = [
             'phanloai_name' => $name,
-            'phanloai_code' => $code,
         ];
         try {
-            $result = DB::table($this->table)->where('phanloai_id',$phanloai_id)->update($data);
-            return $result; // Trả về true nếu thành công, false nếu thất bại
+            $result =$this->edit($data, $id);
+            return $result;
         } catch (\Exception $e) {
             return false;
         }
     }
-    public function checkDatabase( $code) {
-        return DB::table($this->table)
-            ->Where('phanloai_code', $code)
-            ->exists();
+    public function checkDatabase($code,$id=null) {
+        $result=$this->checkColum('phanloai_name', $code, $id);
+        return $result ;
     }
-    public function checkDatabaseIs($code, $phanloai_id) {
-        return DB::table($this->table)
-            ->where('phanloai_code', $code)
-            ->where('phanloai_id', '<>', $phanloai_id)
-            ->exists();
-    }
-    public function status_toggle($status,$phanloai_id){
+    public function status_toggle($status,$id){
         $data['phanloai_status']=$status;
         try {
-            $result =   DB::table($this->table)->where('phanloai_id',$phanloai_id)->update($data); 
+            $result =  $this->toggleStatus($id,$data); 
             return $result; // Trả về true nếu thành công, false nếu thất bại
         } catch (\Exception $e) {
-            return false;
+            return $result;
         }
     }
+   
 }

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="{{ asset('BE/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/css/vendor.bundle.base.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.css"
         integrity="sha512-arPZ7r4v4xEkxAQngubdkUNXFBVO8NFFRg1IszNv2AMaaZ9cDiCVRFGSZSjF7o5GHpm826QTqtNdOFNSnHbOYQ=="
@@ -35,32 +34,24 @@
 
 <body>
     <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
         @include('include.headerTop')
-        <!-- partial -->
         @include('include.main')
-        <!-- page-body-wrapper ends -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
     <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.js"
         integrity="sha512-QwpsxtdZRih55GaU/Ce2Baqoy2tEv9GltjAG8yuTy2k9lHqK7VHHp3wWWe+yITYKZlsT3AaCj49ZxMYPp46iJQ=="
@@ -70,12 +61,8 @@
     <script src="{{ asset('BE/vendors/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('BE/vendors/datatables.net/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('BE/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
-    <script src="{{ asset('BE/vendors/js/vendor.bundle.base.js') }}"></script>
+        <script src="{{ asset('BE/vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('BE/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
-    <script src="{{ asset('BE/vendors/select2/select2.min.js') }}"></script>
-
-    <script src="{{ asset('BE/js/dataTables.select.min.js') }}"></script>
-    <script src="{{ asset('BE/js/select2.js') }}"></script>
     <script src="{{ asset('BE/js/file-upload.js') }}"></script>
     <script src="{{ asset('BE/js/off-canvas.js') }}"></script>
     <script src="{{ asset('BE/js/hoverable-collapse.js') }}"></script>
@@ -83,15 +70,13 @@
     <script src="{{ asset('BE/js/settings.js') }}"></script>
     <script src="{{ asset('BE/js/todolist.js') }}"></script>
     <script src="{{ asset('BE/js/callAPI.js') }}"></script>
-    {{-- <script src="{{ asset('BE/js/dashboard.js') }}"></script> --}}
+    <script src="{{ asset('BE/js/dashboard.js') }}"></script>
     <script src="{{ asset('BE/js/Chart.roundedBarCharts.js') }}"></script>
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
     <script src="{{ asset('BE/js/main.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
     <script type="module">
         const firebaseConfig = {
             apiKey: "AIzaSyBO3mI1DKCovx5uDyvOKzhfBC3nNDOzPY8",
@@ -178,7 +163,8 @@
                 event.preventDefault();
                 const name = 'nameProduct';
                 const code = 'product_code';
-
+                const checkNumberpriceIn = 'price-int';
+                const checkNumberpriceOut = 'price-out';
 
                 if (checkEmty(name)) {
                     return
@@ -211,8 +197,6 @@
                             .text());
                         item_arr.push($(this).find('#item-quantity-price-out-text-' + itemCount)
                             .text());
-
-                        // Đẩy temp array vào mảng chính arr_quantity
                         arr_quantity.push(item_arr);
                         itemCount++;
 
@@ -330,6 +314,12 @@
                 $('#btn-loadmore-staff').hide()
                 searchAjax(content, link, list);
             });
+            $('#filter-status-staff').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('staff.filter.Ajax') }}";
+                const table = "#list-staff";
+                tilterStatus(url, value, table)
+            })
             $('#return-product').click(function() {
                 const link = '{{ route('product_return_Ajax') }}';
                 const list = '#list-product';
@@ -390,6 +380,13 @@
                 const btnLoad = '#btn-loadmore-position';
                 returnAjax(link, list, btnLoad)
             })
+            $('#filter-status-position').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('position.filter.Ajax') }}";
+                const table = "#list-position";
+                tilterStatus(url, value, table)
+            })
+
             $('#position-search-btn').click(function(event) {
                 event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
                 const content = $('#position-search').val();
@@ -447,7 +444,30 @@
                 $('.tfoot-table').hide()
                 searchAjax(content, link, list);
             });
-
+            $('#filter-status-permisstion').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('permission.filter.Ajax') }}";
+                const table = "#list-permission";
+                tilterStatus(url, value, table)
+            });
+            $('#filter-status-methodPayment').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('method.payment.filter.Ajax') }}";
+                const table = "#list-methodPayment";
+                tilterStatus(url, value, table)
+            });
+            $('#filter-status-statusPayment').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('status.payment.filter.Ajax') }}";
+                const table = "#list-statusPayment";
+                tilterStatus(url, value, table)
+            });
+            $('#filter-status-ship').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('ship.filter.Ajax') }}";
+                const table = "#list-ship";
+                tilterStatus(url, value, table)
+            });
             $('#return-permission').click(function() {
                 const link = '{{ route('permission.return.Ajax') }}';
                 const list = '#list-permission';
@@ -463,7 +483,12 @@
                 $('.tfoot-table').hide()
                 searchAjax(content, link, list);
             });
-
+            $('#filter-status-permissionGroup').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('permission.group.filter.Ajax') }}";
+                const table = "#list-permissionGroup";
+                tilterStatus(url, value, table)
+            })
             $('#return-permissionGroup').click(function() {
                 const link = '{{ route('permission.group.return.Ajax') }}';
                 const list = '#list-permissionGroup';
@@ -587,13 +612,15 @@
             })
 
             $('#user-search-btn').click(function(event) {
-                event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
+                event.preventDefault();
                 const content = $('#user-search').val();
                 const link = '{{ route('user_seach_Ajax') }}';
                 const list = '#list-user';
-                $('.tfoot-user').hide()
+                $('.tfoot-table').hide()
                 searchAjax(content, link, list);
             });
+
+
 
             $('#return-user').click(function() {
                 const link = '{{ route('user_return_Ajax') }}';
@@ -634,7 +661,7 @@
                     },
                     success: function(response) {
                         $(list).html(response.view);
-                        $('.req-text-mess').text(response.counMess)
+                        $('.req-text-mess').text(response.counMess);
                     },
                     error: function(xhr, status, error) {
                         console.log('Lỗi: ' + error);
@@ -680,7 +707,8 @@
                     success: function(response) {
                         $(list).html(response);
                         $(btnLoad).show()
-                        $('.req-text-mess').text('')
+                        $('.req-text-mess').text('');
+                        $('.tfoot-table').show();
                     },
                     error: function(xhr, status, error) {
                         console.log('Lỗi: ' + error);
@@ -710,7 +738,6 @@
                     task
                         .then(snapshot => snapshot.ref.getDownloadURL())
                         .then(url => {
-                            console.log(url);
                             var csrfToken = $('meta[name="csrf-token"]').attr('content');
                             $.ajaxSetup({
                                 headers: {
@@ -927,27 +954,30 @@
             }
             $('.add-quantity-item').click(function(e) {
                 e.preventDefault();
-
                 const quantity = $('.quantity-product').val();
                 const priceInt = $('.price-int').val();
                 const priceOut = $('.price-out').val();
                 const size = $("input[name='size']:checked").val();
                 const color = $("input[name='color']:checked").val();
 
-                if (isItemAdded(color, size)) {
+                if (quantity.trim().length === 0 || priceInt.trim().length === 0 || priceOut.trim()
+                    .length === 0) {
+                    alert("Không được bỏ trống ô nhập");
+                    return;
+                } else if (isItemAdded(color, size)) {
                     alert("Màu và kích thước đã được thêm vào trước đó!");
                     return;
                 } else {
                     const newItem = `
-            <div class="swiper-slide item-quantity">
-                <i class="mdi mdi-close icon-close-item"></i>
-                <div class="item-quantity-div item-quantity-color"><p>Màu sắc: <span  id="item-quantity-color-text-${itemCount}">${color}</span></p></div>
-                <div class="item-quantity-div item-quantity-Size"><p>Size: <span  id="item-quantity-Size-text-${itemCount}">${size}</span></p></div>
-                <div class="item-quantity-div item-quantity-quantity"><p>Số lượng: <span  id="item-quantity-quantity-text-${itemCount}">${quantity}</span></p></div>
-                <div class="item-quantity-div item-quantity-price-import"><p>Giá nhập: <span id="item-quantity-price-import-text-${itemCount}">${priceInt}</span></p></div>
-                <div class="item-quantity-div item-quantity-price-out"><p>Giá bán: <span id="item-quantity-price-out-text-${itemCount}">${priceOut}</span></p></div>
-            </div>
-        `;
+                        <div class="swiper-slide item-quantity">
+                            <i class="mdi mdi-close icon-close-item"></i>
+                            <div class="item-quantity-div item-quantity-color"><p>Màu sắc: <span  id="item-quantity-color-text-${itemCount}">${color}</span></p></div>
+                            <div class="item-quantity-div item-quantity-Size"><p>Size: <span  id="item-quantity-Size-text-${itemCount}">${size}</span></p></div>
+                            <div class="item-quantity-div item-quantity-quantity"><p>Số lượng: <span  id="item-quantity-quantity-text-${itemCount}">${quantity}</span></p></div>
+                            <div class="item-quantity-div item-quantity-price-import"><p>Giá nhập: <span id="item-quantity-price-import-text-${itemCount}">${priceInt}</span></p></div>
+                            <div class="item-quantity-div item-quantity-price-out"><p>Giá bán: <span id="item-quantity-price-out-text-${itemCount}">${priceOut}</span></p></div>
+                        </div>
+                    `;
                     itemCount++;
                     addedItems.push({
                         color: color,
@@ -971,8 +1001,6 @@
                     img.attr('src', URL.createObjectURL(ip_img[0].files[0]));
                 }
             });
-
-            // khi thêm ảnh hiển thị dạng slider
             $('#file-upload-product').on('change', function(e) {
                 var files = e.target.files;
                 var sliderProduct = $('.slider-product');
@@ -1003,8 +1031,6 @@
                     inner.append(carouselItem);
                 }
             });
-
-
             var swiper = new Swiper(".mySwiper", {
                 slidesPerView: 3,
                 spaceBetween: 20,
@@ -1038,22 +1064,7 @@
             $('.close').click(function() {
                 $('.myModal').hide()
             })
-            //   $(".nav-link").on("click", function (e) {
-            //     e.preventDefault(); // Ngăn chặn mặc định của thẻ <a>
 
-            //     // Loại bỏ lớp "active" từ tất cả các tab và nội dung tab-pane
-            //     $(".nav-link").removeClass("active");
-            //     $(".tab-pane").removeClass("active");
-
-            //     // Thêm lớp "active" vào tab được click
-            //     $(this).addClass("active");
-
-            //     // Lấy href của tab được click để xác định tab-pane tương ứng
-            //     var targetPaneId = $(this).attr("href");
-
-            //     // Thêm lớp "active" vào tab-pane tương ứng
-            //     $(targetPaneId).addClass("active");
-            //   });
             function isValueEmpty(inputValue) {
                 return inputValue.trim().length === 0;
             }
@@ -1066,40 +1077,155 @@
                 const regex = /^[1-9]\d*$/;
                 return regex.test(inputValue);
             }
-
+            $('#filter-status-category').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('category.filter.Ajax') }}";
+                const table = "#list-category";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-user').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('user.filter.Ajax') }}";
+                const table = "#list-user";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-phanloai').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('phanloai.filter.Ajax') }}";
+                const table = "#list-phanloai";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-color').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('color.filter.Ajax') }}";
+                const table = "#list-color";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-brand').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('brand.filter.Ajax') }}";
+                const table = "#list-brand";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-size').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('size.filter.Ajax') }}";
+                const table = "#list-size";
+                tilterStatus(url, value, table)
+            })
+            $('#filter-status-material').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('material.filter.Ajax') }}";
+                const table = "#list-material";
+                tilterStatus(url, value, table)
+            })
             $('.toggle-filter').click(function() {
-
                 $('.toggle-filter-div').toggle();
+
             })
 
+            function tilterStatus(url, value, table) {
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: {
+                        content: value
+                    },
+                    success: function(response) {
+                        $(table).html(response.view);
+                        $('.req-text-mess').text(response.counMess);
+                        $('.btn-loadmore').hide();
+                        $('.tfoot-table').hide();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
             $(".uppercaseInput").on("keyup", function() {
-                // Lấy giá trị hiện tại của ô nhập
                 var inputValue = $(this).val();
-
-                // Chuyển đổi giá trị thành chữ in hoa và cập nhật lại giá trị trong ô nhập
                 $(this).val(inputValue.toUpperCase());
             });
             $('.req-div-quantity').on('click', '.icon-close-item', function() {
-                $(this).parent().remove(); // Xóa phần tử cha của icon-close-item
+                $(this).parent().remove();
             });
+            $('#toggle-box-canne-bill').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.canne-bill-text').text('Không xác nhận');
+                } else {
+                    $('.canne-bill-text').text('Xác nhận');
+                }
+            })
+            $('.toggle-modal').click(function() {
+                const textData = $(this).data("reason");
+                const user_id = $(this).data("user_id");
+                const payment_id = $(this).data("payment_id");
+                const id = $(this).data("id");
+                const divElement = $('<div>').html(textData);
+
+                divElement.find('p').replaceWith(function() {
+                    return $(this).contents();
+                });
+                const updatedText = divElement.html();
+                $('.text-reason').html(updatedText);
+                $('.btn-canne-bill').attr('data-user_id', user_id);
+                $('.btn-canne-bill').attr('data-payment_id', payment_id);
+                $('.btn-canne-bill').attr('data-id', id);
+            });
+            $('.btn-canne-bill').click(function(e) {
+                e.preventDefault();
+                const user_id = $(this).data('user_id');
+                const payment_id = $(this).data('payment_id');
+                const id = $(this).data('id');
+                const isChecked = $('.toggle-box-canne-bill').prop('checked');
+                const responseContent = $('.response-content').val();
+                const data = {
+                    status: isChecked,
+                    context: responseContent,
+                    user_id: user_id,
+                    payment_id: payment_id
+                }
+                const updateUrl =
+                    '{{ route('payment.canne.bill.action', ['request_cancellation_id' => 0]) }}';
+                const link = updateUrl.slice(0, -1) + id;
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: link,
+                    data: data,
+                    success: function(response) {
+                        if (response.status === "success") {
+                            alert(response.mess);
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            })
             $('.quantity-update').click(function() {
                 const quantityItem = $(this).closest('.item-quantity')
                 quantityItem.addClass('active');
                 const color = quantityItem.find('.color-quantity').text();
                 const size = quantityItem.find('.size-quantity').text();
                 const quantity = quantityItem.find('.quantity-product').text();
-                const priceInt = quantityItem.find('.priceInt-quantity').text();
-                const priceOut = quantityItem.find('.priceOut-quantity').text();
+                const priceIntString = quantityItem.find('.priceInt-quantity').text();
+                const priceOutString = quantityItem.find('.priceOut-quantity').text();
+                const priceInt = parseFloat(priceIntString.replace(/,/g, ''));
+                const priceOut = parseFloat(priceOutString.replace(/,/g, ''));
                 const quantity_id = quantityItem.data('id')
-
                 $('#update-quantity-item').attr('data-quantity', quantity_id);
                 $('.list-color-quantity').each(function() {
                     if ($(this).val() === color) {
                         $(this).prop('checked', true);
                     }
                 });
-
-                // Check the corresponding radio button for size
                 $('.list-size-quantity').each(function() {
                     if ($(this).val() === size) {
                         $(this).prop('checked', true);
@@ -1173,18 +1299,63 @@
                 });
 
             })
+            $('#update-quantity-item').click(function(e) {
+                e.preventDefault()
+                const size = $('.list-size-quantity:checked').val();
+                const color = $('.list-color-quantity:checked').val();
+                const quantity = $('.quantity-product').val()
+                const priceInt = $('.price-int').val()
+                const priceout = $('.price-out').val()
+                const product_id = $(this).data('product');
+                const quantity_id = $(this).data('quantity');
+                $('#add-quantity-item').removeAttr('data-quantity');
 
+                const updateUrl =
+                    '{{ route('product_post_update_quantity', ['product_id' => 0, 'productQuantity_id' => 0]) }}';
+                const updatedUrl = updateUrl.replace(/0$/, quantity_id);
+                const link = updatedUrl.replace(/0(?=\/\d+$)/, product_id);
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+                $.ajax({
+                    type: "PUT",
+                    url: link,
+                    data: {
+                        size: size,
+                        color: color,
+                        quantity: quantity,
+                        priceout: priceout,
+                        priceInt: priceInt,
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert(response.mess);
+                            window.location = response.route;
+                        } else {
+
+                            alert(response.mess);
+                            window.location = response.route;
+                        }
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+
+            })
             $('#add-img').click(function(event) {
                 event.preventDefault();
-
                 const product_id = $(this).data('id')
                 var updateUrl = "{{ route('product_post_add_Img', ['product_id' => 0]) }}";
                 var link = updateUrl.slice(0, -1) + product_id;
-
                 const files = Array.from(document.getElementById("file-upload-product-img").files);
                 const uploadPromises = [];
                 const ref = firebase.storage().ref();
-
                 files.forEach((file) => {
                     const name = +new Date() + "-" + file.name;
                     const metadata = {
@@ -1340,6 +1511,7 @@
 
 
             })
+
             $('#btn-upload-banner').click(function(event) {
                 event.preventDefault();
                 const namebaner = $('#namebanner').val();
@@ -1542,49 +1714,83 @@
                     const product_id = $(this).data('id');
                     const url = "{{ route('statistical.product.deatil.acction', ['product_id' => 0]) }}";
                     const link = url.slice(0, -1) + product_id;
-
-                    $.ajax({
-                        type: "GET",
-                        url: link,
-                        data: {
-                            value: value,
-                        },
-                        success: function(response) {
-                            console.log(response.listLable);
-                            console.log(response.result);
-                            updateChart(response.listLable, response.result);
-                        },
-                        error: function(xhr, status, error) {
-                            console.log('Lỗi: ' + error);
-                        }
-                    });
+                    callAPIStaticalProduct(link, value);
                 } else {
-                   $('.compare-box').show()
+                    $('.compare-box').show()
                 }
             });
-            $('.revenue-action').click(function(){
-                const value=$(this).data('value')
-                $('.revenue-action').removeClass('active');
+
+            const activeRevenue = $('.product-deatil-action.active');
+            if (activeRevenue.length > 0) {
+                const value = activeRevenue.data('value');
+                const product_id = activeRevenue.data('id');
+
+                const url = "{{ route('statistical.product.deatil.acction', ['product_id' => 0]) }}";
+                const link = url.slice(0, -1) + product_id;
+                callAPIStaticalProduct(link, "6Mouth");
+            }
+            const activeAllproduct = $('.product-all-action.active');
+            if (activeAllproduct.length > 0) {
+                const value = activeAllproduct.data('value');
+                const link = "{{ route('statistical.product.all.acction') }}";
+                callAPIStaticalProduct(link, value);
+            }
+            $('.product-all-action').click(function() {
+                $('.product-all-action').removeClass('active');
                 $(this).addClass('active');
+                const value = $(this).data('value');
+                const link = "{{ route('statistical.product.all.acction') }}"
+                callAPIStaticalProduct(link, value);
+            });
+
+            function callAPIStaticalProduct(link, value) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('statistical.product.deatil.acction.ajax') }}",
+                    url: link,
                     data: {
                         value: value,
                     },
                     success: function(response) {
-                        if(response.status==="success"){
-                            $('#list-revenue').html(response.view)
-                            updateChart(response.lableChart, response.dataChart)
-                        }
-
-                        
+                        updateChart(response.listLable, response.result, true);
                     },
                     error: function(xhr, status, error) {
                         console.log('Lỗi: ' + error);
                     }
                 });
+            }
+            const activeProductDeatil = $('.revenue-action.active');
+            if (activeProductDeatil.length > 0) {
+                const value = activeProductDeatil.data('value');
+                callAPIProductDeailTK(value);
+            }
+            $('.revenue-action').click(function() {
+                const value = $(this).data('value')
+                $('.revenue-action').removeClass('active');
+                $(this).addClass('active');
+                callAPIProductDeailTK(value)
             })
+
+            function callAPIProductDeailTK(value) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('statistical.acction.ajax') }}",
+                    data: {
+                        value: value,
+                    },
+                    success: function(response) {
+                        if (response.status === "success") {
+                            $('#list-revenue').html(response.view)
+                            updateChart(response.lableChart, response.dataChart)
+                        }
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+
             function updateChartTitle(value) {
                 const titleMap = {
                     '6Mouth': '6 tháng gần nhất',
@@ -1595,7 +1801,7 @@
                 };
 
                 $('.titel-compare-product-detail').text(titleMap[value] || '');
-               
+
             }
 
             function updateChart(labels, data) {
@@ -1618,9 +1824,7 @@
                                 propagate: false
                             }
                         },
-                        scales: {
-                            // ... (giữ nguyên phần cấu hình cho trục x và y)
-                        },
+                        scales: {},
                         legend: {
                             display: false
                         },
@@ -1646,250 +1850,74 @@
                 }
             }
 
-            $('.select-change-compare').change(function(){
+            $('.select-change-compare').change(function() {
                 const product_id = $(this).data('id');
                 const valueProductId = $(this).val();
                 const url = "{{ route('statistical.product.deatil.acction', ['product_id' => 0]) }}";
-                    const link = url.slice(0, -1) + product_id;
-                    // var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    // $.ajaxSetup({
-                    //     headers: {
-                    //         'X-CSRF-TOKEN': csrfToken
-                    //     }
-                    // });
-                    $.ajax({
-                        type: "GET",
-                        url: link,
-                        data: {
-                            value: "compare",
-                            comparison_Id:valueProductId
-                        },
-                        success: function(response) {
-                            console.log(response.listLable);
-                            console.log(response.result);
-                            updateChart(response.listLable, response.result);
-                        },
-                        error: function(xhr, status, error) {
-                            console.log('Lỗi: ' + error);
-                        }
-                    });
+                const link = url.slice(0, -1) + product_id;
+                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                // $.ajaxSetup({
+                //     headers: {
+                //         'X-CSRF-TOKEN': csrfToken
+                //     }
+                // });
+                $.ajax({
+                    type: "GET",
+                    url: link,
+                    data: {
+                        value: "compare",
+                        comparison_Id: valueProductId
+                    },
+                    success: function(response) {
+                        console.log(response.listLable);
+                        console.log(response.result);
+                        updateChart(response.listLable, response.result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
             });
 
-        });
-    </script>
-    <script>
-        (function($) {
-            'use strict';
-            $(function() {
-                if ($("#order-chart").length) {
-                    var areaData = {
-                        labels:
+            function updateChartColumn(value) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('statistical.payment.acction') }}",
+                    data: {
+                        value: value,
+                    },
+                    success: function(response) {
+                        if (response.status === "success") {
+                            updateColumnChart(response.listLable, response.resultListFail, response
+                                .resultListSuccess)
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                })
+            }
+            updateChartColumn("6Mouth")
 
-                            [
-                                "Tháng 1", "Tháng 2",
-                                "Tháng 3", "Tháng 4",
-                                "Tháng 5", "Tháng 6",
-                            ],
-                        datasets: [{
-                                data: [
-                                    390, 304, 504, 304, 430, 5040
-                                ],
-                                borderColor: [
-                                    '#4747A1'
-                                ],
-                                borderWidth: 2,
-                                fill: false,
-                                label: "Orders"
-                            },
-                            // {
-                            //     data: [400, 450, 410, 500, 480, 600, 450, 550, 460, "560",
-                            //         "450", "700", "450", "640", "550", "650", "400",
-                            //         "850", "800"
-                            //     ],
-                            //     borderColor: [
-                            //         '#F09397'
-                            //     ],
-                            //     borderWidth: 2,
-                            //     fill: false,
-                            //     label: "Downloads"
-                            // }
-                        ]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            filler: {
-                                propagate: false
-                            }
-                        },
-                        scales: {
-                            xAxes: [{
-                                display: true,
-                                ticks: {
-                                    display: true,
-                                    padding: 10,
-                                    fontColor: "#6C7383"
-                                },
-                                gridLines: {
-                                    display: false,
-                                    drawBorder: false,
-                                    color: 'transparent',
-                                    zeroLineColor: '#eeeeee'
-                                }
-                            }],
-                            yAxes: [{
-                                display: true,
-                                ticks: {
-                                    display: true,
-                                    autoSkip: false,
-                                    maxRotation: 0,
-                                    stepSize: 200,
-                                    min: 200,
-                                    max: 1200,
-                                    padding: 18,
-                                    fontColor: "#6C7383"
-                                },
-                                gridLines: {
-                                    display: true,
-                                    color: "#f2f2f2",
-                                    drawBorder: false
-                                }
-                            }]
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        elements: {
-                            line: {
-                                tension: .35
-                            },
-                            point: {
-                                radius: 0
-                            }
-                        }
-                    }
-                    var revenueChartCanvas = $("#order-chart").get(0).getContext("2d");
-                    var revenueChart = new Chart(revenueChartCanvas, {
-                        type: 'line',
-                        data: areaData,
-                        options: areaOptions
-                    });
-                }
-                if ($("#order-chart-dark").length) {
-                    var areaData = {
-                        labels: ["10", "", "", "20", "", "", "30", "", "", "40", "", "", "50",
-                            "", "", "60", "", "", "70"
-                        ],
-                        datasets: [{
-                                data: [200, 480, 700, 600, 620, 350, 380, 350, 850, "600",
-                                    "650", "350", "590", "350", "620", "500", "990",
-                                    "780", "650"
-                                ],
-                                borderColor: [
-                                    '#4747A1'
-                                ],
-                                borderWidth: 2,
-                                fill: false,
-                                label: "Orders"
-                            },
-                            {
-                                data: [400, 450, 410, 500, 480, 600, 450, 550, 460, "560",
-                                    "450", "700", "450", "640", "550", "650", "400",
-                                    "850", "800"
-                                ],
-                                borderColor: [
-                                    '#F09397'
-                                ],
-                                borderWidth: 2,
-                                fill: false,
-                                label: "Downloads"
-                            }
-                        ]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            filler: {
-                                propagate: false
-                            }
-                        },
-                        scales: {
-                            xAxes: [{
-                                display: true,
-                                ticks: {
-                                    display: true,
-                                    padding: 10,
-                                    fontColor: "#fff"
-                                },
-                                gridLines: {
-                                    display: false,
-                                    drawBorder: false,
-                                    color: 'transparent',
-                                    zeroLineColor: '#575757'
-                                }
-                            }],
-                            yAxes: [{
-                                display: true,
-                                ticks: {
-                                    display: true,
-                                    autoSkip: false,
-                                    maxRotation: 0,
-                                    stepSize: 200,
-                                    min: 200,
-                                    max: 1200,
-                                    padding: 18,
-                                    fontColor: "#fff"
-                                },
-                                gridLines: {
-                                    display: true,
-                                    color: "#575757",
-                                    drawBorder: false
-                                }
-                            }]
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        elements: {
-                            line: {
-                                tension: .35
-                            },
-                            point: {
-                                radius: 0
-                            }
-                        }
-                    }
-                    var revenueChartCanvas = $("#order-chart-dark").get(0).getContext("2d");
-                    var revenueChart = new Chart(revenueChartCanvas, {
-                        type: 'line',
-                        data: areaData,
-                        options: areaOptions
-                    });
-                }
+            function updateColumnChart(labels, dataFail, dataSuccess) {
                 if ($("#sales-chart").length) {
                     var SalesChartCanvas = $("#sales-chart").get(0).getContext("2d");
                     var SalesChart = new Chart(SalesChartCanvas, {
                         type: 'bar',
                         data: {
-                            labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+                            labels: labels,
                             datasets: [{
-                                    label: 'Offline Sales',
-                                    data: [480, 230, 470, 210, 330],
+                                    label: 'Thành công',
+                                    data: dataSuccess,
                                     backgroundColor: '#98BDFF'
                                 },
                                 {
-                                    label: 'Online Sales',
-                                    data: [400, 340, 550, 480, 170],
+                                    label: 'Thất bại',
+                                    data: dataFail,
                                     backgroundColor: '#4B49AC'
                                 }
+
+
                             ]
                         },
                         options: {
@@ -1915,9 +1943,9 @@
                                     ticks: {
                                         display: true,
                                         min: 0,
-                                        max: 560,
+                                        max: 10,
                                         callback: function(value, index, values) {
-                                            return value + '$';
+                                            return value;
                                         },
                                         autoSkip: true,
                                         maxTicksLimit: 10,
@@ -1949,488 +1977,287 @@
                     });
                     document.getElementById('sales-legend').innerHTML = SalesChart.generateLegend();
                 }
-                if ($("#sales-chart-dark").length) {
-                    var SalesChartCanvas = $("#sales-chart-dark").get(0).getContext("2d");
-                    var SalesChart = new Chart(SalesChartCanvas, {
-                        type: 'bar',
-                        data: {
-                            labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-                            datasets: [{
-                                    label: 'Offline Sales',
-                                    data: [480, 230, 470, 210, 330],
-                                    backgroundColor: '#98BDFF'
-                                },
-                                {
-                                    label: 'Online Sales',
-                                    data: [400, 340, 550, 480, 170],
-                                    backgroundColor: '#4B49AC'
-                                }
-                            ]
-                        },
-                        options: {
-                            cornerRadius: 5,
-                            responsive: true,
-                            maintainAspectRatio: true,
-                            layout: {
-                                padding: {
-                                    left: 0,
-                                    right: 0,
-                                    top: 20,
-                                    bottom: 0
-                                }
-                            },
-                            scales: {
-                                yAxes: [{
-                                    display: true,
-                                    gridLines: {
-                                        display: true,
-                                        drawBorder: false,
-                                        color: "#575757"
-                                    },
-                                    ticks: {
-                                        display: true,
-                                        min: 0,
-                                        max: 500,
-                                        callback: function(value, index, values) {
-                                            return value + '$';
-                                        },
-                                        autoSkip: true,
-                                        maxTicksLimit: 10,
-                                        fontColor: "#F0F0F0"
-                                    }
-                                }],
-                                xAxes: [{
-                                    stacked: false,
-                                    ticks: {
-                                        beginAtZero: true,
-                                        fontColor: "#F0F0F0"
-                                    },
-                                    gridLines: {
-                                        color: "#575757",
-                                        display: false
-                                    },
-                                    barPercentage: 1
-                                }]
-                            },
-                            legend: {
-                                display: false
-                            },
-                            elements: {
-                                point: {
-                                    radius: 0
-                                }
-                            }
-                        },
-                    });
-                    document.getElementById('sales-legend').innerHTML = SalesChart.generateLegend();
-                }
-                if ($("#north-america-chart").length) {
-                    var areaData = {
-                        labels: ["Jan", "Feb", "Mar"],
-                        datasets: [{
-                            data: [100, 50, 50],
-                            backgroundColor: [
-                                "#4B49AC", "#FFC100", "#248AFD",
-                            ],
-                            borderColor: "rgba(0,0,0,0)"
-                        }]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        segmentShowStroke: false,
-                        cutoutPercentage: 78,
-                        elements: {
-                            arc: {
-                                borderWidth: 4
-                            }
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        legendCallback: function(chart) {
-                            var text = [];
-                            text.push('<div class="report-chart">');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[0] +
-                                '"></div><p class="mb-0">Offline sales</p></div>');
-                            text.push('<p class="mb-0">88333</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[1] +
-                                '"></div><p class="mb-0">Online sales</p></div>');
-                            text.push('<p class="mb-0">66093</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[2] +
-                                '"></div><p class="mb-0">Returns</p></div>');
-                            text.push('<p class="mb-0">39836</p>');
-                            text.push('</div>');
-                            text.push('</div>');
-                            return text.join("");
-                        },
-                    }
-                    var northAmericaChartPlugins = {
-                        beforeDraw: function(chart) {
-                            var width = chart.chart.width,
-                                height = chart.chart.height,
-                                ctx = chart.chart.ctx;
-
-                            ctx.restore();
-                            var fontSize = 3.125;
-                            ctx.font = "500 " + fontSize + "em sans-serif";
-                            ctx.textBaseline = "middle";
-                            ctx.fillStyle = "#13381B";
-
-                            var text = "90",
-                                textX = Math.round((width - ctx.measureText(text).width) /
-                                    2),
-                                textY = height / 2;
-
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        }
-                    }
-                    var northAmericaChartCanvas = $("#north-america-chart").get(0).getContext("2d");
-                    var northAmericaChart = new Chart(northAmericaChartCanvas, {
-                        type: 'doughnut',
-                        data: areaData,
-                        options: areaOptions,
-                        plugins: northAmericaChartPlugins
-                    });
-                    document.getElementById('north-america-legend').innerHTML = northAmericaChart
-                        .generateLegend();
-                }
-                if ($("#north-america-chart-dark").length) {
-                    var areaData = {
-                        labels: ["Jan", "Feb", "Mar"],
-                        datasets: [{
-                            data: [100, 50, 50],
-                            backgroundColor: [
-                                "#4B49AC", "#FFC100", "#248AFD",
-                            ],
-                            borderColor: "rgba(0,0,0,0)"
-                        }]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        segmentShowStroke: false,
-                        cutoutPercentage: 78,
-                        elements: {
-                            arc: {
-                                borderWidth: 4
-                            }
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        legendCallback: function(chart) {
-                            var text = [];
-                            text.push('<div class="report-chart">');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[0] +
-                                '"></div><p class="mb-0">Offline sales</p></div>');
-                            text.push('<p class="mb-0">88333</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[1] +
-                                '"></div><p class="mb-0">Online sales</p></div>');
-                            text.push('<p class="mb-0">66093</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[2] +
-                                '"></div><p class="mb-0">Returns</p></div>');
-                            text.push('<p class="mb-0">39836</p>');
-                            text.push('</div>');
-                            text.push('</div>');
-                            return text.join("");
-                        },
-                    }
-                    var northAmericaChartPlugins = {
-                        beforeDraw: function(chart) {
-                            var width = chart.chart.width,
-                                height = chart.chart.height,
-                                ctx = chart.chart.ctx;
-
-                            ctx.restore();
-                            var fontSize = 3.125;
-                            ctx.font = "500 " + fontSize + "em sans-serif";
-                            ctx.textBaseline = "middle";
-                            ctx.fillStyle = "#fff";
-
-                            var text = "90",
-                                textX = Math.round((width - ctx.measureText(text).width) /
-                                    2),
-                                textY = height / 2;
-
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        }
-                    }
-                    var northAmericaChartCanvas = $("#north-america-chart-dark").get(0).getContext(
-                        "2d");
-                    var northAmericaChart = new Chart(northAmericaChartCanvas, {
-                        type: 'doughnut',
-                        data: areaData,
-                        options: areaOptions,
-                        plugins: northAmericaChartPlugins
-                    });
-                    document.getElementById('north-america-legend').innerHTML = northAmericaChart
-                        .generateLegend();
-                }
-
-                if ($("#south-america-chart").length) {
-                    var areaData = {
-                        labels: ["Jan", "Feb", "Mar"],
-                        datasets: [{
-                            data: [60, 70, 70],
-                            backgroundColor: [
-                                "#4B49AC", "#FFC100", "#248AFD",
-                            ],
-                            borderColor: "rgba(0,0,0,0)"
-                        }]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        segmentShowStroke: false,
-                        cutoutPercentage: 78,
-                        elements: {
-                            arc: {
-                                borderWidth: 4
-                            }
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        legendCallback: function(chart) {
-                            var text = [];
-                            text.push('<div class="report-chart">');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[0] +
-                                '"></div><p class="mb-0">Offline sales</p></div>');
-                            text.push('<p class="mb-0">495343</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[1] +
-                                '"></div><p class="mb-0">Online sales</p></div>');
-                            text.push('<p class="mb-0">630983</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[2] +
-                                '"></div><p class="mb-0">Returns</p></div>');
-                            text.push('<p class="mb-0">290831</p>');
-                            text.push('</div>');
-                            text.push('</div>');
-                            return text.join("");
-                        },
-                    }
-                    var southAmericaChartPlugins = {
-                        beforeDraw: function(chart) {
-                            var width = chart.chart.width,
-                                height = chart.chart.height,
-                                ctx = chart.chart.ctx;
-
-                            ctx.restore();
-                            var fontSize = 3.125;
-                            ctx.font = "600 " + fontSize + "em sans-serif";
-                            ctx.textBaseline = "middle";
-                            ctx.fillStyle = "#000";
-
-                            var text = "76",
-                                textX = Math.round((width - ctx.measureText(text).width) /
-                                    2),
-                                textY = height / 2;
-
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        }
-                    }
-                    var southAmericaChartCanvas = $("#south-america-chart").get(0).getContext("2d");
-                    var southAmericaChart = new Chart(southAmericaChartCanvas, {
-                        type: 'doughnut',
-                        data: areaData,
-                        options: areaOptions,
-                        plugins: southAmericaChartPlugins
-                    });
-                    document.getElementById('south-america-legend').innerHTML = southAmericaChart
-                        .generateLegend();
-                }
-                if ($("#south-america-chart-dark").length) {
-                    var areaData = {
-                        labels: ["Jan", "Feb", "Mar"],
-                        datasets: [{
-                            data: [60, 70, 70],
-                            backgroundColor: [
-                                "#4B49AC", "#FFC100", "#248AFD",
-                            ],
-                            borderColor: "rgba(0,0,0,0)"
-                        }]
-                    };
-                    var areaOptions = {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        segmentShowStroke: false,
-                        cutoutPercentage: 78,
-                        elements: {
-                            arc: {
-                                borderWidth: 4
-                            }
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltips: {
-                            enabled: true
-                        },
-                        legendCallback: function(chart) {
-                            var text = [];
-                            text.push('<div class="report-chart">');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[0] +
-                                '"></div><p class="mb-0">Offline sales</p></div>');
-                            text.push('<p class="mb-0">495343</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[1] +
-                                '"></div><p class="mb-0">Online sales</p></div>');
-                            text.push('<p class="mb-0">630983</p>');
-                            text.push('</div>');
-                            text.push(
-                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
-                                chart.data.datasets[0].backgroundColor[2] +
-                                '"></div><p class="mb-0">Returns</p></div>');
-                            text.push('<p class="mb-0">290831</p>');
-                            text.push('</div>');
-                            text.push('</div>');
-                            return text.join("");
-                        },
-                    }
-                    var southAmericaChartPlugins = {
-                        beforeDraw: function(chart) {
-                            var width = chart.chart.width,
-                                height = chart.chart.height,
-                                ctx = chart.chart.ctx;
-
-                            ctx.restore();
-                            var fontSize = 3.125;
-                            ctx.font = "600 " + fontSize + "em sans-serif";
-                            ctx.textBaseline = "middle";
-                            ctx.fillStyle = "#fff";
-
-                            var text = "76",
-                                textX = Math.round((width - ctx.measureText(text).width) /
-                                    2),
-                                textY = height / 2;
-
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        }
-                    }
-                    var southAmericaChartCanvas = $("#south-america-chart-dark").get(0).getContext(
-                        "2d");
-                    var southAmericaChart = new Chart(southAmericaChartCanvas, {
-                        type: 'doughnut',
-                        data: areaData,
-                        options: areaOptions,
-                        plugins: southAmericaChartPlugins
-                    });
-                    document.getElementById('south-america-legend').innerHTML = southAmericaChart
-                        .generateLegend();
-                }
-
-                function format(d) {
-                    // `d` is the original data object for the row
-                    return '<table cellpadding="5" cellspacing="0" border="0" style="width:100%;">' +
-                        '<tr class="expanded-row">' +
-                        '<td colspan="8" class="row-bg"><div><div class="d-flex justify-content-between"><div class="cell-hilighted"><div class="d-flex mb-2"><div class="mr-2 min-width-cell"><p>Policy start date</p><h6>25/04/2020</h6></div><div class="min-width-cell"><p>Policy end date</p><h6>24/04/2021</h6></div></div><div class="d-flex"><div class="mr-2 min-width-cell"><p>Sum insured</p><h5>$26,000</h5></div><div class="min-width-cell"><p>Premium</p><h5>$1200</h5></div></div></div><div class="expanded-table-normal-cell"><div class="mr-2 mb-4"><p>Quote no.</p><h6>Incs234</h6></div><div class="mr-2"><p>Vehicle Reg. No.</p><h6>KL-65-A-7004</h6></div></div><div class="expanded-table-normal-cell"><div class="mr-2 mb-4"><p>Policy number</p><h6>Incsq123456</h6></div><div class="mr-2"><p>Policy number</p><h6>Incsq123456</h6></div></div><div class="expanded-table-normal-cell"><div class="mr-2 mb-3 d-flex"><div class="highlighted-alpha"> A</div><div><p>Agent / Broker</p><h6>Abcd Enterprices</h6></div></div><div class="mr-2 d-flex"> <img src="../../images/faces/face5.jpg" alt="profile"/><div><p>Policy holder Name & ID Number</p><h6>Phillip Harris / 1234567</h6></div></div></div><div class="expanded-table-normal-cell"><div class="mr-2 mb-4"><p>Branch</p><h6>Koramangala, Bangalore</h6></div></div><div class="expanded-table-normal-cell"><div class="mr-2 mb-4"><p>Channel</p><h6>Online</h6></div></div></div></div></td>'
-                    '</tr>' +
-                    '</table>';
-                }
-                var table = $('#example').DataTable({
-                    "ajax": "js/data.txt",
-                    "columns": [{
-                            "data": "Quote"
-                        },
-                        {
-                            "data": "Product"
-                        },
-                        {
-                            "data": "Business"
-                        },
-                        {
-                            "data": "Policy"
-                        },
-                        {
-                            "data": "Premium"
-                        },
-                        {
-                            "data": "Status"
-                        },
-                        {
-                            "data": "Updated"
-                        },
-                        {
-                            "className": 'details-control',
-                            "orderable": false,
-                            "data": null,
-                            "defaultContent": ''
-                        }
-                    ],
-                    "order": [
-                        [1, 'asc']
-                    ],
-                    "paging": false,
-                    "ordering": true,
-                    "filter": false,
-                    columnDefs: [{
-                        orderable: false,
-                        className: 'select-checkbox',
-                        targets: 0
-                    }],
-                    select: {
-                        style: 'os',
-                        selector: 'td:first-child'
-                    }
-                });
-                $('#example tbody').on('click', 'td.details-control', function() {
-                    var tr = $(this).closest('tr');
-                    var row = table.row(tr);
-
-                    if (row.child.isShown()) {
-                        // This row is already open - close it
-                        row.child.hide();
-                        tr.removeClass('shown');
-                    } else {
-                        // Open this row
-                        row.child(format(row.data())).show();
-                        tr.addClass('shown');
-                    }
+            }
+                $(document).on('click', '.feedback-cmt', function() {
+                    const id = $(this).data('id');
+                    $('.btn-post-cmt').attr('data-feedback', id);
                 });
 
+            $('.btn-post-cmt').click(function() {
+                const valueCmt = $('.input-cmt').val();
+                alert(valueCmt)
+                const product_id = $(this).data('id');
+                const reqlyId = $(this).data('feedback');
+                const data = {
+                    context: valueCmt,
+                    product_id: product_id
+                };
+
+                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                // $.ajaxSetup({
+                //     headers: {
+                //         'X-CSRF-TOKEN': csrfToken
+                //     }
+                // });
+                if (reqlyId && reqlyId !== null) {
+                    data.resId = reqlyId;
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('post.cmt') }}",
+                        data: data,
+                        success: function(response) {
+                            $('.list-cmt').append(response.view);
+                            $('.input-cmt').val('');
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('Lỗi: ' + error);
+                        }
+                    });
+                } else {
+                   
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('post.cmt') }}",
+                        data: data,
+                        success: function(response) {
+                            $('.list-cmt').append(response.view);
+                            $('.input-cmt').val('');
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('Lỗi: ' + error);
+                        }
+                    });
+                }
             });
-        })(jQuery);
+
+            $('#ecxel-category').click(function() {
+                const router = "{{ route('get.category.excel') }}";
+                const data = {
+                    primary: "category_id",
+                    name: "category_name",
+                    code: "category_code",
+                    status: "category_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id danh mục",
+                    name: "Tên danh mục",
+                    code: "Mã danh mục",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-phanloai').click(function() {
+                const router = "{{ route('get.phanloai.excel') }}";
+                const data = {
+                    primary: "phanloai_id",
+                    name: "phanloai_name",
+                    code: "phanloai_code",
+                    status: "phanloai_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id phân loại",
+                    name: "Tên phân loại",
+                    code: "Mã phân loại",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-color').click(function() {
+                const router = "{{ route('get.color.excel') }}";
+                const data = {
+                    primary: "color_id",
+                    name: "color_name",
+                    code: "color_code",
+                    status: "color_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id màu sắc",
+                    name: "Tên màu sắc",
+                    code: "Mã màu sắc",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-size').click(function() {
+                const router = "{{ route('get.size.excel') }}";
+                const data = {
+                    primary: "size_id",
+                    name: "size_name",
+                    code: "size_note",
+                    status: "size_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id màu sắc",
+                    name: "Tên màu sắc",
+                    code: "Mô tả ngắn",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-brand').click(function() {
+                const router = "{{ route('get.brand.excel') }}";
+                const data = {
+                    primary: "brand_id",
+                    name: "brand_name",
+                    code: "brand_code",
+                    status: "brand_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id thương hiệu",
+                    name: "Tên thương hiệu",
+                    code: "Mã thương hiệu",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-material').click(function() {
+                const router = "{{ route('get.material.excel') }}";
+                const data = {
+                    primary: "material_id",
+                    name: "material_name",
+                    code: "",
+                    status: "material_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id thương hiệu",
+                    name: "Tên chất liệu",
+                    code: "",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-position').click(function() {
+                const router = "{{ route('get.position.excel') }}";
+                const data = {
+                    primary: "position_id",
+                    name: "position_name",
+                    code: "position_code",
+                    status: "position_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id chức vụ",
+                    name: "Tên chức vụ",
+                    code: "Mã chức vụ",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-permissionGroup').click(function() {
+                const router = "{{ route('get.permission.group.excel') }}";
+                const data = {
+                    primary: "permission_group_id",
+                    name: "permission_group_id",
+                    code: "permission_group_code",
+                    status: "permission_group_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id nhóm quyền",
+                    name: "Tên nhóm quyền",
+                    code: "Mã nhóm quyền    ",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-methodPayment').click(function() {
+                const router = "{{ route('get.method.payment.excel') }}";
+                const data = {
+                    primary: "methodPayment_id",
+                    name: "methodPayment_name",
+                    code: "methodPayment_code",
+                    status: "methodPayment_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id Phương thức thanh toán",
+                    name: "Tên Phương thức thanh toán",
+                    code: "Mã Phương thức thanh toán",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-statusPayment').click(function() {
+                const router = "{{ route('get.status.payment.excel') }}";
+                const data = {
+                    primary: "statusPayment_id",
+                    name: "statusPayment_name",
+                    code: "statusPayment_code",
+                    status: "statusPayment_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id trạng thái hóa đơn",
+                    name: "Tên trạng thái hóa đơn",
+                    code: "Mã trạng thái hóa đơn",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            $('#ecxel-ship').click(function() {
+                const router = "{{ route('get.ship.excel') }}";
+                const data = {
+                    primary: "ship_id",
+                    name: "ship_name",
+                    code: "ship_price",
+                    status: "ship_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id phương thức vận chuyển",
+                    name: "Tên phương thức vận chuyển",
+                    code: "Mã phương thức vận chuyển",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+            function getdataExcel(router, titel, data) {
+                $.ajax({
+                    type: "GET",
+                    url: router,
+                    success: function(response) {
+                        if (response.status === "success") {
+                            const datarr = [
+                                [titel.stt, titel.id, titel.name, titel.code, titel.status],
+                                ...response.results.map((item, index) => [
+                                    index + 1,
+                                    item[data.primary],
+                                    item[data.name],
+                                    item[data.code],
+                                    item[data.status] === 1 ? "Đang hiển thị" :
+                                    "Không hiển thị",
+                                ]),
+                            ];
+
+                            const ws = XLSX.utils.aoa_to_sheet(datarr);
+                            const wb = XLSX.utils.book_new();
+                            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                            const blob = XLSX.write(wb, {
+                                bookType: 'xlsx',
+                                type: 'array'
+                            });
+                            const url = URL.createObjectURL(new Blob([blob]));
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = response.title + '.xlsx';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

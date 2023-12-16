@@ -5,6 +5,7 @@ a{
     color: #333 ;
     text-decoration: none !important;
 }
+
 :root {
     --primary-color: #5E50F9;
     --primary-backgroup-color: #5E50F9;
@@ -47,7 +48,17 @@ a{
     margin: 0;
     padding: 0;
 }
+.cmt-item{
+    position: relative;
+}
 
+.reqly-link{
+    position: absolute;
+    bottom: -5px;
+    left: 25px;
+    color: white;
+    cursor: pointer;
+}
 .item-icon:hover {
     width: 100px;
     border-radius: 26px;
@@ -331,6 +342,12 @@ table tfoot{
     font-weight: bold;
     color: white;
     cursor: pointer;
+}
+.page-item.active a.page-link{
+    color: white !important;
+}
+.page-item:hover a.page-link{
+    color: white !important;
 }
 .flex_warp{
     display: flex;
@@ -758,3 +775,158 @@ table a{
     color: white;
     border-radius: 10px;
 }
+
+.item-payment-user-box{
+    padding: 20px 5px ;
+     margin-bottom: 10px;
+}
+.item-payment-user{
+    width: 100%;
+    background-color: #5E50F9;
+    padding: 25px 10px;
+     border-radius: 10px;
+     color: white;
+}
+.toggle-box-canne-bill{
+    width: 90px;
+    height: 40px;
+    border: none;
+    background-color: #ff6c60;
+    position: relative;
+    border-radius: 25px;
+    appearance: none;
+    cursor: pointer;
+}
+
+.toggle-box-canne-bill::after{
+    position: absolute;
+    content: "";
+    top: 50%;
+    transform: translateY(-50%);
+    left: 3px;
+    width: 35px;
+    height: 35px;
+    background-color: #F4A460;
+    border-radius: 50%;
+    transition: .5s cubic-bezier(0.25, -0.059, .82,1, 1.66);
+}
+.toggle-box-canne-bill:checked::after{
+ left: 47px;   
+}
+.toggle-box-canne-bill:checked{
+    background-color: #57B657;
+}
+.canne-bill-text{
+    margin-left: 10px;
+}
+.pd-10px{
+    padding: 10px 0;
+}
+.modal p,.modal label{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.cmt-item{
+    padding:15px 20px;
+    border-bottom: 1px #ccc solid;
+    margin: 10px;
+    background-color: #5e50f9e5;
+    color: white;
+    border-radius: 10px;
+}
+.cmt-item.cmt-item-active{
+    margin-left: 40px;
+}
+.div-cmt-box{
+    height: 6f00px;
+}
+.cmt-item-header{
+    display: flex;
+}
+.cmt-item-header .cmt-item-img img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+.cmt-item-header .cmt-item-infro-user p{
+   margin: 0;
+   padding: 0;
+   margin-left: 10px;
+   font-size: 18px;
+}
+.cmt-item-ifro{
+    padding: 15px 10px;
+}
+
+.div-cmt-box{
+    border: 1px solid #ccc;
+    padding: 80px 0 100px 0;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.box-cmt-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #5E50F9;
+    color: white;
+}
+.div-cmt-box .form-input-cmt{
+    background-color: #5E50F9;
+    position: absolute;
+    bottom: 0;
+    height: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+.list-cmt{
+    height: 400px;
+    overflow-y: scroll;
+}
+.list-cmt::-webkit-scrollbar {
+    width: 12px; /* Đặt chiều rộng thanh cuộn */
+  }
+  
+  .list-cmt::-webkit-scrollbar-thumb {
+    background-color: #888; /* Đặt màu sắc cho "thanh nằm trong" */
+    border-radius: 6px; /* Đặt độ cong cho "thanh nằm trong" */
+  }
+  
+  .list-cmt::-webkit-scrollbar-track {
+    background-color: transparent; /* Loại bỏ background của thanh cuộn */
+  }
+  
+.div-cmt-box .form-input-cmt form.form-input-cmt-content{
+    width: 80%;
+    height: 45px;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+}
+.div-cmt-box .form-input-cmt form.form-input-cmt-content input{
+    width: 100%;
+    height: 100%;
+    padding-left: 30px;
+    border: none;
+    outline: none;
+}
+.btn-post-cmt{
+    width: 45px;
+    height: 45px;
+    background-color: #F4A460;
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    cursor: pointer;
+}
+/* .reqly-link-text{
+    margin:0 10px ;   
+} */
