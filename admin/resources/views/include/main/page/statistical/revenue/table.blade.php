@@ -33,7 +33,6 @@
                         <th scope="col">Tháng</th>
                         <th scope="col" >Tổng số lượng bán</th>
                         <th scope="col" >Doanh thu</th>
-                        <th colspan="3" style="text-align: center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody id="list-revenue">
@@ -49,10 +48,6 @@
                             </td>
                             <td >
                                 {{ number_format($item->money) }} VNĐ
-                            </td>
-                            <td>
-                         
-
                             </td>
                         </tr>
                     @endforeach

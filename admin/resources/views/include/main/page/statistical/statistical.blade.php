@@ -13,17 +13,18 @@
                     <div class="list-titel-statistical">
                         <a href="{{ route('statistical') }}">
                             <div class="item-titel-statistical  flex_center">
-                                Doanh số
+                               <i class="mdi mdi-cash-usd menu-icon"></i>  Doanh số
                             </div>
                         </a>
                         <a href="{{ route('statistical.product.list') }}">
                             <div class="item-titel-statistical  flex_center">
+                                <i class="mdi mdi-tshirt-crew menu-icon"></i> 
                                 Sản phẩm
                             </div>
                         </a>
-                        <a href="">
+                        <a href="{{route('statistical.user.list')}}">
                             <div class="item-titel-statistical  flex_center">
-                                Người dùng
+                                <i class="mdi mdi-account-multiple-outline menu-icon"></i> Người dùng
                             </div>
                         </a>
                         <a href="">

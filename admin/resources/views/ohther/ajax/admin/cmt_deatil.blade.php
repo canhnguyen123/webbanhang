@@ -7,7 +7,7 @@
             @else
                 @if ($cmt_deatil->user_linkImg==="")
                     https://firebasestorage.googleapis.com/v0/b/doan-59ab4.appspot.com/o/user-profile-icon-free-vector.jpg?alt=media&token=77b7ad6c-3d70-4090-8bab-6fae0b6e0bba
-                @else
+                @else* 
                     {{$cmt_deatil->user_linkImg}}
                 @endif
             @endif
@@ -30,7 +30,7 @@
     </div>
     <div class="reqly-link flex_start">
         <p class="reqly-link-text feedback-cmt" style="margin-right: 35px" data-id="{{$cmt_deatil->comment_id}}">Phản hồi</p>
-        <p class="reqly-link-text" data-id="{{$cmt_deatil->comment_id}}">Có {{$cmt_deatil->feedback_count}} comment phản hồi</p>
+        <p class="reqly-link-text count-cmt" data-id="{{$cmt_deatil->comment_id}}">Có {{$cmt_deatil->feedback_count}} comment phản hồi</p>
     </div>
     
 </div>

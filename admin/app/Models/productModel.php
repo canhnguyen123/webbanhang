@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class productModel extends Model
@@ -172,9 +171,6 @@ class productModel extends Model
 
     return $results;
 }
-
-
-
     function addProductQuantityDeatil($size, $color, $quantity, $priceInt, $priceOut, $product_id)
     {
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class indexModel extends Model
 {
@@ -31,6 +31,7 @@ class indexModel extends Model
             $query = $this->orderBy($this->primaryKey, ($arrange !== 1) ? 'desc' : 'asc');
             return $query;
         } catch (\Exception $e) {
+            Log::error($e);
             return null;
         }
     }
@@ -40,6 +41,7 @@ class indexModel extends Model
             $result = $this->find($id);
             return $result;
         } catch(\Exception $e) {
+            Log::error($e);
             return $result; 
         } 
     }
@@ -49,6 +51,7 @@ class indexModel extends Model
             $result = $this->create($data);
             return $result;
         } catch (\Exception $e) {
+            Log::error($e);
             return $result;
         }  
     }
@@ -58,6 +61,7 @@ class indexModel extends Model
             $result=$this->where($this->primaryKey, $id)->update($data);
             return $result;
         } catch (\Exception $e) {
+            Log::error($e);
             return false;
         }
     }
@@ -71,6 +75,7 @@ class indexModel extends Model
             $result= $query->exists();
             return $result;
         } catch (\Exception $e) {
+            Log::error($e);
             return $query;
         }  
     }
@@ -79,6 +84,7 @@ class indexModel extends Model
             $result =$this->where($this->primaryKey,$id)->update($data); 
             return $result;
         } catch (\Exception $e) {
+            Log::error($e);
             return false;
         }
     }
@@ -119,6 +125,8 @@ class indexModel extends Model
     
             return $success;
         } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
             return false;
         }
     }

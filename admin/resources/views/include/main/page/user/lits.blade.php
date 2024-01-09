@@ -30,12 +30,23 @@
             </form>
           </div>
         </div>
-        <div class="col-md-12 grid-margin stretch-card ">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 grid-margin stretch-card ">
           <div class="row toggle-filter-div" style="display: none">
             <select class="form-select form-select-lg mb-3" id="filter-status-user">
-              <option disabled>Chọn trạng thái</option>
+              <option disabled selected>Chọn trạng thái</option>
               <option value="1">Đang hoạt động</option>
               <option value="0">Đang bị khóa</option>
+            </select>
+        
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 grid-margin stretch-card ">
+          <div class="row toggle-filter-div" style="display: none">
+            <select class="form-select form-select-lg mb-3" id="filter-categoryAccount-user">
+              <option disabled selected>Thể loại tài khoản</option>
+              <option value="1">Tài khoản bình thường</option>
+              <option value="2">Tài khoản  Google</option>
+              <option value="3">Tài khoản  facebook</option>
             </select>
         
           </div>

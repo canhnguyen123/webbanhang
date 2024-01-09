@@ -5,33 +5,35 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-class bannerModel extends Model
+class bannerModel extends indexModel
 {
     protected $table = 'tbl_banner'; // Tên bảng mà model này liên kết với
     protected $primaryKey = 'banner_id'; 
     protected $pagination = 'tbl_pagination';  
+    protected $fillable = ['banner_name','banner_link','banner_status'];
+    public $timestamps = false; 
     public function getPagination(){
         $result=DB::table($this->pagination)
         ->where('pagination_tbl',$this->table);
        return $result;
    }
-    public function addbanner($name, $link)
+    public function add($name, $link)
 {
     $data = [
         'banner_name' => $name,
         'banner_link' => $link,
         'banner_status' => 1,
-        'create_at' =>  Carbon::now(),
     ];
 
-    try {
-        $result = DB::table($this->table)->insert($data);
-        return $result; // Trả về true nếu thành công, false nếu thất bại
-    } catch (\Exception $e) {
-        return false;
-    }
+    $result=$this->createData($data);
+    return $result;
 }
-    public function updatebanner($name, $link,$banner_id)
+public function getDeatil($id){
+    $result=$this->getDeatilId($id);
+   return $result;
+}
+
+public function updatebanner($name, $link,$banner_id)
     {
         $data = [
             'banner_name' => $name,

@@ -205,7 +205,7 @@
                                     </div>
                                     <div class="reqly-link flex_start">
                                         <p class="reqly-link-text feedback-cmt" style="margin-right: 35px" data-id="{{$item->comment_id}}">Phản hồi</p>
-                                        <p class="reqly-link-text" data-id="{{$item->comment_id}}">Có {{$item->feedback_count}} comment phản hồi</p>
+                                        <p class="reqly-link-text count-cmt" data-product_id={{$product_id}} data-id="{{$item->comment_id}}">Có {{$item->feedback_count}} comment phản hồi</p>
                                     </div>
                                     
                                 </div>

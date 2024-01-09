@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\categoryRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\categoryModel;
-use App\Exports\UsersExport;
-use Maatwebsite\Excel\Facades\Excel;
 class categoryController extends Controller
 {    
     private $categoryModel;
@@ -74,7 +71,6 @@ class categoryController extends Controller
     }
     public function toogle_status($id){
         $getStatus=$this->categoryModel->getDeatil($id);
-        
         $getStatus_now=$getStatus->category_status;
         if($getStatus_now===1){
             $status=0;
@@ -84,8 +80,6 @@ class categoryController extends Controller
         $result = $this->categoryModel->status_toggle($status,$id);
         $message = ($result) ? 'Cập nhật thành công' : 'Cập nhật thất bại';
     
-        return "<script> alert('$message'); window.location.href = '" . route('category_list') . "';</script>";
- 
-       }
-  
+        return "<script> alert('$message'); window.location.href = '" . route('category_list') . "';</script>";      
+     }
 }

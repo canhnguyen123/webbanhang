@@ -19,8 +19,15 @@ class staffModel extends Model implements Authenticatable
     protected $primaryKey = 'staff_id';
     public $timestamps = false;
     protected $fillable = [
-        'staff_username', 'staff_password',
+       'position_id','staff_fullname','staff_username', 'staff_password',
+       'staff_linkimg','staff_odlPass','staff_email','staff_phone','staff_note',
+       'staff_status','staff_codeRecovery','staff_address','remember_token'
     ];
+    public function post()
+    {
+        return $this->hasMany(blogModel::class, 'staff_id', 'staff_id');
+    }
+    
     protected $pagination = 'tbl_pagination';  
     public function getPagination(){
             $result=DB::table($this->pagination)->where('pagination_tbl',$this->table);

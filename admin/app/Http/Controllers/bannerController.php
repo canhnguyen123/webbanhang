@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use App\Http\Requests\bannerRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\bannerModel;
 class bannerController extends Controller
-{
+{   
+    private $bannerModel;
+
+    public function __construct(bannerModel $bannerModel)
+    {
+        $this->bannerModel = $bannerModel;
+    }
     public function list(){
         $bannerModel = new bannerModel();
         $paginate = $bannerModel->getPagination()->first(); 
@@ -26,10 +28,7 @@ public function add(){
 public function post_add(Request $request){
     $name=$request->namebanner;
     $link=$request->linkImg;
-    
-    $banner= new bannerModel();
-   
-        $add= $banner->addbanner($name,$link);
+    $add= $this->bannerModel->add($name,$link);
         if($add){
             return response()->json([
                 'status'=>'success',
@@ -46,9 +45,8 @@ public function post_add(Request $request){
     
   
 }
-public function update($banner_id){
-    $item_banner = DB::table('tbl_banner')->where('banner_id',$banner_id)->get();
-     
+public function update($id){
+    $item_banner = $this->bannerModel->getDeatil($id);
     return view('include.main.page.banner.update',compact('item_banner'));
 }
 public function post_update(Request $request,$banner_id){

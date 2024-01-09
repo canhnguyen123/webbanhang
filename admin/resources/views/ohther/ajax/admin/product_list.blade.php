@@ -14,7 +14,7 @@
     <td colspan="3" class="flex_center">
         <div class="list-icon flex_center">
             <a href="{{ route('product_deatil', ['product_id' => $item->product_id]) }}"
-                class="item-icon mg-5 flex_center icon-edit bg-bule">
+                class="item-icon mg-5 flex_center icon-edit bg-da">
                 <i class="mdi mdi-eye"></i>
                 <p>Xem chi tiết</p>
             </a>

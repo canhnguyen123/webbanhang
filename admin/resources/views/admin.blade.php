@@ -18,6 +18,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.css"
         integrity="sha512-arPZ7r4v4xEkxAQngubdkUNXFBVO8NFFRg1IszNv2AMaaZ9cDiCVRFGSZSjF7o5GHpm826QTqtNdOFNSnHbOYQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <link rel="stylesheet" href="{{ asset('BE/vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('BE/vendors/select2/select2.min.css') }}">
@@ -30,10 +31,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
+
 </head>
 
 <body>
+
     <div class="container-scroller">
+        <div class="flex_center alert-load">
+            <div class="flex_center card">
+                <div class="alert card-body" role="alert">
+                    <h4 class="alert-heading card-title spiner-load flex_start">
+
+                        <div class="spinner-border spiner-load" role="status" style="margin-right: 10px">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Đang thực hiện
+                    </h4>
+                    <p class="spiner-load">Vui lòng không thực hiện hành động khác</p>
+                </div>
+            </div>
+        </div>
+
         @include('include.headerTop')
         @include('include.main')
     </div>
@@ -56,19 +74,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.2.0/swiper-bundle.min.js"
         integrity="sha512-QwpsxtdZRih55GaU/Ce2Baqoy2tEv9GltjAG8yuTy2k9lHqK7VHHp3wWWe+yITYKZlsT3AaCj49ZxMYPp46iJQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
     <script src="{{ asset('BE/vendors/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('BE/vendors/datatables.net/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('BE/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
-        <script src="{{ asset('BE/vendors/js/vendor.bundle.base.js') }}"></script>
+    <script src="{{ asset('BE/vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('BE/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <script src="{{ asset('BE/js/file-upload.js') }}"></script>
     <script src="{{ asset('BE/js/off-canvas.js') }}"></script>
     <script src="{{ asset('BE/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('BE/js/template.js') }}"></script>
     <script src="{{ asset('BE/js/settings.js') }}"></script>
-    <script src="{{ asset('BE/js/todolist.js') }}"></script>
+    {{-- <script src="{{ asset('BE/js/todolist.js') }}"></script> --}}
     <script src="{{ asset('BE/js/callAPI.js') }}"></script>
     <script src="{{ asset('BE/js/dashboard.js') }}"></script>
     <script src="{{ asset('BE/js/Chart.roundedBarCharts.js') }}"></script>
@@ -77,6 +95,8 @@
     <script src="{{ asset('BE/js/main.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.min.js"></script>
     <script type="module">
         const firebaseConfig = {
             apiKey: "AIzaSyBO3mI1DKCovx5uDyvOKzhfBC3nNDOzPY8",
@@ -161,6 +181,9 @@
             var itemCount = 1;
             $('#add-product').click(function(event) {
                 event.preventDefault();
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
                 const name = 'nameProduct';
                 const code = 'product_code';
                 const checkNumberpriceIn = 'price-int';
@@ -245,7 +268,7 @@
                                 url: "{{ route('product_post_add') }}",
                                 data: data,
                                 success: function(response) {
-
+                                    $('.alert-load').removeClass('active');
                                     if (response.status === 'success') {
                                         alert(response.mess);
                                         window.location = response.route;
@@ -300,6 +323,30 @@
                 const btnLoad = '#btn-loadmore-category';
                 returnAjax(link, list, btnLoad)
             })
+
+            $('#blog-search-btn').click(function(event) {
+                event.preventDefault(); // Ngăn trình duyệt gửi yêu cầu mặc định
+                const content = $('#blog-search').val();
+                const link = '{{ route('blog.seach.Ajax') }}';
+                const list = '#list-blog';
+                $('#btn-loadmore-blog').hide()
+                searchAjax(content, link, list);
+            });
+            $('#btn-loadmore-blog').click(function() {
+                const stt = $(this).data('stt')
+                const link = '{{ route('blog.loadmore.Ajax') }}';
+                const list = '#list-blog';
+                const id = $(this).data('id');
+                const btn = $(this)
+                loadmoreAjax(stt, id, link, list, btn)
+            })
+            $('#return-blog').click(function() {
+                const link = '{{ route('blog.return.Ajax') }}';
+                const list = '#list-blog';
+                const btnLoad = '#btn-loadmore-blog';
+                returnAjax(link, list, btnLoad)
+            })
+
             $('#return-staff').click(function() {
                 const link = '{{ route('staff_return_Ajax') }}';
                 const list = '#list-staff';
@@ -318,7 +365,13 @@
                 const value = $(this).val();
                 const url = "{{ route('staff.filter.Ajax') }}";
                 const table = "#list-staff";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
+            })
+            $('#filter-status-blog').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('blog.filter.Ajax') }}";
+                const table = "#list-blog";
+                fitterStatus(url, value, table)
             })
             $('#return-product').click(function() {
                 const link = '{{ route('product_return_Ajax') }}';
@@ -384,7 +437,7 @@
                 const value = $(this).val();
                 const url = "{{ route('position.filter.Ajax') }}";
                 const table = "#list-position";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
 
             $('#position-search-btn').click(function(event) {
@@ -448,25 +501,25 @@
                 const value = $(this).val();
                 const url = "{{ route('permission.filter.Ajax') }}";
                 const table = "#list-permission";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             });
             $('#filter-status-methodPayment').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('method.payment.filter.Ajax') }}";
                 const table = "#list-methodPayment";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             });
             $('#filter-status-statusPayment').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('status.payment.filter.Ajax') }}";
                 const table = "#list-statusPayment";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             });
             $('#filter-status-ship').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('ship.filter.Ajax') }}";
                 const table = "#list-ship";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             });
             $('#return-permission').click(function() {
                 const link = '{{ route('permission.return.Ajax') }}';
@@ -487,7 +540,7 @@
                 const value = $(this).val();
                 const url = "{{ route('permission.group.filter.Ajax') }}";
                 const table = "#list-permissionGroup";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#return-permissionGroup').click(function() {
                 const link = '{{ route('permission.group.return.Ajax') }}';
@@ -715,10 +768,214 @@
                     }
                 });
             }
+            $('.btn-update-blog').click(function(event) {
+                event.preventDefault();
 
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100);
+                const blod_id = $(this).data('id');
+                const codeBlog = $('.code-blog').val();
+                const titelBlog = $('.titel-blog').val();
+                const blogContent = CKEDITOR.instances.blogContent.getData();
+                const authorBlog = $('.author-blog').val();
+                const nameBlog = $('.name-blog').val();
+                const imgold = $('.img-blog-old').val();
+                var updateUrl = "{{ route('blog.put.update', ['blog_id' => 0]) }}";
+                var link = updateUrl.slice(0, -1) + blod_id;
+                if (isValueEmpty(codeBlog)) {
+                    $('.err-text-codeBlog').text(emtyValue);
+                } else if (isValueEmpty(titelBlog)) {
+                    $('.err-text-titelBlog').text(emtyValue);
+                } else if (isValueEmpty(authorBlog)) {
+                    $('.err-text-authorBlog').text(emtyValue);
+                } else if (isValueEmpty(nameBlog)) {
+                    $('.err-text-nameBlog').text(emtyValue);
+                } else {
+                    const ref = firebase.storage().ref();
+                    const file = document.querySelector(".img-blog").files[0];
+
+                    if (file && file.size > 0) {
+                        const name = +new Date() + "-" + file.name;
+                        const metadata = {
+                            contentType: file.type
+                        };
+
+                        const task = ref.child(name).put(file, metadata);
+
+                        task
+                            .then(snapshot => snapshot.ref.getDownloadURL())
+                            .then(url => {
+                                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                                $.ajaxSetup({
+                                    headers: {
+                                        'X-CSRF-TOKEN': csrfToken
+                                    }
+                                });
+
+                                return $.ajax({
+                                    type: "PUT",
+                                    url: link,
+                                    data: {
+                                        code: codeBlog,
+                                        titel: titelBlog,
+                                        linkImg: url,
+                                        content: blogContent,
+                                        author: authorBlog,
+                                        name: nameBlog
+                                    },
+                                });
+                            })
+                            .then(response => {
+                                $('.alert-load').removeClass('active');
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: 'Thành công',
+                                        text: response.message,
+                                        icon: 'success',
+                                    }).then(() => {
+                                        window.location.href = response.redirect;
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Lỗi',
+                                        text: response.message,
+                                        icon: 'error',
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                $('.alert-load').removeClass('active');
+                                console.error(error);
+                                Swal.fire({
+                                    title: 'Lỗi',
+                                    text: 'Đã xảy ra lỗi trong quá trình xử lý.',
+                                    icon: 'error',
+                                });
+                            });
+                    } else {
+                        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            }
+                        });
+                        $.ajax({
+                            type: "PUT",
+                            url: link,
+                            data: {
+                                code: codeBlog,
+                                titel: titelBlog,
+                                linkImg: imgold,
+                                content: blogContent,
+                                author: authorBlog,
+                                name: nameBlog
+                            },
+                            success: function(response) {
+                                $('.alert-load').removeClass('active');
+                                if (response.status === 'success') {
+                                    alert(response.message);
+                                    window.location = response.redirect;
+                                } else {
+                                    alert(response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('Lỗi: ' + error);
+                            }
+                        });
+                    }
+                }
+            });
+
+            $('.btn-add-blog').click(function(event) {
+                event.preventDefault();
+
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
+                const codeBlog = $('.code-blog').val();
+                const titelBlog = $('.titel-blog').val();
+                const blogContent = CKEDITOR.instances.blogContent.getData();
+                const authorBlog = $('.author-blog').val();
+                const nameBlog = $('.name-blog').val();
+
+                if (isValueEmpty(codeBlog)) {
+                    $('.err-text-codeBlog').text(emtyValue);
+                } else if (isValueEmpty(titelBlog)) {
+                    $('.err-text-titelBlog').text(emtyValue);
+                } else if (isValueEmpty(authorBlog)) {
+                    $('.err-text-authorBlog').text(emtyValue);
+                } else if (isValueEmpty(nameBlog)) {
+                    $('.err-text-nameBlog').text(emtyValue);
+                } else {
+                    const ref = firebase.storage().ref();
+                    const file = document.querySelector(".img-blog").files[0];
+                    const name = +new Date() + "-" + file.name;
+                    const metadata = {
+                        contentType: file.type
+                    };
+                    const task = ref.child(name).put(file, metadata);
+
+                    task
+                        .then(snapshot => snapshot.ref.getDownloadURL())
+                        .then(url => {
+                            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                }
+                            });
+
+                            return $.ajax({
+                                type: "POST",
+                                url: "{{ route('blog.post.add') }}",
+                                data: {
+                                    code: codeBlog,
+                                    titel: titelBlog,
+                                    linkImg: url,
+                                    content: blogContent,
+                                    author: authorBlog,
+                                    name: nameBlog
+                                },
+                            });
+                        })
+                        .then(response => {
+                            $('#processingModal').modal('hide');
+                            $('.alert-load').removeClass('active')
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: 'Thành công',
+                                    text: response.message,
+                                    icon: 'success',
+                                }).then(() => {
+                                    window.location.href = response.redirect;
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Lỗi',
+                                    text: response.message,
+                                    icon: 'error',
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            $('#processingModal').modal('hide');
+                            console.error(error);
+                            Swal.fire({
+                                title: 'Lỗi',
+                                text: 'Đã xảy ra lỗi trong quá trình xử lý.',
+                                icon: 'error',
+                            });
+                        });
+                }
+            });
 
             $('#btn-upload-theloai').click(function(event) {
                 event.preventDefault();
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
                 const nametheloai = $('#nametheloai').val();
                 const theloaiCode = $('#codetheloai').val();
                 const category_id = $('#category_id').val();
@@ -755,6 +1012,7 @@
                                     linkImg: url,
                                 },
                                 success: function(response) {
+                                    $('.alert-load').removeClass('active');
                                     if (response.status === 'success') {
                                         alert(response.message)
                                         window.location.href = response.redirect;
@@ -771,11 +1029,11 @@
                         .catch(console.error);
                 }
             });
-
-
-
             $('#btn-upload-theloai-update').click(function(event) {
                 event.preventDefault();
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
                 const nametheloai = $('#nametheloai').val();
                 const theloaiCode = $('#codetheloai').val();
                 const category_id = $('#category_id_up').val();
@@ -807,8 +1065,6 @@
                         task
                             .then(snapshot => snapshot.ref.getDownloadURL())
                             .then(url => {
-                                console.log(url);
-
                                 $.ajax({
                                     type: "PUT",
                                     url: link,
@@ -820,6 +1076,7 @@
                                         linkImg: url,
                                     },
                                     success: function(response) {
+                                        $('.alert-load').removeClass('active');
                                         if (response.status === 'success') {
                                             alert(response.message)
                                             window.location.href = response.redirect;
@@ -1081,50 +1338,56 @@
                 const value = $(this).val();
                 const url = "{{ route('category.filter.Ajax') }}";
                 const table = "#list-category";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#filter-status-user').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('user.filter.Ajax') }}";
                 const table = "#list-user";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
+            })
+            $('#filter-categoryAccount-user').change(function() {
+                const value = $(this).val();
+                const url = "{{ route('userCategory.filter.Ajax') }}";
+                const table = "#list-user";
+                fitterStatus(url, value, table)
             })
             $('#filter-status-phanloai').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('phanloai.filter.Ajax') }}";
                 const table = "#list-phanloai";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#filter-status-color').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('color.filter.Ajax') }}";
                 const table = "#list-color";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#filter-status-brand').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('brand.filter.Ajax') }}";
                 const table = "#list-brand";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#filter-status-size').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('size.filter.Ajax') }}";
                 const table = "#list-size";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('#filter-status-material').change(function() {
                 const value = $(this).val();
                 const url = "{{ route('material.filter.Ajax') }}";
                 const table = "#list-material";
-                tilterStatus(url, value, table)
+                fitterStatus(url, value, table)
             })
             $('.toggle-filter').click(function() {
                 $('.toggle-filter-div').toggle();
 
             })
 
-            function tilterStatus(url, value, table) {
+            function fitterStatus(url, value, table) {
                 $.ajax({
                     type: "GET",
                     url: url,
@@ -1132,6 +1395,7 @@
                         content: value
                     },
                     success: function(response) {
+                        console.log(response)
                         $(table).html(response.view);
                         $('.req-text-mess').text(response.counMess);
                         $('.btn-loadmore').hide();
@@ -1514,6 +1778,9 @@
 
             $('#btn-upload-banner').click(function(event) {
                 event.preventDefault();
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
                 const namebaner = $('#namebanner').val();
                 if (checkEmty('namebanner')) {
                     return
@@ -1544,6 +1811,7 @@
                                 },
                                 success: function(response) {
                                     if (response.status === 'success') {
+                                        $('.alert-load').removeClass('active');
                                         alert(response.message)
                                         window.location.href = response.redirect;
                                     } else {
@@ -1561,6 +1829,9 @@
             })
             $('#btn-upload-banner-update').click(function(event) {
                 event.preventDefault();
+                setTimeout(function() {
+                    $('.alert-load').addClass('active');
+                }, 100)
                 const namebanner = $('#namebanner').val();
                 const img_old = $('.img-item-form').attr('src')
                 const banner_id = $(this).data('id');
@@ -1588,6 +1859,7 @@
                                     linkImg: url,
                                 },
                                 success: function(response) {
+                                    $('.alert-load').removeClass('active');
                                     if (response.status === 'success') {
                                         alert(response.message)
                                         window.location.href = response.redirect;
@@ -1743,6 +2015,37 @@
                 callAPIStaticalProduct(link, value);
             });
 
+            // const activeUserStatical= $('.user-statisical-action.active');
+            // if (activeUserStatical.length > 0) {
+            //     const value = activeUserStatical.data('value');
+            //     const link = "{{ route('statistical.chart.user') }}";
+            //     callAPIStaticalUser(link, value);
+            // }
+            $('.user-statisical-action').click(function() {
+                $('.user-statisical-action').removeClass('active');
+                $(this).addClass('active');
+                const value = $(this).data('value');
+                const link = "{{ route('statistical.chart.user') }}"
+                callAPIStaticalUser(link, value);
+            });
+
+            function callAPIStaticalUser(link, value) {
+                $.ajax({
+                    type: "GET",
+                    url: link,
+                    data: {
+                        content: value,
+                    },
+                    success: function(response) {
+                        createChart(response.result);
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+
             function callAPIStaticalProduct(link, value) {
                 $.ajax({
                     type: "GET",
@@ -1752,6 +2055,7 @@
                     },
                     success: function(response) {
                         updateChart(response.listLable, response.result, true);
+                        console.log(response);
                     },
                     error: function(xhr, status, error) {
                         console.log('Lỗi: ' + error);
@@ -1978,14 +2282,14 @@
                     document.getElementById('sales-legend').innerHTML = SalesChart.generateLegend();
                 }
             }
-                $(document).on('click', '.feedback-cmt', function() {
-                    const id = $(this).data('id');
-                    $('.btn-post-cmt').attr('data-feedback', id);
-                });
+            $(document).on('click', '.feedback-cmt', function() {
+                const id = $(this).data('id');
+                $('.btn-post-cmt').attr('data-feedback', id);
+            });
 
             $('.btn-post-cmt').click(function() {
                 const valueCmt = $('.input-cmt').val();
-                alert(valueCmt)
+
                 const product_id = $(this).data('id');
                 const reqlyId = $(this).data('feedback');
                 const data = {
@@ -1993,16 +2297,17 @@
                     product_id: product_id
                 };
 
-                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                // $.ajaxSetup({
-                //     headers: {
-                //         'X-CSRF-TOKEN': csrfToken
-                //     }
-                // });
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
                 if (reqlyId && reqlyId !== null) {
                     data.resId = reqlyId;
+                    console.log(data)
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: "{{ route('post.cmt') }}",
                         data: data,
                         success: function(response) {
@@ -2014,9 +2319,9 @@
                         }
                     });
                 } else {
-                   
+
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url: "{{ route('post.cmt') }}",
                         data: data,
                         success: function(response) {
@@ -2029,7 +2334,29 @@
                     });
                 }
             });
+            $('.count-cmt').click(function() {
+                const cmtId = $(this).data('id');
+                const product_id = $(this).data('product_id');
+                const updateUrl = '{{ route('get.Loadmore.Cmt', ['cmt_id' => 0]) }}';
+                var url = updateUrl.slice(0, -1) + cmtId;
+                var parentDiv = $(this).closest('.cmt-item');
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: {
+                        product_id: product_id
+                    },
+                    success: function(response) {
+                        parentDiv.after(response.view)
+                        console.log(response.view)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
 
+
+            })
             $('#ecxel-category').click(function() {
                 const router = "{{ route('get.category.excel') }}";
                 const data = {
@@ -2043,6 +2370,24 @@
                     id: "id danh mục",
                     name: "Tên danh mục",
                     code: "Mã danh mục",
+                    status: "Trạng thái",
+                }
+                getdataExcel(router, titel, data);
+            });
+
+            $('#ecxel-blog').click(function() {
+                const router = "{{ route('get.blog.excel') }}";
+                const data = {
+                    primary: "blog_id",
+                    name: "blog_name",
+                    code: "blog_code",
+                    status: "blog_status",
+                }
+                const titel = {
+                    stt: "STT",
+                    id: "id bài viết",
+                    name: "Tên bài viết",
+                    code: "Mã bài viết",
                     status: "Trạng thái",
                 }
                 getdataExcel(router, titel, data);
@@ -2217,6 +2562,7 @@
                 }
                 getdataExcel(router, titel, data);
             });
+
             function getdataExcel(router, titel, data) {
                 $.ajax({
                     type: "GET",
@@ -2257,6 +2603,156 @@
                     }
                 });
             }
+
+            function createChart(dataArray) {
+                if ($("#north-america-chart").length) {
+                    var areaData = {
+                        labels: ["Tài khoản bình thường", "Tài khoản google", "Tài khoản facebook"],
+                        datasets: [{
+                            data: dataArray,
+                            backgroundColor: [
+                                "#FCB322", "greenyellow", "#ff6c60",
+                            ],
+                            borderColor: "rgba(0,0,0,0)"
+                        }]
+                    };
+                    var areaOptions = {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        segmentShowStroke: false,
+                        cutoutPercentage: 78,
+                        elements: {
+                            arc: {
+                                borderWidth: 4
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            enabled: true
+                        },
+                        legendCallback: function(chart) {
+                            var text = [];
+                            text.push('<div class="report-chart">');
+                            text.push(
+                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
+                                chart.data.datasets[0].backgroundColor[0] +
+                                '"></div><p class="mb-0">Offline sales</p></div>');
+                            text.push('<p class="mb-0">88333</p>');
+                            text.push('</div>');
+                            text.push(
+                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
+                                chart.data.datasets[0].backgroundColor[1] +
+                                '"></div><p class="mb-0">Online sales</p></div>');
+                            text.push('<p class="mb-0">66093</p>');
+                            text.push('</div>');
+                            text.push(
+                                '<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' +
+                                chart.data.datasets[0].backgroundColor[2] +
+                                '"></div><p class="mb-0">Returns</p></div>');
+                            text.push('<p class="mb-0">39836</p>');
+                            text.push('</div>');
+                            text.push('</div>');
+                            return text.join("");
+                        },
+                    }
+                    var northAmericaChartPlugins = {
+                        beforeDraw: function(chart) {
+                            var width = chart.chart.width,
+                                height = chart.chart.height,
+                                ctx = chart.chart.ctx;
+
+                            ctx.restore();
+                            var fontSize = 3.125;
+                            ctx.font = "500 " + fontSize + "em sans-serif";
+                            ctx.textBaseline = "middle";
+                            ctx.fillStyle = "#13381B";
+
+                            var text = "90",
+                                textX = Math.round((width - ctx.measureText(text).width) / 2),
+                                textY = height / 2;
+
+                            ctx.fillText(text, textX, textY);
+                            ctx.save();
+                        }
+                    }
+                    var northAmericaChartCanvas = $("#north-america-chart").get(0).getContext("2d");
+                    var northAmericaChart = new Chart(northAmericaChartCanvas, {
+                        type: 'doughnut',
+                        data: areaData,
+                        options: areaOptions,
+                        plugins: northAmericaChartPlugins
+                    });
+                    document.getElementById('north-america-legend').innerHTML = northAmericaChart.generateLegend();
+                }
+            }
+
+            function getDataChartUser() {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('statistical.chart.user.normal') }}",
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            createChart(response.result);
+                        } else {
+                            console.log("có lỗi xảy ả")
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+            getDataChartUser();
+            $('.filter-user-bill').change(function() {
+                const link = "{{ route('user.Bill.Ajax') }}";
+                const value = $(this).val();
+                const table = '#list-user-statistical';
+                fitterStatus(link, value, table);
+            })
+            $('.filter-user-time').change(function() {
+                const link = "{{ route('user.Time.Ajax') }}";
+                const value = $(this).val();
+                const table = '#list-user-statistical';
+                fitterStatus(link, value, table);
+            })
+            function listAPiMyList() {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('my.todolist.list') }}",
+                    success: function(response) {
+                        console.log(response);
+                        if(response.status==="success"){
+                           $('ul.todo-list').append(response.results);
+                        }   
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Lỗi: ' + error);
+                    }
+                });
+            }
+            listAPiMyList();
+            var todoListInput = $('.todo-list-input');
+            $('.todo-list').on('change', '.checkbox', function() {
+                $(this).closest("li").toggleClass('completed', $(this).prop('checked'));
+            });
+            $('.todo-list').on('click', '.remove', function() {
+                const id = $(this).data('id');
+                const userConfirmed = confirm('Bạn xác nhận cập nhật ?');
+                if (userConfirmed) {
+                    $(this).parent().remove();
+                }
+            });
+            // updateFormattedTime();
+            // function updateFormattedTime() {
+            //     moment.locale('vi');
+            //     $('.converer-time').each(function() {
+            //         const originalTime = $(this).text().trim();
+            //         const formattedTime = moment(originalTime, 'YYYY-MM-DD HH:mm:ss').fromNow();
+            //         $(this).text(formattedTime);
+            //     });
+            // }
         });
     </script>
 </body>

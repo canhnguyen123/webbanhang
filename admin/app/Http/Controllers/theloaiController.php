@@ -42,9 +42,10 @@ class theloaiController extends Controller
         $linkImg = $request->linkImg;
         $check = $this->theloaiModel->checkDatabase($theloaiCode);
         if ($check) {
-            $errorMessage = "Mã thể loại đã tồn tại";
-            session()->flash('errorMessage', $errorMessage);
-            return redirect()->back();
+            return response()->json([
+                'status'=>'fail',
+                'message' => 'Mã thể loại đã tồn tại'
+            ]);  
         } else {
             $add = $this->theloaiModel->add($nametheloai, $theloaiCode,$category_id,$phanloai_id,$linkImg);
             if ($add) {

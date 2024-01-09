@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Requests\brandRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\brandModel;
 
 class brandController extends Controller

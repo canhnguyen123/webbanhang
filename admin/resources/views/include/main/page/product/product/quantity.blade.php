@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="col-12 pg-0-0-20-0">
                                     <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="add-quantity-item" data-product="{{$product_id}}">Thêm</button>
-                                    <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="  " data-product="{{$product_id}}" style="display: none">Cập nhật</button>
+                                    <button type="submit" class="btn-pimar-key mr-2 btn-quantity" id="update-quantity-item" data-product="{{$product_id}}" style="display: none">Cập nhật</button>
                                 </div>
                                 <div class="col-12 req-div-quantity">
                                     @foreach ($item_product_Quantity as $item)

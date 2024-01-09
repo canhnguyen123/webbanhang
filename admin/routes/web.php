@@ -27,6 +27,9 @@ use App\Http\Controllers\settingController;
 use App\Http\Controllers\paginationController;
 use App\Http\Controllers\statisticalController;
 use App\Http\Controllers\todolistController;
+use App\Http\Controllers\blogController;
+
+use function Ramsey\Uuid\v1;
 Route::get('/login', [Controller::class, 'login'])->name('login');
 Route::post('/login-post', [accountController::class, 'postLogin'])->name('login_post');
 Route::middleware(['auth'])->group(function () {
@@ -42,18 +45,23 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::prefix('/todolist')->group(function(){
             Route::get('/list', [todolistController::class, 'list'])->name('todolist.list')->middleware('check_permission:check');
+            Route::get('/my-list', [controller::class, 'myTodolist'])->name('my.todolist.list');
             Route::get('/add', [todolistController::class, 'add'])->name('todolist.add')->middleware('check_permission:check');
-            Route::post('/post-add', [todolistController::class, 'post_add'])->name('todolist.post.add');
+            Route::post('/post-add', [todolistController::class, 'post_add'])->name('todo.list.add.post');
             Route::get('/update/{todolist_id}', [todolistController::class, 'update'])->name('todolist.update')->middleware('check_permission:check');
-            Route::put('/post-update/{todolist_id}', [todolistController::class, 'post_update'])->name('todolist.post.update');
-            Route::get('/toggle-status/{todolist_id}/{todolist_status}', [todolistController::class, 'toogle_status'])->name('todolist.toogle');
+            Route::get('/deatil/{todolist_id}', [todolistController::class, 'deatil'])->name('todolist.deatil')->middleware('check_permission:check');
+            Route::put('/post-update/{todolist_id}', [todolistController::class, 'post_update'])->name('todolist.put.update');
+            Route::get('/toggle-status/{todolist_id}', [todolistController::class, 'toogle_status'])->name('todolist.toogle');
         });
         Route::prefix('/page')->group(function(){
             
             Route::prefix('/statistical')->group(function(){
                 Route::get('/', [statisticalController::class, 'statistical'])->name('statistical');
                 Route::get('/revenue-action-ajax', [statisticalController::class, 'statisticalAction'])->name('statistical.acction.ajax');
-
+                Route::prefix('/user')->group(function(){
+                    Route::get('/', [statisticalController::class, 'statisticaluser'])->name('statistical.user.list');
+                    Route::get('/{user_id}', [statisticalController::class, 'statisticalDeatiluser'])->name('statistical.user.deatil');
+                });
                 Route::prefix('/product')->group(function(){
                     Route::get('/', [statisticalController::class, 'statisticalProduct'])->name('statistical.product.list');
                     Route::get('/deatil/{product_id}', [statisticalController::class, 'productDeatil'])->name('statistical.product.deatil');
@@ -61,8 +69,15 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/all-action', [statisticalController::class, 'productAllAcction'])->name('statistical.product.all.acction');
                 });
                 Route::prefix('/payment')->group(function(){
-                    Route::get('/action', [statisticalController::class, 'paymentAcction'])->name('statistical.payment.acction');                });
+                    Route::get('/action', [statisticalController::class, 'paymentAcction'])->name('statistical.payment.acction');               
+                  
+                });
+                Route::prefix('/acction')->group(function(){
+                    Route::get('/user', [statisticalController::class, 'statisticalchatUser'])->name('statistical.user.acction');                               
+                  
+                });
             });
+
             Route::prefix('/setting')->group(function(){
                 Route::get('/', [settingController::class, 'setting'])->name('setting');
                 Route::prefix('/pagination')->group(function(){
@@ -73,6 +88,15 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/post-update/{pagination_id}', [paginationController::class, 'post_update'])->name('pagination.post.update');
                     Route::get('/toggle-status/{pagination_id}/{pagination_status}', [paginationController::class, 'toogle_status'])->name('pagination.toogle');
                 });
+            });
+            Route::prefix('/blog')->group(function(){
+                Route::get('/list', [blogController::class, 'list'])->name('blog.list')->middleware('check_permission:check');
+                Route::get('/add', [blogController::class, 'add'])->name('blog.add')->middleware('check_permission:check');
+                Route::post('/post-add', [blogController::class, 'post_add'])->name('blog.post.add');
+                Route::get('/update/{blog_id}', [blogController::class, 'update'])->name('blog.update')->middleware('check_permission:check');
+                Route::get('/deatil/{blog_id}', [blogController::class, 'deatil'])->name('blog.deatil')->middleware('check_permission:check');
+                Route::put('/post-update/{blog_id}', [blogController::class, 'post_update'])->name('blog.put.update');
+                Route::get('/toggle-status/{blog_id}', [blogController::class, 'toogle_status'])->name('blog.toogle.status');
             });
             Route::prefix('/product')->group(function(){
                 Route::prefix('/category')->group(function(){
@@ -272,7 +296,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/material', [AjaxController::class, 'material_seach'])->name('material.seach.Ajax');
                 Route::get('/permission-group', [AjaxController::class, 'permissionGroup_seach'])->name('permission.group.seach.Ajax');
                 Route::get('/permission', [AjaxController::class, 'permission_seach'])->name('permission.seach.Ajax');
-
+                Route::get('/blog', [AjaxController::class, 'blog_search'])->name('blog.seach.Ajax');
             });
             Route::prefix('/filter')->group(function(){
                 Route::get('/category', [AjaxController::class, 'category_filter'])->name('category.filter.Ajax');
@@ -289,6 +313,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/methodPayment', [AjaxController::class, 'methodPayment_filter'])->name('method.payment.filter.Ajax');
                 Route::get('/statusPayment', [AjaxController::class, 'statusPayment_filter'])->name('status.payment.filter.Ajax');
                 Route::get('/ship', [AjaxController::class, 'ship_filter'])->name('ship.filter.Ajax');
+                Route::get('/blog', [AjaxController::class, 'blog_filter'])->name('blog.filter.Ajax');
             });
             Route::prefix('/loadmore')->group(function(){
                 Route::post('/category', [AjaxController::class, 'category_loadmore'])->name('category_loadmore_Ajax');
@@ -301,7 +326,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/statusPayment', [AjaxController::class, 'statusPayment_loadmore'])->name('statusPayment_loadmore_Ajax');
                 Route::post('/ship', [AjaxController::class, 'ship_loadmore'])->name('ship.loadmore.Ajax');
                 Route::post('/material', [AjaxController::class, 'material_loadmore'])->name('material.loadmore.Ajax');
-                
+                Route::post('/blog', [AjaxController::class, 'blog_loadmore'])->name('blog.loadmore.Ajax');
             });
             Route::prefix('/return')->group(function(){
                 Route::get('/category', [AjaxController::class, 'category_return'])->name('category_return_Ajax');
@@ -321,21 +346,26 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/material', [AjaxController::class, 'material_return'])->name('material.return.Ajax');
                 Route::get('/permission', [AjaxController::class, 'permission_return'])->name('permission.return.Ajax');
                 Route::get('/permission-group', [AjaxController::class, 'permissionGroup_return'])->name('permission.group.return.Ajax');
-
+                Route::get('/blog', [AjaxController::class, 'blog_return'])->name('blog.return.Ajax');
             });
             Route::prefix('/select')->group(function(){ 
                 Route::post('/list-theloai', [AjaxController::class, 'select_data_theloai'])->name('select_data_theloai');
                 Route::post('/list-theloai-product', [AjaxController::class, 'select_data_theloai_product'])->name('select_data_theloaiproduct');
                 Route::post('/list-product', [AjaxController::class, 'filter_product'])->name('filter_product');
                 Route::post('/list-product-plus', [AjaxController::class, 'filter_productPlus'])->name('filter_productPlus');
+                Route::get('/filter-categoryAccount-user', [AjaxController::class, 'user_Category_filter'])->name('userCategory.filter.Ajax');
+                Route::get('/filter-user-bill', [statisticalController::class, 'fitterUserBill'])->name('user.Bill.Ajax');
+                Route::get('/filter-user-time', [statisticalController::class, 'fitterUserTime'])->name('user.Time.Ajax');
+                Route::get('/get-data-user', [statisticalController::class, 'statisticalchatUser'])->name('statistical.chart.user');
+                Route::get('/get-data-normal', [statisticalController::class, 'statisticalchatUsernormal'])->name('statistical.chart.user.normal');
             });
             Route::prefix('/get-list')->group(function(){ 
                 Route::post('/payment', [AjaxController::class, 'selete_bill'])->name('selete_billPayment');
     
             });
             Route::prefix('/post')->group(function(){ 
-                Route::get('/post-cmt', [AjaxController::class, 'postCmt'])->name('post.cmt');
-    
+                Route::post('/post-cmt', [AjaxController::class, 'postCmt'])->name('post.cmt');
+                Route::get('/get-listCmt/{cmt_id}', [AjaxController::class, 'getLoadmoreCmt'])->name('get.Loadmore.Cmt');
             });
             Route::prefix('/excel')->group(function(){ 
                 Route::get('/category', [AjaxController::class, 'getdataCategoryExcel'])->name('get.category.excel');
@@ -349,6 +379,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/method-payment', [AjaxController::class, 'getdatabMethodPaymentExcel'])->name('get.method.payment.excel');
                 Route::get('/status-payment', [AjaxController::class, 'getdatastatusPaymentExcel'])->name('get.status.payment.excel');
                 Route::get('/ship', [AjaxController::class, 'getdataShipExcel'])->name('get.ship.excel');
+                Route::get('/blog', [AjaxController::class, 'getdataBlogExcel'])->name('get.blog.excel');
             });
         });
     });

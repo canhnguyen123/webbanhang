@@ -2,7 +2,7 @@
   const mysql = require('mysql');
   const bodyParser = require('body-parser');
   const cors = require('cors');
-  // const unidecode = require('unidecode');
+  const errorHandler  = require('./middleware/errlog');
   const userRouter = require('./router/private/userRouter');
   const bannerRouter = require('./router/public/banner');
   const productRouter = require('./router/public/product');
@@ -25,6 +25,7 @@
   //     next();
   //   });
   // }
+  app.use(errorHandler)
   app.use('/user', userRouter);
   app.use('/cart', cartRouter);
   app.use('/banner', bannerRouter);

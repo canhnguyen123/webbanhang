@@ -55,7 +55,7 @@ public function post_update(colorRequest $request,$id){
     $code=$request->color_code;
     $check_is= $this->colorModel->checkDatabase($code,$id);
     if($check_is){
-        $errorMessage = "Mã danh mục đã tồn tại";
+        $errorMessage = "Mã màu đã tồn tại";
         session()->flash('errorMessage', $errorMessage);
         return redirect()->back();
     }else{

@@ -26,7 +26,6 @@
             <div class="col-xl-12 col-sm-12">
                  
               <button type="submit" id="btn-upload-banner" class="btn-pimar-key mr-2">Thêm</button>
-              <button type="reset" class="btn btn-light">Reset form</button>
             </div>
             </form>
           </div>

@@ -3,8 +3,7 @@
 namespace App\Models;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 class AjaxModel extends indexModel
 {
@@ -28,6 +27,12 @@ class AjaxModel extends indexModel
     {
         $results = DB::table($table_name)
             ->where($colum_name,$status);
+        return $results;
+    }
+    function getPaginate($table_name)
+    {
+        $results = DB::table('tbl_pagination')
+            ->where('pagination_tbl',$table_name);
         return $results;
     }
     function search_ajax2Colum($table_name, $colum_name1, $colum_name2, $input)
@@ -94,8 +99,7 @@ class AjaxModel extends indexModel
     function returnTable_ajax($table_name, $primary_id)
     {
         $results = DB::table($table_name)
-            ->orderBy($primary_id, 'asc')
-            ->paginate(5);
+            ->orderBy($primary_id, 'asc');
         return $results;
     }
     function getDataExcel($table_name, $primary_id)
@@ -241,18 +245,27 @@ class AjaxModel extends indexModel
         $results =DB::table('tbl_payment')->where('statusPayment_id',$status);
         return $results;
     }
-   public function post_cmt($context,$resId,$product_id){
-        $data=[
-            'staff_id'=>Auth::id(),
-            'comment_resMessId'=>$resId,
-            'product_id'=>$product_id,
-            'comment_context'=>$context,
-            'comment_status'=>1,
-            'created_at'=>Carbon::now()
+    public function post_cmt($context, $resId, $product_id)
+    {
+        $data = [
+            'staff_id' => Auth::id(),
+            'comment_resMessId' => $resId,
+            'product_id' => $product_id,
+            'comment_context' => $context,
+            'comment_status' => 1,
+            'created_at' => Carbon::now(),
         ];
-        $results=DB::table('tbl_comment')->insertGetId($data);
-        return $results;
-   }
+        Log::info('Dữ liệu là:', $data);
+        try {
+            $results = DB::table('tbl_comment')->insertGetId($data);
+            Log::info(DB::getQueryLog());
+            return $results;
+        } catch (\Exception $e) {
+            Log::error("có lỗi xảy ra". $e);
+            return false; 
+        }
+    }
+    
   
    public function getCmtDeatilAdmin($product_id,$cmt_id){
     $results = DB::table('tbl_comment as main_comment')
@@ -269,10 +282,29 @@ class AjaxModel extends indexModel
         DB::raw('SUM(CASE WHEN sub_comment.comment_resMessId = main_comment.comment_id THEN 1 ELSE 0 END) as feedback_count')
     )
     ->where('main_comment.product_id', $product_id)
-    ->where('main_comment.comment_resMessId', null)
     ->where('main_comment.comment_id', $cmt_id)
     ->groupBy('main_comment.comment_context', 'main_comment.comment_id', 'main_comment.created_at', 'main_comment.user_id', 'user_fullname', 'user_linkImg')
-    ->first();
+ ;
+        return $results;
+   }
+   public function getListCmt($product_id,$cmt_id){
+    $results = DB::table('tbl_comment as main_comment')
+    ->leftJoin('tbl_user', 'main_comment.user_id', '=', 'tbl_user.user_id')
+    ->leftJoin('tbl_comment as sub_comment', 'main_comment.comment_id', '=', 'sub_comment.comment_resMessId')
+    ->select(
+        'main_comment.comment_context',
+        'main_comment.comment_id',
+        'main_comment.created_at',
+        'main_comment.user_id',
+        DB::raw('IFNULL(tbl_user.user_fullname, "null") as user_fullname'),
+        DB::raw('IFNULL(tbl_user.user_linkImg, "null") as user_linkImg'),
+        DB::raw('COUNT(sub_comment.comment_id) as sub_comment_count'),
+        DB::raw('SUM(CASE WHEN sub_comment.comment_resMessId = main_comment.comment_id THEN 1 ELSE 0 END) as feedback_count')
+    )
+    ->where('main_comment.product_id', $product_id)
+    ->where('main_comment.comment_resMessId', $cmt_id)
+    ->groupBy('main_comment.comment_context', 'main_comment.comment_id', 'main_comment.created_at', 'main_comment.user_id', 'user_fullname', 'user_linkImg')
+ ;
         return $results;
    }
 }

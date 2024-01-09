@@ -38,51 +38,6 @@
       </div>
       <div class="list-wrapper px-3">
         <ul class="d-flex flex-column-reverse todo-list">
-          <li>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="checkbox" type="checkbox">
-                Team review meeting at 3.00 PM
-              </label>
-            </div>
-            <i class="remove ti-close"></i>
-          </li>
-          <li>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="checkbox" type="checkbox">
-                Prepare for presentation
-              </label>
-            </div>
-            <i class="remove ti-close"></i>
-          </li>
-          <li>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="checkbox" type="checkbox">
-                Resolve all the low priority tickets due today
-              </label>
-            </div>
-            <i class="remove ti-close"></i>
-          </li>
-          <li class="completed">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="checkbox" type="checkbox" checked>
-                Schedule meeting for next week
-              </label>
-            </div>
-            <i class="remove ti-close"></i>
-          </li>
-          <li class="completed">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input class="checkbox" type="checkbox" checked>
-                Project review
-              </label>
-            </div>
-            <i class="remove ti-close"></i>
-          </li>
         </ul>
       </div>
     </div>
@@ -100,56 +55,11 @@
           </div>
           <small class="text-muted my-auto">19 min</small>
         </li>
-        <li class="list">
-          <div class="profile"><img src="{{asset('BE/images/faces/face2.jpg')}}" alt="image"><span class="offline"></span></div>
-          <div class="info">
-            <div class="wrapper d-flex">
-              <p>Catherine</p>
-            </div>
-            <p>Away</p>
-          </div>
-          <div class="badge badge-success badge-pill my-auto mx-2">4</div>
-          <small class="text-muted my-auto">23 min</small>
-        </li>
-        <li class="list">
-          <div class="profile"><img src="{{asset('BE/images/faces/face3.jpg')}}" alt="image"><span class="online"></span></div>
-          <div class="info">
-            <p>Daniel Russell</p>
-            <p>Available</p>
-          </div>
-          <small class="text-muted my-auto">14 min</small>
-        </li>
-        <li class="list">
-          <div class="profile"><img src="{{asset('BE/images/faces/face4.jpg')}}" alt="image"><span class="offline"></span></div>
-          <div class="info">
-            <p>James Richardson</p>
-            <p>Away</p>
-          </div>
-          <small class="text-muted my-auto">2 min</small>
-        </li>
-        <li class="list">
-          <div class="profile"><img src="{{asset('BE/images/faces/face5.jpg')}}" alt="image"><span class="online"></span></div>
-          <div class="info">
-            <p>Madeline Kennedy</p>
-            <p>Available</p>
-          </div>
-          <small class="text-muted my-auto">5 min</small>
-        </li>
-        <li class="list">
-          <div class="profile"><img src="{{asset('BE/images/faces/face6.jpg')}}" alt="image"><span class="online"></span></div>
-          <div class="info">
-            <p>Sarah Graves</p>
-            <p>Available</p>
-          </div>
-          <small class="text-muted my-auto">47 min</small>
-        </li>
+     
       </ul>
     </div>
-    <!-- chat tab ends -->
   </div>
 </div>
-<!-- partial -->
-<!-- partial:partials/_sidebar.html -->
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
     <li class="nav-item">
@@ -185,7 +95,7 @@
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{{route('statistical')}}">
-        <i class="mdi mdi-account-settings menu-icon"></i>
+        <i class="mdi mdi-chart-line menu-icon"></i>
         <span class="menu-title">Thống kê</span>
       </a>
     </li>
@@ -193,6 +103,12 @@
       <a class="nav-link" href="{{route('banner_list')}}">
         <i class="mdi mdi-image menu-icon"></i>
         <span class="menu-title">Bannner</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{route('blog.list')}}">
+        <i class="mdi mdi-book-open-variant" style="margin-right: 10px"></i>
+          <span class="menu-title">Bài viết</span>
       </a>
     </li>
     <li class="nav-item">

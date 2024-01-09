@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\statisticalModel;
+use App\Models\userModel;
+use Illuminate\Support\Facades\Log;
 
 class statisticalController extends Controller
 {
@@ -20,6 +22,21 @@ class statisticalController extends Controller
         $list_productSoid=$statisticalModel->productSoid()->get();
         $i=1;
         return view('include.main.page.statistical.product.table', compact('countProductSoid','countProductAll','list_productSoid','i'));
+    }
+    public function statisticaluser(){
+        $statisticalModel = new statisticalModel();
+        $coutnUserAll= $statisticalModel->selectUser()->count();
+        $coutnUser1= $statisticalModel->selectUser(1)->count();
+        $coutnUser0= $statisticalModel->selectUser(0)->count();
+        $getListUser= $statisticalModel->getListUserFormoney()->get();
+        $i=1;
+        return view('include.main.page.statistical.user.list', compact('coutnUserAll','coutnUser1','coutnUser0','i','getListUser'));
+    }
+    public function statisticalDeatiluser($user_id){
+        $statisticalModel = new statisticalModel();
+
+        $i=1;
+        return view('include.main.page.statistical.user.deatil');
     }
     public function statisticalAction(Request $request)
     {
@@ -82,5 +99,57 @@ class statisticalController extends Controller
         $resultListFail=$statisticalModel->getDataPayment($value,5);
         $resultListSuccess=$statisticalModel->getDataPayment($value,6);
         return response()->json(['status' => "success",'listLable'=>$listLable,'resultListFail'=>$resultListFail,'resultListSuccess'=>$resultListSuccess]);
+    }
+    public function userAcction(Request $request){
+        $statisticalModel = new statisticalModel();
+        $value = $request->value;
+     
+        return response()->json(['status' => "success",'listLable'=>1]);
+    }
+    public function fitterUserBill(Request $request){
+   
+        $statisticalModel = new statisticalModel();
+        $value = $request->input('content');;
+        $list=$statisticalModel->getDataUser($value)->get();
+        // $count=$statisticalModel->getListUserFormoney()->count();
+        $count=1;
+        $i=1;
+        return response()->json([
+            'view' =>view('ohther.ajax.admin.statisticalUser_list')->with('getListUser', $list)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+       ]);
+    }
+    public function fitterUserTime(Request $request){
+   
+        $statisticalModel = new statisticalModel();
+        $value = $request->input('content');;
+        $list=$statisticalModel->getDataUserTime($value)->get();
+        // $count=$statisticalModel->getListUserFormoney()->count();
+        $count=1;
+        $i=1;
+        return response()->json([
+            'view' =>view('ohther.ajax.admin.statisticalUser_list')->with('getListUser', $list)->with('i', $i)->render(),
+            'counMess' => "Có " . $count . " kết quả trả về",
+       ]);
+    }
+    public function statisticalchatUser(Request $request){
+        $statisticalModel = new statisticalModel();
+        $value=$request->input('content');
+        $arrChat=[];
+        for ($a = 1; $a <= 3; $a++) {
+            $arrAccount=$statisticalModel->getDataUserStaticalChart($value,$a)->count();
+            array_push($arrChat,$arrAccount);
+        };
+        return response()->json(['status' => "success",'result'=>$arrChat]);
+
+    }
+    public function statisticalchatUsernormal(){
+        $arrChat=[];
+        for ($a = 1; $a <= 3; $a++) {
+            $arrAccount=userModel::where('user_categoryAccount',$a)->count();
+            array_push($arrChat,$arrAccount);
+        };
+        return response()->json(['status' => "success",'result'=>$arrChat]);
+
     }
 }
